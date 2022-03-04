@@ -1,7 +1,15 @@
-from flask import *
-app=Flask(__name__)
+import os
+from flask import Flask, render_template
+from controllers.api import api
+
+# ===================================================================================== #
+
+app = Flask(__name__)
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
+app.secret_key = os.getenv("SECRET_KEY")
+
+app.register_blueprint(api, prefix="/api")
 
 # Pages
 @app.route("/")
@@ -17,4 +25,5 @@ def booking():
 def thankyou():
 	return render_template("thankyou.html")
 
-app.run(port=3000)
+if __name__ == "__main__":
+	app.run(port=3000)
