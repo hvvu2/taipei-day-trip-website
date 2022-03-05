@@ -62,7 +62,7 @@ def showAttractionList():
         if currentPage >= 0:
             if keyword:
                 keyRawData = db.getRawDataByKeyword(keyword, currentPage, shownItems)
-                totalItems = len(keyRawData)
+                totalItems = db.getKeywordCount(keyword)[0]
                 lastPage = totalItems // shownItems
                 restItems = totalItems % shownItems
                 itemList = []

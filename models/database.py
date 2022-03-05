@@ -74,6 +74,13 @@ class DBManager:
         result = self.cursor.fetchall()
         return result
 
+    def getKeywordCount(self, keyword):
+        cmd = "SELECT COUNT(`name`) FROM `attractions`WHERE `name` LIKE %(keyword)s;"
+        param = {"keyword": f"%{keyword}%"}
+        self.cursor.execute(cmd, param)
+        result = self.cursor.fetchone()
+        return result
+
     def getRawDataByKeyword(self, keyword, currentPage, shownItems):
         cmd = "SELECT * FROM `attractions` WHERE `name` LIKE %(keyword)s LIMIT %(index)s, %(shownItems)s;"
         param = {
