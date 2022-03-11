@@ -40,7 +40,7 @@ nav .navbar__title {
   color: #448899;
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (min-width: 360px) and (max-width: 480px) {
   nav .navbar__title {
     margin-left: 10px;
   }
@@ -86,7 +86,7 @@ header {
   background: linear-gradient(135deg, #AADDEE 0%, #66AABB 100%);
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (min-width: 360px) and (max-width: 480px) {
   header {
     height: 280px;
   }
@@ -104,7 +104,7 @@ header .header {
   height: 149px;
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (min-width: 360px) and (max-width: 480px) {
   header .header {
     width: 340px;
     height: 169px;
@@ -139,7 +139,7 @@ header .header__wrapper .header__input-wrapper {
           box-shadow: 0 0 15px 1px #AABBCC;
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (min-width: 360px) and (max-width: 480px) {
   header .header__wrapper .header__input-wrapper {
     width: 322px;
   }
@@ -154,7 +154,7 @@ header .header__wrapper .header__input-wrapper .header__input {
   border-radius: 5px 0 0 5px;
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (min-width: 360px) and (max-width: 480px) {
   header .header__wrapper .header__input-wrapper .header__input {
     width: 230px;
   }
@@ -196,7 +196,7 @@ header .header__img {
   z-index: 1;
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (min-width: 360px) and (max-width: 480px) {
   header .header__img {
     width: 212px;
     height: 148px;
@@ -220,7 +220,7 @@ main {
   padding-bottom: 104px;
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (min-width: 360px) and (max-width: 480px) {
   main {
     padding-bottom: 52px;
   }
@@ -239,7 +239,7 @@ main .main {
   margin: 40px 0;
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (min-width: 360px) and (max-width: 480px) {
   main .main {
     width: 352px;
   }
@@ -254,7 +254,7 @@ main .main .card {
   border-radius: 5px;
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (min-width: 360px) and (max-width: 480px) {
   main .main .card {
     width: 322px;
     height: 280px;
@@ -270,7 +270,7 @@ main .main .card__img {
   border-radius: 5px 5px 0 0;
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (min-width: 360px) and (max-width: 480px) {
   main .main .card__img {
     height: 202px;
   }
@@ -289,7 +289,7 @@ main .main .card__txt-wrapper {
   height: 60px;
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (min-width: 360px) and (max-width: 480px) {
   main .main .card__txt-wrapper {
     width: 302px;
   }
@@ -336,7 +336,7 @@ main .main__message {
   color: #757575;
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (min-width: 360px) and (max-width: 480px) {
   main .main__message {
     padding: 15px;
     height: 70px;
@@ -368,7 +368,7 @@ footer {
   background-color: #757575;
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (min-width: 360px) and (max-width: 480px) {
   footer {
     height: 52px;
     margin-top: -52px;
