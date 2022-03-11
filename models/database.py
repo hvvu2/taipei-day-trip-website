@@ -112,6 +112,7 @@ class DBManager:
         return result
 
     def __exit__(self):
+        self.cursor.close()
         self.cnx.close()
 
 db = DBManager()
