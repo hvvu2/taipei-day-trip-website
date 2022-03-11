@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/reset.css">
+    <link rel="stylesheet" href="../static/style.css">
+
+    <title>Taipei Day Trip</title>
+</head>
+<body>
+    <div class="content-wrapper">
+        <nav>
+            <div class="navbar">
+                <h1 class="navbar__title">台北一日遊</h1>
+                <div class="navbar__wrapper">
+                    <a class="navbar__btn" href="#">預定行程</a>
+                    <a class="navbar__btn" href="#">登入/註冊</a>
+                </div>
+            </div>
+        </nav>
+
+        <header>
+            <div class="header">
+                <div class="header__wrapper">
+                    <h1 class="header__title">輕鬆享受台北一日悠閒</h1>
+                    <p class="header__txt">探索每個角落，體驗城市的深度旅遊行程</p>
+                    <div class="header__input-wrapper">
+                        <input class="header__input" id="js-header__input" type="text" placeholder="輸入景點名稱查詢">
+                        <button class="header__btn" id="js-header__btn">
+                            <img class="header__icon" src="../static/img/icon_search.png" alt="查詢景點">
+                        </button>
+                    </div>
+                </div>
+                <div class="header__img"></div>
+            </div>
+        </header>
+
+        <main id="js-body">
+            <div class="main" id="js-main"></div>
+
+            <div class="sentinel" id="js-sentinel"></div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer">
+            <p class="footer__txt">COPYRIGHT © 2021 台北一日遊</p>
+        </div>
+    </footer>
+
+    <script src="../static/index.js"></script>
+</body>
+</html>
