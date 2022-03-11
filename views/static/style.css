@@ -37,31 +37,20 @@ nav .navbar {
 
 @media screen and (min-width: 768px) and (max-width: 1200px) {
   nav .navbar {
-    width: 768px;
+    width: 755px;
   }
 }
 
 @media screen and (min-width: 360px) and (max-width: 768px) {
   nav .navbar {
-    width: 360px;
+    width: 365px;
   }
 }
 
 nav .navbar__title {
   font-size: 30px;
   color: #448899;
-}
-
-@media screen and (min-width: 768px) and (max-width: 1200px) {
-  nav .navbar__title {
-    margin-left: 10px;
-  }
-}
-
-@media screen and (min-width: 360px) and (max-width: 768px) {
-  nav .navbar__title {
-    margin-left: 10px;
-  }
+  margin-left: 10px;
 }
 
 nav .navbar__wrapper {
@@ -132,7 +121,6 @@ header .header {
   header .header {
     width: 720px;
     height: 169px;
-    margin: 0 10px;
   }
 }
 
@@ -140,7 +128,6 @@ header .header {
   header .header {
     width: 340px;
     height: 169px;
-    margin: 0 10px;
   }
 }
 

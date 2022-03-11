@@ -60,17 +60,18 @@ nav{
         height: 34px;
 
         @include pad(){
-            width: 768px;
+            width: 755px;
         } 
 
         @include mobile(){
-            width: 360px;
+            width: 365px;
         }
 
         &__title{
             font-size: 30px;
             color: $main-color;
             margin-left: 10px;
+        }
 
         &__wrapper{
             display: flex;
@@ -119,13 +120,11 @@ header{
         @include pad(){
             width: 720px;
             height: 169px;
-            margin: 0 10px;
         }
 
         @include mobile(){
             width: 340px;
             height: 169px;
-            margin: 0 10px;
         }
 
         &__wrapper{
