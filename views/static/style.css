@@ -66,12 +66,17 @@
   background: url("../static/img/circle_current.png") !important;
 }
 
-body {
-  height: 100%;
+html, body {
+  min-height: 100%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 1fr auto;
+      grid-template-rows: 1fr auto;
 }
 
 .content-wrapper {
-  min-height: 100%;
+  -ms-grid-row: 1;
+  grid-row: 1;
 }
 
 nav {
@@ -324,7 +329,6 @@ main {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  padding-bottom: 104px;
 }
 
 @media screen and (min-width: 768px) and (max-width: 1200px) {
@@ -903,7 +907,7 @@ main .attraction-main .separator {
 main .attraction-main .info {
   padding: 10px;
   width: 100%;
-  min-height: 362px;
+  height: auto;
 }
 
 @media screen and (min-width: 768px) and (max-width: 1200px) {
@@ -947,6 +951,8 @@ main .attraction-main .info__wrapper .info__txt {
 }
 
 footer {
+  -ms-grid-row: 2;
+  grid-row: 2;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -957,7 +963,6 @@ footer {
       -ms-flex-align: center;
           align-items: center;
   height: 104px;
-  margin-top: -104px;
   background-color: #666666;
 }
 
