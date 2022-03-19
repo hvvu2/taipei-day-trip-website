@@ -801,7 +801,8 @@ main .attraction-main .profile__wrapper .order__wrapper .order__price {
 
 main .attraction-main .profile__wrapper .order__wrapper .order__date {
   position: relative;
-  width: 193px;
+  padding: 0 10px;
+  width: 173px;
   height: 35px;
   background-color: white;
 }
