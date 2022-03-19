@@ -1,4 +1,22 @@
-const addCard = (container, imgUrl, name, mrt, category) => {
+const searchBtn = document.getElementById("js-header__btn");
+const main = document.getElementById("js-main");
+const searchResult = document.getElementById("js-search-result");
+
+// Model
+const url = (page, keyword) => {
+    return "/api/attractions?page=" + page.toString() + "&keyword=" + keyword;
+}
+
+const getData = async (url) => {
+    const response = await fetch(url);
+    const promise = await response.json();
+    const result = await promise;
+    return result;
+}
+
+// View
+const addCard = (container, url, imgUrl, name, mrt, category) => {
+    const attractionLink = document.createElement("a");
     const cardArticle = document.createElement("article");
     const cardImg = document.createElement("img");
     const cardTxtWrapper = document.createElement("div");
@@ -7,7 +25,8 @@ const addCard = (container, imgUrl, name, mrt, category) => {
     const cardMrt = document.createElement("span");
     const cardCategory = document.createElement("span");
 
-    container.appendChild(cardArticle);
+    container.appendChild(attractionLink);
+    attractionLink.appendChild(cardArticle);
     cardArticle.appendChild(cardImg);
     cardArticle.appendChild(cardTxtWrapper);
     cardTxtWrapper.appendChild(cardTitle);
@@ -15,6 +34,7 @@ const addCard = (container, imgUrl, name, mrt, category) => {
     cardDescWrapper.appendChild(cardMrt);
     cardDescWrapper.appendChild(cardCategory);
 
+    attractionLink.setAttribute("href", url);
     cardArticle.setAttribute("class", "card");
     cardImg.setAttribute("class", "card__img");
     cardImg.setAttribute("src", imgUrl);
@@ -31,134 +51,117 @@ const addCard = (container, imgUrl, name, mrt, category) => {
 
 const loadPage = (container, data, shownItems) => {
     for (i = 0; i < shownItems; i++) {
+        const id = data[i].id.toString();
+        const url = "/attraction/" + id;
         const imgUrl = data[i].images[0];
         const name = data[i].name;
         const mrt = data[i].mrt;
         const category = data[i].category;
 
-        addCard(container, imgUrl, name, mrt, category);
+        addCard(container, url, imgUrl, name, mrt, category);
     };
 }
 
-const initUrl = "/api/attractions?page=0";
-const body = document.getElementById("js-body");
-const searchBtn = document.getElementById("js-header__btn");
-const main = document.getElementById("js-main");
-const sentinel = document.getElementById("js-sentinel");
-const searchResult = document.createElement("div");
-const searchMessage = document.createElement("p");
+const addSentinel = (container, sentinel) => {
+    sentinel.classList.add("main__sentinel");
+    container.appendChild(sentinel);
+}
 
-fetch(initUrl).then((response) => {
-    const promise = response.json();
-    promise.then((result) => {
-        let nextPage = result.nextPage
-        const url = "/api/attractions?page=";
-        const data = result.data;
-        const shownItems = data.length;
-        const callback = (entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    sentinel.style.display = "none";
+const addMessage = (container, message, classname, text) => {
+    container.appendChild(message);
+    message.setAttribute("class", classname);
+    message.textContent = text;
+}
 
-                    if (nextPage) {
-                            fetch(url + nextPage.toString()).then((response) => {
-                            const promise = response.json();
-                            promise.then((result) => {
-                                nextPage = result.nextPage;
-                                const data = result.data;
-                                const shownItems = data.length;
-                    
-                                loadPage(main, data, shownItems);
-                                sentinel.style.display = "block";
-                            });
-                        });
-                    }
+const show = (e) => {
+    e.classList.remove("hidden");
+}
+
+const hide = (e) => {
+    e.classList.add("hidden");
+}
+
+// Controller
+const infiniteScrolling = (result, container, target, keyword) => {
+    let loaded = true;
+    let nextPage = result.nextPage;
+    const callback = (entries, observer) => {
+        entries.forEach(async (entry) => {
+            if (entry.isIntersecting && loaded) {
+                loaded = false;
+
+                if (nextPage) {
+                    const result = await getData(url(nextPage, keyword));
+                    nextPage = result.nextPage;
+                    const data = result.data;
+                    const shownItems = data.length;
+        
+                    loadPage(container, data, shownItems);
+                    loaded = true;
                 }
-            });
-        };
-        const options = {
-            root: null,
-            rootMargin: "0px 0px 30px 0px",
-            threshold: 1
-        };
-        const observer = new IntersectionObserver(callback, options);
 
-        loadPage(main, data, shownItems);
-        observer.observe(sentinel);
-    });
-});
+                else {
+                    loaded = true;
+                }
+            }
+        });
+    };
+    const options = {
+        root: null,
+        rootMargin: "0px 0px 30px 0px",
+        threshold: 1
+    };
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(target);
+}
 
-searchBtn.addEventListener("click", () => {
+const init = async () => {
+    const result = await getData(url(0, ""));
+    const sentinel = document.createElement("div");
+    const data = result.data;
+    const shownItems = data.length;
+
+    loadPage(main, data, shownItems);
+    addSentinel(main, sentinel);
+    infiniteScrolling(result, main, sentinel, "");
+}
+
+const search = async () => {
     const keyword = document.getElementById("js-header__input").value;
-    const searchSentinel = document.createElement("div");
 
     while (searchResult.lastChild) {
         searchResult.removeChild(searchResult.lastChild);
     }
 
     if (keyword) {
-        sentinel.style.display = "none";
-        main.style.display = "none";
-        body.insertBefore(searchResult, sentinel);
-        body.appendChild(searchSentinel);
-        searchSentinel.classList.add("sentinel");
-        searchResult.classList.add("main");
+        show(searchResult);
+        hide(main);
 
-        fetch(initUrl + "&keyword=" + keyword).then((response) => {
-            const promise = response.json();
-            promise.then((result) => {
-                const data = result.data;
+        const result = await getData(url(0, keyword));
+        const data = result.data;
+        
+        if (data) {
+            const sentinel = document.createElement("div");
+            const shownItems = data.length;
 
-                if (data) {
-                    let nextPage = result.nextPage;
-                    const shownItems = data.length;
-                    const callback = (entries, observer) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                searchSentinel.style.display = "none";
-            
-                                if (nextPage) {
-                                        const url = "/api/attractions?page="
-                                        fetch(url + nextPage.toString() + "&keyword=" + keyword).then((response) => {
-                                        const promise = response.json();
-                                        promise.then((result) => {
-                                            nextPage = result.nextPage;
-                                            const data = result.data;
-                                            const shownItems = data.length;
-                                
-                                            loadPage(searchResult, data, shownItems);
-                                            searchSentinel.style.display = "block";
-                                        });
-                                    });
-                                }
-                            }
-                        });
-                    };
-                    const options = {
-                        root: null,
-                        rootMargin: "0px 0px 30px 0px",
-                        threshold: 1
-                    };
-                    const observer = new IntersectionObserver(callback, options);
+            loadPage(searchResult, data, shownItems);
+            addSentinel(searchResult, sentinel);
+            infiniteScrolling(result, searchResult, sentinel, keyword);
+        }
 
-                    loadPage(searchResult, data, shownItems);
-                    observer.observe(searchSentinel);
-                }
-
-                else {
-                    searchResult.appendChild(searchMessage);
-                    searchMessage.setAttribute("class", "main__message")
-                    searchMessage.textContent = "很抱歉，我們沒有找到相關的景點";
-                }
-            });
-        });
+        else {
+            const searchMessage = document.createElement("p");
+            addMessage(searchResult, searchMessage, "main__message", "很抱歉，我們沒有找到相關的景點");
+        }
     }
 
     else {
-        main.style.display = "flex";
-        sentinel.style.display = "block";
-        body.removeChild(searchResult);
-        body.removeChild(searchSentinel);
+        show(main);
+        hide(searchResult);
     }
-});
+}
 
+//
+init();
+
+searchBtn.addEventListener("click", search);

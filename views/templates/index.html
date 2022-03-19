@@ -15,11 +15,13 @@
 <body>
     <div class="content-wrapper">
         <nav>
-            <div class="navbar">
-                <h1 class="navbar__title">台北一日遊</h1>
-                <div class="navbar__wrapper">
-                    <a class="navbar__btn" href="#">預定行程</a>
-                    <a class="navbar__btn" href="#">登入/註冊</a>
+            <div class="fixed-wrapper">
+                <div class="navbar">
+                    <a href="/"><h1 class="navbar__title">台北一日遊</h1></a>
+                    <div class="navbar__wrapper">
+                        <a class="navbar__btn" href="#">預定行程</a>
+                        <a class="navbar__btn" href="#">登入/註冊</a>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -40,10 +42,10 @@
             </div>
         </header>
 
-        <main id="js-body">
+        <main>
             <div class="main" id="js-main"></div>
 
-            <div class="sentinel" id="js-sentinel"></div>
+            <div class="main hidden" id="js-search-result"></div>
         </main>
     </div>
 

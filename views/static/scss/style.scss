@@ -1,10 +1,36 @@
+// Breakpoints
+@mixin mobile{
+    @media screen and (min-width: 360px) and (max-width: 768px) {
+        @content;
+    }
+}
+
+@mixin bp-414 {
+    @media screen and (min-width: 414px) and (max-width: 480px) {
+        @content;
+    }
+}
+
+@mixin bp-480 {
+    @media screen and (min-width: 480px) and (max-width: 768px) {
+        @content;
+    }
+}
+
+@mixin pad{
+    @media screen and (min-width: 768px) and (max-width: 1200px) {
+        @content;
+    }
+}
+
 // Colors
 $main-color: #448899;
 $sub-color: #4EA0B4;
-$main-txt: #757575;
+$main-txt: #666666;
 $sub-txt: #F8F8F8;
 $blank: #C4C4C4;
 $border: #E8E8E8;
+$background: #E8E8E8;
 $btn: #666666;
 $btn-hover: #B2B2B2;
 $shadow: #AABBCC;
@@ -20,76 +46,126 @@ $card__txt-pd: 10px;
 $card__img-ht: $card-ht * 2/3;
 $card__txt-ht: ( $card-ht * 1/3 ) - ($card__txt-pd * 2);
 
+// Utilities
+.hidden{
+    display: none !important;
+}
+
+.l{
+    position: absolute;
+    left: 10px;
+
+    @include mobile(){
+        left: 100px;
+    }
+
+    @include bp-414(){
+        left: 73px;
+    }
+
+    @include bp-480(){
+        left: 40px;
+    }
+}
+
+.r{
+    position: absolute;
+    right: 10px;
+
+    @include mobile(){
+        right: 100px;
+    }
+
+    @include bp-414(){
+        right: 73px;
+    }
+
+    @include bp-480(){
+        right: 40px;
+    }
+}
+
+.l-img{
+    position: absolute;
+    left: -540px;
+    transform: translateX(0);
+}
+
+.f-img{
+    position: absolute;
+    right: -540px;
+    transform: translateX(0);
+}
+
+.current{
+    background: url("../static/img/circle_current.png") !important;
+}
 
 // CSS
-@mixin mobile{
-    @media screen and (min-width: 360px) and (max-width: 768px) {
-        @content;
-    }
-}
-
-@mixin pad{
-    @media screen and (min-width: 768px) and (max-width: 1200px) {
-        @content;
-    }
-}
-
 html, body{
-    height: 100%;
+    min-height: 100%;
+    display: grid;
+    grid-template-rows: 1fr auto;
 }
 
 .content-wrapper{
-    min-height: 100%;
+    grid-row: 1;
 }
 
 nav{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    width: 100%;
     height: $nav-ht;
-    background: white;
-    z-index: 99;
 
-    .navbar{
+    .fixed-wrapper{
         display: flex;
-        justify-content: space-between;
-        width: 1200px;
-        height: 34px;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: $nav-ht;
+        border-bottom: 1px solid $shadow;
+        background: white;
+        z-index: 99;
 
-        @include pad(){
-            width: 755px;
-        } 
-
-        @include mobile(){
-            width: 365px;
-        }
-
-        &__title{
-            font-size: 30px;
-            color: $main-color;
-            margin-left: 10px;
-        }
-
-        &__wrapper{
+        .navbar{
             display: flex;
-            align-items: center;
+            justify-content: space-between;
+            width: 1200px;
+            height: 34px;
 
-            .navbar__btn{
-                font-size: $normal-fs;
-                color: $btn;
-                margin: 0 10px;
-                transition: 0.3s;
+            @include pad(){
+                width: 755px;
+            } 
 
-                &:hover{
-                    color: $btn-hover;
+            @include mobile(){
+                width: 365px;
+            }
+
+            &__title{
+                font-size: 30px;
+                color: $main-color;
+                margin-left: 10px;
+            }
+
+            &__wrapper{
+                display: flex;
+                align-items: center;
+
+                .navbar__btn{
+                    font-size: $normal-fs;
+                    color: $btn;
+                    margin: 0 10px;
                     transition: 0.3s;
+
+                    &:hover{
+                        color: $btn-hover;
+                        transition: 0.3s;
+                    }
                 }
             }
         }
     }
+
 }
 
 header{
@@ -97,7 +173,6 @@ header{
     justify-content: center;
     align-items: center;
     position: relative;
-    padding-top: $nav-ht;
     width: 100%;
     height: 320px;
     background: linear-gradient(135deg, #AADDEE 0%, #66AABB 100%);
@@ -182,12 +257,12 @@ header{
                     height: 46px;
                     background-color: $main-color;
                     border-radius: 0 5px 5px 0;
+                    cursor: pointer;
                     transition: 0.3s;
 
                     &:hover{
                         background-color: $sub-color;
                         transition: 0.3s;
-                        cursor: pointer;
                     }
                 }
             }
@@ -221,8 +296,6 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
-    padding-bottom: $footer-ht;
 
     @include pad(){
         padding-bottom: $pad-footer-ht;
@@ -236,8 +309,13 @@ main{
         display: flex;
         align-items: center;
         flex-wrap: wrap;
+        position: relative;
         width: 1200px;
         margin: 40px 0;
+
+        &.hidden{
+            display: none;
+        }
 
         @include pad(){
             width: 764px;
@@ -344,23 +422,365 @@ main{
                 line-height: 70px;
             }
         }
+
+        &__sentinel{
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+        }
     }
 
-    .sentinel{
-        width: 100%;
-    }
+    .attraction-main{
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 1200px;
+        margin: 40px 0;
 
-    .search-result{
-        display: none;
+        @include pad(){
+            justify-content: center;
+            width: 748px;
+        }
+
+        @include mobile(){
+            justify-content: center;
+            align-items: center;
+            padding: 0 10px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .profile{
+            display: flex;
+            padding: 0 15px;
+            width: 1170px;
+            height: 400px;
+
+            @include pad(){
+                justify-content: center;
+                flex-direction: column;
+                padding: 0;
+                width: 748px;
+                height: auto;
+            }
+
+            @include mobile(){
+                justify-content: center;
+                flex-direction: column;
+                padding: 0;
+                width: 340px;
+                height: auto;
+            }
+
+            .slider{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+                width: 540px;
+                height: 100%;
+                margin-right: 30px;
+                border-radius: 5px;
+
+                @include pad(){
+                    position: absolute;
+                    align-self: center;
+                    top: 0;
+                    width: 540px;
+                    height: 400px;
+                    margin: 0;
+                }
+
+                @include mobile(){
+                    position: absolute;
+                    align-self: center;
+                    top: 0;
+                    width: 540px;
+                    height: 400px;
+                    margin: 0;
+                }
+
+                &__showcase{
+                    display: flex;
+                    width: 100%;
+                    height: 100%;
+                    align-items: center;
+                    position: relative;
+                    overflow: hidden;
+
+                    .slider__img{
+                        display: block;
+                        width: 540px;
+                        max-width: 540px;
+                        height: 100%;
+                        border-radius: 5px;
+                    }
+    
+                    .slider__container{
+                        display: flex;
+                        align-items: center;
+                        width: auto;
+                        height: 100%;
+                        transform: translateX(0);
+                    }
+                }
+
+                &__btn{
+                    opacity: 0.75;
+                    transition: 0.3s;
+                    cursor: pointer;
+                    
+                    &:hover{
+                        opacity: 1;
+                        transition: 0.3s;
+                    }
+                }
+
+                &__indicator{
+                    display: flex;
+                    position: absolute;
+                    bottom: 13px;
+
+                    .slider__dot{
+                        width: 12px;
+                        height: 12px;
+                        margin: 0 6px;
+                        background: url("../static/img/circle_Ncurrent.png");
+                        transition: ease-in-out 0.5s;
+
+                        @include mobile(){
+                            margin: 0 4px;
+                        }
+                    }
+                }
+            }
+
+            &__wrapper{
+                display: flex;
+                flex-direction: column;
+                padding: 8px 0;
+                width: 600px;
+
+                @include pad(){
+                    padding: 0;
+                    width: 100%;
+                    margin-top: 450px;
+                }
+
+                @include mobile(){
+                    padding: 0;
+                    width: 100%;
+                    margin-top: 420px;
+                }
+
+                .profile__title{
+                    margin-bottom: 20px;
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: $main-txt;
+                }
+
+                .profile__desc{
+                    margin-bottom: 20px;
+                    font-size: $normal-fs;
+                    color: $main-txt;
+                }
+
+                .order{
+                    display: flex;
+                    flex-direction: column;
+                    padding: 20px;
+                    width: 560px;
+                    min-height: 262px;
+                    border-radius: 5px;
+                    background-color: $background;
+
+                    @include pad(){
+                        padding: 15px 20px;
+                        width: 708px;
+                    }
+
+                    @include mobile(){
+                        padding: 15px 20px;
+                        width: 300px;
+                    }
+
+                    &__title{
+                        margin-bottom: 20px;
+                        font-size: $normal-fs;
+                        color: $main-txt;
+                    }
+
+                    &__desc{
+                        margin-bottom: 15px;
+                        font-size: $normal-fs;
+                        color: $main-txt;
+                    }
+
+                    &__wrapper{
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 20px;
+                    
+                        .order__sub-title{
+                            margin-right: 5px;
+                            font-size: $normal-fs;
+                            color: $main-txt;
+                        }
+
+                        .order__price{
+                            font-size: $normal-fs;
+                            color: $main-txt;
+                        }
+
+                        .order__date{
+                            position: relative;
+                            padding: 0 10px;
+                            width: 173px;
+                            height: 35px;
+                            background-color: white;
+
+                            &::-webkit-calendar-picker-indicator{
+                                position: absolute;
+                                right: 0;
+                                padding: 100%;
+                                opacity: 0;
+                                cursor: pointer;
+                            }
+
+                            &::after{
+                                content: "";
+                                position: absolute;
+                                right: 10px;
+                                width: 24px;
+                                height: 24px;
+                                background: url("../static/img/icon_calendar.png");
+                                pointer-events: none;
+                            }
+                        }
+
+                        .order__label{
+                            display: flex;
+                            align-items: center;
+                            margin-right: 18px;
+                            font-size: $normal-fs;
+                            color: $main-txt;
+                            cursor: pointer;
+
+                            .order__radio--native{
+                                display: none;
+                            }
+
+                            .order__radio{
+                                padding: 2px;
+                                width: 18px;
+                                height: 18px;
+                                margin-right: 5px;
+                                border-radius: 50%;
+                                background: white;
+
+                                &::after{
+                                    display: block;
+                                    content: "";
+                                    width: 100%;
+                                    height: 100%;
+                                    border-radius: 50%;
+                                    background-color: $main-color;
+                                    transform: scale(0);
+                                    transition: 0.3s;
+                                }
+                            }
+
+                            .order__radio--native:checked + .order__radio::after{
+                                transform: scale(1);
+                                transition: 0.3s;
+                            }
+                        }
+                    }
+
+                    &__btn{
+                        padding: 10px 20px;
+                        width: 154px;
+                        height: 36px;
+                        margin-top: 5px;
+                        font-size: 18px;
+                        line-height: 18px;
+                        color: white;
+                        border-radius: 5px;
+                        background-color: $main-color;
+                        transition: 0.3s;
+                        cursor: pointer;
+
+                        &:hover{
+                            background-color: $sub-color;
+                            transition: 0.3s;
+                        }
+                    }
+                }
+            }
+        }
+
+        .separator{
+            width: 100%;
+            margin-top: 40px;
+            margin-bottom: 50px;
+            border-bottom: 1px solid $shadow;
+
+            @include mobile(){
+                width: 340px;
+            }
+        }
+
+        .info{
+            padding: 10px;
+            width: 100%;
+            height: auto;
+
+            @include pad(){
+                width: 728px;
+            }
+
+            @include mobile(){
+                width: 320px;
+            }
+
+            &__desc{
+                display: block;
+                margin-bottom: 25px;
+                font-size: $normal-fs;
+                line-height: 24px;
+                letter-spacing: 1px;
+                color: $main-txt;
+            }
+
+            &__wrapper{
+                margin-bottom: 25px;
+
+                .info__sub-title{
+                    height: 32px;
+                    font-size: $normal-fs;
+                    font-weight: bold;
+                    line-height: 32px;
+                    color: $main-txt;
+                }
+
+                .info__txt{
+                    display: block;
+                    font-size: $normal-fs;
+                    line-height: 24px;
+                    color: $main-txt;
+                }
+            }
+        }
     }
 }
 
 footer{
+    grid-row: 2;
     display: flex;
     justify-content: center;
     align-items: center;
     height: $footer-ht;
-    margin-top: - $footer-ht;
     background-color: $main-txt;
 
     @include pad(){
