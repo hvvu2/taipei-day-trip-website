@@ -39,6 +39,7 @@ button {
 }
 input {
     border: 0;
+	padding: 0;
 }
 input:focus::placeholder{
     color: transparent;
