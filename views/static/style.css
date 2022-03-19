@@ -799,6 +799,7 @@ main .attraction-main .profile__wrapper .order__wrapper .order__date {
   position: relative;
   width: 193px;
   height: 35px;
+  background-color: white;
 }
 
 main .attraction-main .profile__wrapper .order__wrapper .order__date::-webkit-calendar-picker-indicator {
