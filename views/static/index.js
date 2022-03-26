@@ -34,11 +34,12 @@ const addCard = (container, url, imgUrl, name, mrt, category) => {
     cardDescWrapper.appendChild(cardMrt);
     cardDescWrapper.appendChild(cardCategory);
 
+    attractionLink.setAttribute("class", "main__link");
     attractionLink.setAttribute("href", url);
     cardArticle.setAttribute("class", "card");
     cardImg.setAttribute("class", "card__img");
     cardImg.setAttribute("src", imgUrl);
-    cardTxtWrapper.setAttribute("class", "card__txt-wrapper");
+    cardTxtWrapper.setAttribute("class", "card__wrapper");
     cardTitle.setAttribute("class", "card__title");
     cardDescWrapper.setAttribute("class", "card__desc-wrapper");
     cardMrt.setAttribute("class", "card__desc");
@@ -116,6 +117,26 @@ const infiniteScrolling = (result, container, target, keyword) => {
 }
 
 const init = async () => {
+    const option = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+    };
+    const signInResponse = await fetch("/api/user", option);
+    const signInPromise = await signInResponse.json()
+    const signInResult = await signInPromise
+    
+    if (signInResult.data) {
+        hideBlock(gateBtn);
+        showBlock(signOutBtn);
+    }
+
+    else{
+        showBlock(gateBtn);
+        hideBlock(signOutBtn);
+    }
+    
     const result = await getData(url(0, ""));
     const sentinel = document.createElement("div");
     const data = result.data;
@@ -124,6 +145,8 @@ const init = async () => {
     loadPage(main, data, shownItems);
     addSentinel(main, sentinel);
     infiniteScrolling(result, main, sentinel, "");
+
+
 }
 
 const search = async () => {
@@ -151,7 +174,7 @@ const search = async () => {
 
         else {
             const searchMessage = document.createElement("p");
-            addMessage(searchResult, searchMessage, "main__message", "很抱歉，我們沒有找到相關的景點");
+            addMessage(searchResult, searchMessage, "main__txt", "很抱歉，我們沒有找到相關的景點");
         }
     }
 

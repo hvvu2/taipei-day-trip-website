@@ -13,73 +13,115 @@
     <title>Taipei Day Trip</title>
 </head>
 <body>
-    <div class="content-wrapper">
-        <nav>
-            <div class="fixed-wrapper">
-                <div class="navbar">
-                    <a href="/"><h1 class="navbar__title">台北一日遊</h1></a>
-                    <div class="navbar__wrapper">
-                        <a class="navbar__btn" href="#">預定行程</a>
-                        <a class="navbar__btn" href="#">登入/註冊</a>
-                    </div>
+    <article class="popup" id="js-popup">
+        <div class="gate" id="js-gate">
+            <div class="gate__wrapper">
+                <h1 class="gate__title" id="js-gate__title">登入會員帳號</h1>
+                <button class="gate__close" id="js-gate__close"><img src="../static/img/icon_close.png" alt="關閉彈出視窗"></button>
+
+                <div class="gate__input-wrapper" id="js-sign-in">
+                    <input class="gate__input" id="js-sign-in__email" type="text" placeholder="輸入電子信箱">
+                    <p class="gate__txt error al" id="js-sign-in__email-message"></p>
+                    <input class="gate__input" id="js-sign-in__pwd" type="password" placeholder="輸入密碼">
+                    <p class="gate__txt error al" id="js-sign-in__pwd-message"></p>
+                    <button class="gate__btn" id="js-sign-in__btn">登入帳號</button>
+                    <p class="gate__txt error" id="js-sign-in__message"></p>
+                    <button class="gate__switch-btn" id="js-sign-in__switch-btn">還沒有帳號？點此註冊</button>
+                </div>
+
+                <div class="gate__input-wrapper hidden" id="js-sign-up">
+                    <input class="gate__input" id="js-sign-up__name" type="text" placeholder="輸入姓名">
+                    <p class="gate__txt error al" id="js-sign-up__name-message"></p>
+                    <input class="gate__input" id="js-sign-up__email" type="text" placeholder="輸入電子信箱">
+                    <p class="gate__txt error al" id="js-sign-up__email-message"></p>
+                    <input class="gate__input" id="js-sign-up__pwd" type="password" placeholder="輸入密碼">
+                    <p class="gate__txt error al" id="js-sign-up__pwd-message"></p>
+                    <button class="gate__btn" id="js-sign-up__btn">註冊新帳號</button>
+                    <p class="gate__txt" id="js-sign-up__message"></p>
+                    <button class="gate__switch-btn" id="js-sign-up__switch-btn">已經有帳號了？點此登入</button>
                 </div>
             </div>
-        </nav>
+        </div>
+    </article>
 
+    <nav>
+        <div class="navbar">
+            <div class="navbar__wrapper">
+                <a href="/"><h1 class="navbar__title">台北一日遊</h1></a>
+
+                <div class="navbar__btn-wrapper va">
+                    <button class="navbar__btn">預定行程</button>
+                    <button class="navbar__btn" id="navbar__gate-btn">登入/註冊</button>
+                    <button class="navbar__btn hidden" id="navbar__sign-out-btn">登出系統</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
         <main>
             <div class="attraction-main">
-                <section class="profile">
+                <article class="profile">
                     <div class="slider">
                         <div class="slider__showcase">
                             <img class="slider__img l-img" id="slider__last-img" src="" alt="">
                             <div class="slider__container" id="js-slider__container"></div>
                             <img class="slider__img f-img" id="slider__first-img" src="" alt="">
                         </div>
-                        <button class="slider__btn l" id="js-slider__previous-btn"><img src="../static/img/btn_leftArrow.png"></button>
-                        <button class="slider__btn r" id="js-slider__next-btn"><img src="../static/img/btn_rightArrow.png"></button>
+
+                        <button class="slider__btn l-btn" id="js-slider__previous-btn"><img src="../static/img/btn_leftArrow.png"></button>
+                        <button class="slider__btn r-btn" id="js-slider__next-btn"><img src="../static/img/btn_rightArrow.png"></button>
                         <div class="slider__indicator" id="js-slider__indicator"></div>
                     </div>
+                    
                     <div class="profile__wrapper">
                         <h1 class="profile__title" id="js-profile__title"></h1>
                         <span class="profile__desc" id="js-profile__desc"></span>
-
-                        <form class="order" action="/booking">
+                        
+                        <form class="order" action="/booking" method="post">
                             <h1 class="order__title">訂購導覽行程</h1>
-                            <p class="order__desc">以此景點為中心的一日行程，帶您探索城市角落故事</p>
-                            <div class="order__wrapper">
+                            <p class="order__txt">以此景點為中心的一日行程，帶您探索城市角落故事</p>
+
+                            <div class="order__wrapper va">
                                 <h1 class="order__sub-title">選擇日期：</h1>
                                 <input class="order__date" name="order__date" type="date">
                             </div>
-                            <div class="order__wrapper">
+
+                            <div class="order__wrapper va">
                                 <h1 class="order__sub-title">選擇時間：</h1>
                                 <label class="order__label" for="js-order__morning">
                                     <input class="order__radio--native" id="js-order__morning" value="morning" name="order__time" type="radio" checked>
                                     <div class="order__radio"></div>
                                     上半天
                                 </label>
+
                                 <label class="order__label" for="js-order__afternoon">
                                     <input class="order__radio--native" id="js-order__afternoon" value="afternoon" name="order__time" type="radio">
                                     <div class="order__radio"></div>
                                     下半天
                                 </label>
                             </div>
-                            <div class="order__wrapper">
+
+                            <div class="order__wrapper va">
                                 <h1 class="order__sub-title">導覽費用：</h1>
-                                <span class="order__price" id="js-order__price">新台幣 2000 元</span>
+                                <span class="order__desc" id="js-order__desc">新台幣 2000 元</span>
                             </div>
+
                             <button class="order__btn" id="js-order__btn" type="submit">開始預訂行程</button>
                         </form>
                     </div>
-                </section>
+                </article>
 
-                <div class="separator"></div>
+                <div class="hr"></div>
 
                 <section class="info">
-                    <p class="info__desc" id="js-info__desc"></p>
+                    <p class="info__txt" id="js-info__desc"></p>
+
                     <div class="info__wrapper">
                         <h1 class="info__sub-title">景點地址：</h1>
                         <p class="info__txt" id="js-info__address"></p>
                     </div>
+
                     <div class="info__wrapper">
                         <h1 class="info__sub-title">交通方式：</h1>
                         <p class="info__txt" id="js-info__transport"></p>
@@ -96,5 +138,6 @@
     </footer>
 
     <script src="../static/attraction.js"></script>
+    <script src="../static/gate.js"></script>
 </body>
 </html>
