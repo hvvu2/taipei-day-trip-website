@@ -1,6 +1,4 @@
-from cgitb import reset
 import os, mysql.connector, mysql.connector.pooling
-from re import T
 from dotenv import load_dotenv
 
 load_dotenv

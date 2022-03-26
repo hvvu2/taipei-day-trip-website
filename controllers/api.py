@@ -232,7 +232,6 @@ def authUser():
                     response = {
                         "ok": True
                     }
-
                     return json.dumps(response)
                 
                 else:
