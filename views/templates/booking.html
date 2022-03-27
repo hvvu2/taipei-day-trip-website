@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/reset.css">
     <link rel="stylesheet" href="../static/style.css">
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
 
     <title>Taipei Day Trip</title>
 </head>
@@ -19,23 +20,38 @@
                 <h1 class="gate__title" id="js-gate__title">登入會員帳號</h1>
                 <button class="gate__close" id="js-gate__close"><img src="../static/img/icon_close.png" alt="關閉彈出視窗"></button>
 
-                <div class="gate__input-wrapper" id="js-sign-in">
-                    <input class="gate__input" id="js-sign-in__email" type="text" placeholder="輸入電子信箱">
-                    <p class="gate__txt error al" id="js-sign-in__email-message"></p>
-                    <input class="gate__input" id="js-sign-in__pwd" type="password" placeholder="輸入密碼">
-                    <p class="gate__txt error al" id="js-sign-in__pwd-message"></p>
+                <div class="gate__form-wrapper" id="js-sign-in">
+                    <div class="gate__input-wrapper">
+                        <input class="gate__input" id="js-sign-in__email" type="text" placeholder="輸入電子信箱">
+                        <i class="gate__icon bx "></i>
+                    </div>
+
+                    <div class="gate__input-wrapper">
+                        <input class="gate__input" id="js-sign-in__pwd" type="password" placeholder="輸入密碼">
+                        <i class="gate__icon bx"></i>
+                    </div>
+
                     <button class="gate__btn" id="js-sign-in__btn">登入帳號</button>
                     <p class="gate__txt error" id="js-sign-in__message"></p>
                     <button class="gate__switch-btn" id="js-sign-in__switch-btn">還沒有帳號？點此註冊</button>
                 </div>
 
-                <div class="gate__input-wrapper hidden" id="js-sign-up">
-                    <input class="gate__input" id="js-sign-up__name" type="text" placeholder="輸入姓名">
-                    <p class="gate__txt error al" id="js-sign-up__name-message"></p>
-                    <input class="gate__input" id="js-sign-up__email" type="text" placeholder="輸入電子信箱">
-                    <p class="gate__txt error al" id="js-sign-up__email-message"></p>
-                    <input class="gate__input" id="js-sign-up__pwd" type="password" placeholder="輸入密碼">
-                    <p class="gate__txt error al" id="js-sign-up__pwd-message"></p>
+                <div class="gate__form-wrapper hidden" id="js-sign-up">
+                    <div class="gate__input-wrapper">
+                        <input class="gate__input" id="js-sign-up__name" type="text" placeholder="輸入姓名">
+                        <i class="gate__icon bx"></i>
+                    </div>
+
+                    <div class="gate__input-wrapper">
+                        <input class="gate__input" id="js-sign-up__email" type="text" placeholder="輸入電子信箱">
+                        <i class="gate__icon bx"></i>
+                    </div>
+
+                    <div class="gate__input-wrapper">
+                        <input class="gate__input" id="js-sign-up__pwd" type="password" placeholder="輸入密碼">
+                        <i class="gate__icon bx"></i>
+                    </div>
+
                     <button class="gate__btn" id="js-sign-up__btn">註冊新帳號</button>
                     <p class="gate__txt" id="js-sign-up__message"></p>
                     <button class="gate__switch-btn" id="js-sign-up__switch-btn">已經有帳號了？點此登入</button>
