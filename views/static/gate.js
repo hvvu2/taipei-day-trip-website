@@ -10,122 +10,109 @@ const signInBtn = document.getElementById("js-sign-in__btn");
 const signUpBtn = document.getElementById("js-sign-up__btn");
 const signInSwitchBtn = document.getElementById("js-sign-in__switch-btn");
 const signUpSwitchBtn = document.getElementById("js-sign-up__switch-btn");
+const gateInputs = document.querySelectorAll(".gate__input");
 const signInEmail = document.getElementById("js-sign-in__email");
-const signInEmailMsg = document.getElementById("js-sign-in__email-message");
 const signInPwd = document.getElementById("js-sign-in__pwd");
-const signInPwdMsg = document.getElementById("js-sign-in__pwd-message");
 const signInMsg = document.getElementById("js-sign-in__message");
 const signUpName = document.getElementById("js-sign-up__name");
-const signUpNameMsg = document.getElementById("js-sign-up__name-message");
 const signUpEmail = document.getElementById("js-sign-up__email");
-const signUpEmailMsg = document.getElementById("js-sign-up__email-message");
 const signUpPwd = document.getElementById("js-sign-up__pwd");
-const signUpPwdMsg = document.getElementById("js-sign-up__pwd-message");
 const signUpMsg = document.getElementById("js-sign-up__message");
+const emailPattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
 // View
+const resetGateInput = () => {
+    gateInputs.forEach((input) => {
+        removeOk(input);
+        removeOkIcon(input);
+        removeError(input);
+        removeErrorIcon(input);
+        input.value = null;
+    })
+
+    removeError(signUpMsg);
+    removeOk(signUpMsg);
+    removeMsg(signUpMsg);
+    removeError(signInMsg);
+    removeMsg(signInMsg);
+}
+
 const validateSignUp = () => {
     const name = signUpName.value.trim();
     const email = signUpEmail.value.trim();
     const pwd = signUpPwd.value.trim();
-    const pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
-    if (name != true) {
-        validateInput(signUpName, signUpNameMsg, "請輸入姓名");
+    if (name) {
+        setOkInput(signUpName);
     }
 
     else {
-        removeMsg(signUpNameMsg);
-        removeError(signUpName);
+        setErrorInput(signUpName);
     }
 
-    if (email) {
-        if (pattern.test(email)) {
-            removeError(signUpEmail);
-            removeMsg(signUpEmailMsg);
-        }
-
-        else {
-            setError(signUpEmail);
-            setMsg(signUpEmailMsg, "電子信箱格式錯誤");
-        }
+    if (emailPattern.test(email)) {
+        setOkInput(signUpEmail);
     }
 
     else {
-        setError(signUpEmail);
-        setMsg(signUpEmailMsg, "請輸入電子信箱");
-    }
-
-    if (pwd != true) {
-        validateInput(signUpPwd, signUpPwdMsg, "請輸入密碼");
-    }
-
-    else {
-        removeMsg(signUpPwdMsg);
-        removeError(signUpPwd);
-    }
-
-    if (name && email && pattern.test(email) && pwd) {
-        return true;
-    }
-
-    else {
-        return false;
-    }
-};
-
-const validateSignIn = () => {
-    const email = signInEmail.value.trim();
-    const pwd = signInPwd.value.trim();
-    const pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-
-    if (email) {
-        if (pattern.test(email)) {
-            removeError(signInEmail);
-            removeMsg(signInEmailMsg);
-        }
-        
-        else {
-            setError(signUpEmail);
-            setMsg(signUpEmailMsg, "電子信箱格式錯誤");
-        }
-    }
-
-    else {
-        setError(signInEmail);
-        setMsg(signInEmailMsg, "請輸入電子信箱");
+        setErrorInput(signUpEmail);
     }
 
     if (pwd) {
-        removeError(signInPwd);
-        removeMsg(signInPwdMsg);
+        setOkInput(signUpPwd);
     }
 
     else {
-        setError(signInPwd);
-        setMsg(signInPwdMsg, "請輸入密碼");
+        setErrorInput(signUpPwd);
     }
 
-    if (email && pattern.test(email) && pwd) {
+    if (name && emailPattern.test(email) && pwd) {
+        removeError(signUpMsg)
+        removeMsg(signUpMsg);
         return true;
     }
-
+    
     else {
+        setError(signUpMsg);
+        setMsg(signUpMsg, "仍有欄位未輸入或資料格式錯誤")
         return false;
     }
 }
 
-const validateInput = (e, msg, txt) => {
-    const value = e.value.trim();
+const validateSignIn = () => {
+    const email = signInEmail.value.trim();
+    const pwd = signInPwd.value.trim();
 
-    if (value) {
-        removeError(e);
-        removeMsg(e);
+    if (emailPattern.test(email)) {
+        removeError(signInEmail);
+        removeErrorIcon(signInEmail);
     }
 
     else {
-        setError(e);
-        setMsg(msg, txt);
+        setError(signInEmail);
+        setErrorIcon(signInEmail);
+    }
+
+    if (pwd) {
+        removeError(signInPwd);
+        removeErrorIcon(signInPwd);
+    }
+
+    else {
+        setError(signInPwd);
+        setErrorIcon(signInPwd);
+    }
+
+    if (emailPattern.test(email) && pwd) {
+        removeError(signInMsg);
+        removeMsg(signInMsg);
+        return true;
+    }
+
+    else {
+        setError(signInMsg);
+        setMsg(signInMsg, "帳號及密碼未輸入，或帳號格式錯誤")
+        return false;
     }
 }
 
@@ -133,16 +120,46 @@ const setOk = (e) => {
     e.classList.add("ok");
 }
 
+const setOkIcon = (e) => {
+    e.parentNode.querySelector("i").classList.add("bx-check-circle")
+}
+
 const setError = (e) => {
     e.classList.add("error");
+}
+
+const setErrorIcon = (e) => {
+    e.parentNode.querySelector("i").classList.add("bx-x-circle");
 }
 
 const removeOk = (e) => {
     e.classList.remove("ok");
 }
 
+const removeOkIcon = (e) => {
+    e.parentNode.querySelector("i").classList.remove("bx-check-circle");
+}
+
 const removeError = (e) => {
     e.classList.remove("error");
+}
+
+const removeErrorIcon = (e) => {
+    e.parentNode.querySelector("i").classList.remove("bx-x-circle");
+}
+
+const setOkInput = (e) => {
+    setOk(e);
+    setOkIcon(e)
+    removeError(e);
+    removeErrorIcon(e);
+}
+
+const setErrorInput = (e) => {
+    setError(e);
+    setErrorIcon(e);
+    removeOk(e);
+    removeOkIcon(e);
 }
 
 const setMsg = (e, txt) => {
@@ -162,6 +179,7 @@ const hideBlock = (e) => {
 }
 
 
+//
 gateBtn.addEventListener("click", () => {
     popup.style.pointerEvents = "all";
     popup.style.opacity = "1";
@@ -171,16 +189,7 @@ gateBtn.addEventListener("click", () => {
     gateTitle.textContent = "登入會員帳號";
     showBlock(signIn);
     hideBlock(signUp);
-    removeMsg(signUpNameMsg);
-    removeError(signUpName);
-    removeMsg(signUpEmailMsg);
-    removeError(signUpEmail);
-    removeMsg(signUpPwdMsg);
-    removeError(signUpPwd);
-    removeMsg(signInEmailMsg);
-    removeError(signInEmail);
-    removeMsg(signInPwdMsg);
-    removeError(signInPwd);
+    resetGateInput();
 });
 
 gateCloseBtn.addEventListener("click", () => {
@@ -195,12 +204,60 @@ signInSwitchBtn.addEventListener("click", () => {
     gateTitle.textContent = "註冊會員帳號";
     showBlock(signUp);
     hideBlock(signIn);
+    resetGateInput();
 });
 
 signUpSwitchBtn.addEventListener("click", () => {
     gateTitle.textContent = "登入會員帳號";
     showBlock(signIn);
     hideBlock(signUp);
+    resetGateInput();
+});
+
+signUpBtn.addEventListener("click", async () => {
+    const name = signUpName.value.trim();
+    const email = signUpEmail.value.trim();
+    const pwd = signUpPwd.value.trim();
+    const data = {
+        "name": name,
+        "email": email,
+        "password": pwd
+    };
+    const option = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    };
+
+    if (validateSignUp()) {
+        const response = await fetch("/api/user", option);
+        const promise = await response.json();
+        const result = await promise;
+
+        if (result.ok) {
+            resetGateInput();
+            setOk(signUpMsg);
+            removeError(signUpMsg);
+            setMsg(signUpMsg, "註冊成功！");
+        }
+
+        else if (result.error) {
+            if (result.message == "The email has already been registered.") {
+                setErrorInput(signUpEmail);
+                setError(signUpMsg);
+                removeOk(signUpMsg);
+                setMsg(signUpMsg, "此電子信箱已被其他使用者註冊");
+            }
+
+            else {
+                setError(signUpMsg);
+                removeOk(signUpMsg);
+                setMsg(signUpMsg, "註冊失敗，請重新嘗試");
+            }
+        }
+    }
 });
 
 signInBtn.addEventListener("click", async () => {
@@ -234,9 +291,10 @@ signInBtn.addEventListener("click", async () => {
         }
 
         else if (result.error) {
-            setError(signInEmail);
-            setError(signInPwd);
-            setMsg(signInMsg, "電子信箱或密碼錯誤，請重新輸入");
+            setErrorInput(signInEmail);
+            setErrorInput(signInPwd);
+            setError(signInMsg);
+            setMsg(signInMsg, "帳號或密碼錯誤");
         }
     }
 });
@@ -258,132 +316,67 @@ signOutBtn.addEventListener("click", async () => {
         showBlock(gateBtn);
         hideBlock(signOutBtn);
     }
-})
-
-signUpBtn.addEventListener("click", async () => {
-    const name = signUpName.value.trim();
-    const email = signUpEmail.value.trim();
-    const pwd = signUpPwd.value.trim();
-    const data = {
-        "name": name,
-        "email": email,
-        "password": pwd
-    };
-    const option = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    };
-
-    if (validateSignUp()) {
-        const response = await fetch("/api/user", option);
-        const promise = await response.json();
-        const result = await promise;
-
-        if (result.ok) {
-            removeError(signUpMsg)
-            removeError(signUpEmail)
-            setOk(signUpMsg)
-            setMsg(signUpMsg, "註冊成功！");
-        }
-
-        else if (result.error) {
-            if (result.message == "The email has already been registered.") {
-                setError(signUpEmail);
-                setError(signUpMsg);
-                removeOk(signUpMsg);
-                setMsg(signUpMsg, "此電子信箱已被其他使用者註冊");
-            }
-
-            else {
-                setError(signUpMsg);
-                removeOk(signUpMsg);
-                setMsg(signUpMsg, "註冊失敗，請重新輸入");
-            }
-        }
-    }
 });
 
-signUpName.addEventListener("focus", () =>{
-    removeMsg(signUpNameMsg);
-    removeError(signUpName);
+gateInputs.forEach((input) => {
+    input.addEventListener("focus", () => {
+        removeOk(input);
+        removeOkIcon(input);
+        removeError(input);
+        removeErrorIcon(input);
+    });
 });
 
-signUpEmail.addEventListener("focus", () => {
-    removeMsg(signUpEmailMsg);
-    removeError(signUpEmail);
-});
-
-signUpPwd.addEventListener("focus", () => {
-    removeMsg(signUpPwdMsg);
-    removeError(signUpPwd);
-});
-
-signUpName.addEventListener("blur", () =>{
-    validateInput(signUpName, signUpNameMsg, "請輸入姓名");
-});
-
-signUpEmail.addEventListener("blur", () => {
-    const email = signUpEmail.value.trim();
-    const pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-
-    if (email) {
-        if (pattern.test(email)) {
-            removeError(signUpEmail);
-            removeMsg(signUpEmailMsg);
-        }
-
-        else {
-            setError(signUpEmail);
-            setMsg(signUpEmailMsg, "電子信箱格式錯誤");
-        }
+signUpName.addEventListener("blur", () => {
+    if (signUpName.value.trim()) {
+        setOkInput(signUpName);
     }
 
     else {
-        setError(signUpEmail);
-        setMsg(signUpEmailMsg, "請輸入電子信箱");
+        setErrorInput(signUpName);
+    }
+});
+
+signUpEmail.addEventListener("blur", () => {
+    if (emailPattern.test(signUpEmail.value.trim())) {
+        setOkInput(signUpEmail);
+    }
+
+    else {
+        setErrorInput(signUpEmail);
     }
 });
 
 signUpPwd.addEventListener("blur", () => {
-    validateInput(signUpPwd, signUpPwdMsg, "請輸入密碼");
-});
+    if (signUpPwd.value.trim()) {
+        setOkInput(signUpPwd);
+    }
 
-signInEmail.addEventListener("focus", () => {
-    removeMsg(signInEmailMsg);
-    removeError(signInEmail);
-});
-
-signInPwd.addEventListener("focus", () => {
-    removeMsg(signInPwdMsg);
-    removeError(signInPwd);
+    else {
+        setErrorInput(signUpPwd);
+    }
 });
 
 signInEmail.addEventListener("blur", () => {
-    const email = signInEmail.value.trim();
-    const pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-
-    if (email) {
-        if (pattern.test(email)) {
-            removeError(signInEmail);
-            removeMsg(signInEmailMsg);
-        }
-
-        else {
-            setError(signInEmail);
-            setMsg(signInEmailMsg, "電子信箱格式錯誤");
-        }
+    if (emailPattern.test(signInEmail.value.trim())) {
+        removeError(signInEmail);
+        removeErrorIcon(signInEmail);
     }
 
     else {
         setError(signInEmail);
-        setMsg(signInEmailMsg, "請輸入電子信箱");
+        setErrorIcon(signInEmail);
     }
 });
 
 signInPwd.addEventListener("blur", () => {
-    validateInput(signInPwd, signInPwdMsg, "請輸入密碼");
-});
+    if (signInPwd.value.trim()) {
+        removeError(signInPwd);
+        removeErrorIcon(signInPwd);
+    }
 
+    else {
+        setError(signInPwd);
+        setErrorIcon(signInPwd);
+    }
+});

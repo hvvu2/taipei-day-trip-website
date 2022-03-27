@@ -29,7 +29,7 @@ $sub-color: #4EA0B4;
 $main-txt: #666666;
 $sub-txt: #F8F8F8;
 $error: #FF1B1B;
-$correct: #319962;
+$ok: #00CD28;
 $blank: #C4C4C4;
 $border: #E8E8E8;
 $background: #E8E8E8;
@@ -155,10 +155,14 @@ body{
                 }
             }
 
-            .gate__input-wrapper{
+            .gate__form-wrapper{
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+
+                .gate__input-wrapper{
+                    position: relative;
+                }
 
                 .gate__input{
                     padding: 15px;
@@ -172,8 +176,34 @@ body{
                         transition: 0.3s;
                     }
 
+                    &.ok{
+                        border-color: $ok;
+                    }
+
                     &.error{
-                        border: 1px solid $error;
+                        border-color: $error;
+                    }
+                }
+
+                .gate__icon{
+                    position: absolute;
+                    top: 13px;
+                    right: 15px;
+                    font-size: 20px;
+                    transform: scale(0);
+                    transition: 0.3s;
+                    pointer-events: none;
+
+                    &.bx-check-circle{
+                        color: $ok;
+                        transform: scale(1);
+                        transition: 0.3s;
+                    }
+
+                    &.bx-x-circle{
+                        color: $error;
+                        transform: scale(1);
+                        transition: 0.3s;
                     }
                 }
     
@@ -214,7 +244,7 @@ body{
                 margin-bottom: 10px;
 
                 &.ok{
-                    color: $correct;
+                    color: $ok;
                 }
 
                 &.error{
@@ -939,7 +969,13 @@ nav{
                         position: absolute;
                         top: 0;
                         right: 0;
+                        transition: 0.3s;
                         cursor: pointer;
+
+                        &:hover{
+                            opacity: 0.5;
+                            transition: 0.3s;
+                        }
                     }
                 }
                 
@@ -962,6 +998,10 @@ nav{
                     width: 180px;
                     border: 1px solid $border;
                     border-radius: 5px;
+
+                    &:focus{
+                        border-color: $main-color;
+                    }
                 }
 
                 &__txt{
@@ -986,6 +1026,40 @@ nav{
                     width: 180px;
                     border: 1px solid $border;
                     border-radius: 5px;
+
+                    &:focus{
+                        border-color: $main-color;
+                    }
+                }
+            }
+
+            .summary{
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                width: 980px;
+                height: 100px;
+
+                &__title{
+                    font-weight: bold;
+                    margin-bottom: 20px;
+                }
+
+                &__btn{
+                    padding: 10px 20px;
+                    width: 173px;
+                    height: 36px;
+                    color: white;
+                    line-height: 16px;
+                    border-radius: 5px;
+                    background-color: $main-color;
+                    transition: 0.3s;
+                    cursor: pointer;
+
+                    &:hover{
+                        background: $sub-color;
+                        transition: 0.3s;
+                    }
                 }
             }
         }

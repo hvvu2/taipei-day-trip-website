@@ -144,7 +144,7 @@ body {
   transition: 0.3s;
 }
 
-.popup .gate__wrapper .gate__input-wrapper {
+.popup .gate__wrapper .gate__form-wrapper {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -157,7 +157,11 @@ body {
           align-items: center;
 }
 
-.popup .gate__wrapper .gate__input-wrapper .gate__input {
+.popup .gate__wrapper .gate__form-wrapper .gate__input-wrapper {
+  position: relative;
+}
+
+.popup .gate__wrapper .gate__form-wrapper .gate__input {
   padding: 15px;
   width: 278px;
   margin-bottom: 10px;
@@ -165,17 +169,49 @@ body {
   border-radius: 5px;
 }
 
-.popup .gate__wrapper .gate__input-wrapper .gate__input:focus {
+.popup .gate__wrapper .gate__form-wrapper .gate__input:focus {
   border-color: #448899;
   -webkit-transition: 0.3s;
   transition: 0.3s;
 }
 
-.popup .gate__wrapper .gate__input-wrapper .gate__input.error {
-  border: 1px solid #FF1B1B;
+.popup .gate__wrapper .gate__form-wrapper .gate__input.ok {
+  border-color: #00CD28;
 }
 
-.popup .gate__wrapper .gate__input-wrapper .gate__btn {
+.popup .gate__wrapper .gate__form-wrapper .gate__input.error {
+  border-color: #FF1B1B;
+}
+
+.popup .gate__wrapper .gate__form-wrapper .gate__icon {
+  position: absolute;
+  top: 13px;
+  right: 15px;
+  font-size: 20px;
+  -webkit-transform: scale(0);
+          transform: scale(0);
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  pointer-events: none;
+}
+
+.popup .gate__wrapper .gate__form-wrapper .gate__icon.bx-check-circle {
+  color: #00CD28;
+  -webkit-transform: scale(1);
+          transform: scale(1);
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.popup .gate__wrapper .gate__form-wrapper .gate__icon.bx-x-circle {
+  color: #FF1B1B;
+  -webkit-transform: scale(1);
+          transform: scale(1);
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.popup .gate__wrapper .gate__form-wrapper .gate__btn {
   padding: 10px 20px;
   width: 310px;
   margin-bottom: 10px;
@@ -187,20 +223,20 @@ body {
   cursor: pointer;
 }
 
-.popup .gate__wrapper .gate__input-wrapper .gate__btn:hover {
+.popup .gate__wrapper .gate__form-wrapper .gate__btn:hover {
   background-color: #4EA0B4;
   -webkit-transition: 0.3s;
   transition: 0.3s;
 }
 
-.popup .gate__wrapper .gate__input-wrapper .gate__switch-btn {
+.popup .gate__wrapper .gate__form-wrapper .gate__switch-btn {
   display: block;
   -webkit-transition: 0.3s;
   transition: 0.3s;
   cursor: pointer;
 }
 
-.popup .gate__wrapper .gate__input-wrapper .gate__switch-btn:hover {
+.popup .gate__wrapper .gate__form-wrapper .gate__switch-btn:hover {
   -webkit-transition: 0.3;
   transition: 0.3;
   color: #B2B2B2;
@@ -216,7 +252,7 @@ body {
 }
 
 .popup .gate__wrapper .gate__txt.ok {
-  color: #319962;
+  color: #00CD28;
 }
 
 .popup .gate__wrapper .gate__txt.error {
@@ -1179,7 +1215,15 @@ nav .navbar .navbar__wrapper .navbar__btn:hover {
   position: absolute;
   top: 0;
   right: 0;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
   cursor: pointer;
+}
+
+.content-wrapper main .booking-main .schedule__wrapper .schedule__btn:hover {
+  opacity: 0.5;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
 }
 
 .content-wrapper main .booking-main .contact {
@@ -1207,6 +1251,10 @@ nav .navbar .navbar__wrapper .navbar__btn:hover {
   width: 180px;
   border: 1px solid #E8E8E8;
   border-radius: 5px;
+}
+
+.content-wrapper main .booking-main .contact__input:focus {
+  border-color: #448899;
 }
 
 .content-wrapper main .booking-main .contact__txt {
@@ -1238,6 +1286,49 @@ nav .navbar .navbar__wrapper .navbar__btn:hover {
   width: 180px;
   border: 1px solid #E8E8E8;
   border-radius: 5px;
+}
+
+.content-wrapper main .booking-main .payment__input:focus {
+  border-color: #448899;
+}
+
+.content-wrapper main .booking-main .summary {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  width: 980px;
+  height: 100px;
+}
+
+.content-wrapper main .booking-main .summary__title {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.content-wrapper main .booking-main .summary__btn {
+  padding: 10px 20px;
+  width: 173px;
+  height: 36px;
+  color: white;
+  line-height: 16px;
+  border-radius: 5px;
+  background-color: #448899;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.content-wrapper main .booking-main .summary__btn:hover {
+  background: #4EA0B4;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
 }
 
 footer {
