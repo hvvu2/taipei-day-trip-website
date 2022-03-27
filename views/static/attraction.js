@@ -12,7 +12,7 @@ const profileTitle = document.getElementById("js-profile__title");
 const profileDesc = document.getElementById("js-profile__desc");
 const orderMorning = document.getElementById("js-order__morning");
 const orderAfternoon = document.getElementById("js-order__afternoon");
-const orderPrice = document.getElementById("js-order__price");
+const orderPrice = document.getElementById("js-order__desc");
 const infoDesc = document.getElementById("js-info__desc");
 const infoAddress = document.getElementById("js-info__address");
 const infoTransport = document.getElementById("js-info__transport");
@@ -39,6 +39,26 @@ const setPrice = (price) => {
 
 // Controller
 const init = async () => {
+    const option = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+    };
+    const signInResponse = await fetch("/api/user", option);
+    const signInPromise = await signInResponse.json()
+    const signInResult = await signInPromise
+    
+    if (signInResult.data) {
+        hideBlock(gateBtn);
+        showBlock(signOutBtn);
+    }
+
+    else{
+        showBlock(gateBtn);
+        hideBlock(signOutBtn);
+    }
+    
     await getData(url());
     const name = data.name;
     const category = data.category;

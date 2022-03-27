@@ -1,6 +1,6 @@
-from flask import Blueprint, request, Response
+from flask import Blueprint, request, Response, session
 from models.database import db
-import json
+import json, re
 
 def errorHandler(statusCode, message = "The argument is invalid, please retry."):
     if statusCode == 400:
@@ -18,6 +18,10 @@ def errorHandler(statusCode, message = "The argument is invalid, please retry.")
         return Response(json.dumps(response), status=500, mimetype="application/json")
 
 invalidId = "The attraction does not exist or the input is invalid, please retry."
+emptyField = "All fields are required."
+invalidFormat = "The format is invalid."
+emailRegistered = "The email has already been registered."
+incorrectSignIn = "The email or the password is incorrect."
 
 # ===================================================================================== #
 
@@ -158,3 +162,91 @@ def showTargetAttraction(attractionId):
 
     except:
         return errorHandler(500)
+
+
+@api.route("/api/user", methods=["GET", "POST", "PATCH", "DELETE"])
+def authUser():
+    pattern = r"(^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$)"
+
+    if request.method == "GET":
+        try:
+            if session["logged"]:
+                response = {
+                    "data": {
+                        "id": session["logged"][0],
+                        "name": session["logged"][1],
+                        "email": session["logged"][2]
+                    }
+                }
+                return json.dumps(response)
+
+        except:
+            response = {
+                "data": None
+            }
+            return json.dumps(response)
+
+    elif request.method == "POST":
+        try:
+            data = request.get_json()
+            name = data["name"]
+            email = data["email"]
+            pwd = data["password"]
+
+            if name and email and pwd:
+                if re.match(pattern, email):
+                    if db.checkEmail(email):
+                        db.insertUser(name, email, pwd)
+                        response = {
+                            "ok": True
+                        }
+                        return json.dumps(response)
+
+                    else:
+                        return errorHandler(400, emailRegistered)
+
+                else:
+                    return errorHandler(400, invalidFormat)
+
+            else:
+                return errorHandler(400, emptyField)
+        
+        except:
+            return errorHandler(500)
+
+    elif request.method == "PATCH":
+        try:
+            data = request.get_json()
+            email = data["email"]
+            pwd = data["password"]
+
+            if db.getUserInfo(email):
+                result = db.getUserInfo(email)
+                dbId = result[0]
+                dbName = result[1]
+                dbEmail = result[2]
+                dbPwd = result[3]
+
+                if (pwd == dbPwd):
+                    session["logged"] = [dbId, dbName, dbEmail]
+                    response = {
+                        "ok": True
+                    }
+                    return json.dumps(response)
+                
+                else:
+                    return errorHandler(400, incorrectSignIn)
+
+            else:
+                return errorHandler(400, incorrectSignIn)
+
+        except:
+            return errorHandler(500)
+
+    elif request.method == "DELETE":
+        session.clear()
+
+        response = {
+            "ok": True
+        }
+        return json.dumps(response)

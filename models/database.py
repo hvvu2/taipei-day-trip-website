@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv
 
 poolName = "mysqlPool"
-poolSize = 3
+poolSize = 6
 dbconfig ={
     "host":os.getenv("HOST"),
     "port":os.getenv("PORT"),
@@ -110,6 +110,45 @@ class DBManager:
         self.cursor.execute(cmd, param)
         result = self.cursor.fetchall()
         return result
+
+    def checkEmail(self, email):
+        cmd = "SELECT `email` FROM `members` WHERE `email` = %(email)s;"
+        param = {"email": email}
+        self.cursor.execute(cmd, param)
+        result = self.cursor.fetchone()
+
+        if result:
+            return False
+
+        else:
+            return True
+
+    def insertUser(self, name, email, password):
+        cmd = "INSERT INTO `members` (`name`, `email`, `password`) VALUES (%(name)s, %(email)s, %(password)s);"
+        param = {
+            "name": name,
+            "email": email,
+            "password": password
+        }
+        self.cursor.execute(cmd, param)
+
+        try:
+            self.cnx.commit()
+
+        except:
+            self.cnx.rollback()
+
+    def getUserInfo(self, email):
+        cmd = "SELECT `id`, `name`, `email`, `password` FROM `members` WHERE `email` = %(email)s;"
+        param = {"email": email}
+        self.cursor.execute(cmd, param)
+        result = self.cursor.fetchone()
+
+        if result:
+            return result
+
+        else:
+            return False
 
     def __exit__(self):
         self.cursor.close()

@@ -10,16 +10,19 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	outline: 0;
+	outline: transparent;
 	font-size: 100%;
 	vertical-align: baseline;
+	font-weight: normal;
 	background: transparent;
     text-decoration: none;
     font-family: 'Noto Sans TC', sans-serif;
 }
+html{
+	height: 100%;
+}
 body {
 	line-height: 1;
-	height: 100%;
 }
 button {
     border: none;
@@ -38,11 +41,15 @@ button {
     line-height: normal;
 }
 input {
-    border: 0;
+	border: none;
+    margin: 0;
 	padding: 0;
 }
 input:focus::placeholder{
     color: transparent;
+}
+a {
+	color: #666666;
 }
 ol, ul {
 	list-style: none;

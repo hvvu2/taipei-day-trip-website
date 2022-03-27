@@ -9,28 +9,78 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/reset.css">
     <link rel="stylesheet" href="../static/style.css">
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
 
     <title>Taipei Day Trip</title>
 </head>
 <body>
-    <div class="content-wrapper">
-        <nav>
-            <div class="fixed-wrapper">
-                <div class="navbar">
-                    <a href="/"><h1 class="navbar__title">台北一日遊</h1></a>
-                    <div class="navbar__wrapper">
-                        <a class="navbar__btn" href="#">預定行程</a>
-                        <a class="navbar__btn" href="#">登入/註冊</a>
+    <article class="popup" id="js-popup">
+        <div class="gate" id="js-gate">
+            <div class="gate__wrapper">
+                <h1 class="gate__title" id="js-gate__title">登入會員帳號</h1>
+                <button class="gate__close" id="js-gate__close"><img src="../static/img/icon_close.png" alt="關閉彈出視窗"></button>
+
+                <div class="gate__form-wrapper" id="js-sign-in">
+                    <div class="gate__input-wrapper">
+                        <input class="gate__input" id="js-sign-in__email" type="text" placeholder="輸入電子信箱">
+                        <i class="gate__icon bx "></i>
                     </div>
+
+                    <div class="gate__input-wrapper">
+                        <input class="gate__input" id="js-sign-in__pwd" type="password" placeholder="輸入密碼">
+                        <i class="gate__icon bx"></i>
+                    </div>
+
+                    <button class="gate__btn" id="js-sign-in__btn">登入帳號</button>
+                    <p class="gate__txt error" id="js-sign-in__message"></p>
+                    <button class="gate__switch-btn" id="js-sign-in__switch-btn">還沒有帳號？點此註冊</button>
+                </div>
+
+                <div class="gate__form-wrapper hidden" id="js-sign-up">
+                    <div class="gate__input-wrapper">
+                        <input class="gate__input" id="js-sign-up__name" type="text" placeholder="輸入姓名">
+                        <i class="gate__icon bx"></i>
+                    </div>
+
+                    <div class="gate__input-wrapper">
+                        <input class="gate__input" id="js-sign-up__email" type="text" placeholder="輸入電子信箱">
+                        <i class="gate__icon bx"></i>
+                    </div>
+
+                    <div class="gate__input-wrapper">
+                        <input class="gate__input" id="js-sign-up__pwd" type="password" placeholder="輸入密碼">
+                        <i class="gate__icon bx"></i>
+                    </div>
+
+                    <button class="gate__btn" id="js-sign-up__btn">註冊新帳號</button>
+                    <p class="gate__txt" id="js-sign-up__message"></p>
+                    <button class="gate__switch-btn" id="js-sign-up__switch-btn">已經有帳號了？點此登入</button>
                 </div>
             </div>
-        </nav>
+        </div>
+    </article>
 
+    <nav>
+        <div class="navbar">
+            <div class="navbar__wrapper">
+                <a href="/"><h1 class="navbar__title">台北一日遊</h1></a>
+
+                <div class="navbar__btn-wrapper va">
+                    <button class="navbar__btn">預定行程</button>
+                    <button class="navbar__btn" id="navbar__gate-btn">登入/註冊</button>
+                    <button class="navbar__btn hidden" id="navbar__sign-out-btn">登出系統</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
         <header>
             <div class="header">
                 <div class="header__wrapper">
                     <h1 class="header__title">輕鬆享受台北一日悠閒</h1>
                     <p class="header__txt">探索每個角落，體驗城市的深度旅遊行程</p>
+
                     <div class="header__input-wrapper">
                         <input class="header__input" id="js-header__input" type="text" placeholder="輸入景點名稱查詢">
                         <button class="header__btn" id="js-header__btn">
@@ -38,6 +88,7 @@
                         </button>
                     </div>
                 </div>
+
                 <div class="header__img"></div>
             </div>
         </header>
@@ -56,5 +107,6 @@
     </footer>
 
     <script src="../static/index.js"></script>
+    <script src="../static/gate.js"></script>
 </body>
 </html>

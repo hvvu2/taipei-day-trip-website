@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/reset.css">
+    <link rel="stylesheet" href="../static/style.css">
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+
+    <title>Taipei Day Trip</title>
+</head>
+<body>
+    <article class="popup" id="js-popup">
+        <div class="gate" id="js-gate">
+            <div class="gate__wrapper">
+                <h1 class="gate__title" id="js-gate__title">登入會員帳號</h1>
+                <button class="gate__close" id="js-gate__close"><img src="../static/img/icon_close.png" alt="關閉彈出視窗"></button>
+
+                <div class="gate__form-wrapper" id="js-sign-in">
+                    <div class="gate__input-wrapper">
+                        <input class="gate__input" id="js-sign-in__email" type="text" placeholder="輸入電子信箱">
+                        <i class="gate__icon bx "></i>
+                    </div>
+
+                    <div class="gate__input-wrapper">
+                        <input class="gate__input" id="js-sign-in__pwd" type="password" placeholder="輸入密碼">
+                        <i class="gate__icon bx"></i>
+                    </div>
+
+                    <button class="gate__btn" id="js-sign-in__btn">登入帳號</button>
+                    <p class="gate__txt error" id="js-sign-in__message"></p>
+                    <button class="gate__switch-btn" id="js-sign-in__switch-btn">還沒有帳號？點此註冊</button>
+                </div>
+
+                <div class="gate__form-wrapper hidden" id="js-sign-up">
+                    <div class="gate__input-wrapper">
+                        <input class="gate__input" id="js-sign-up__name" type="text" placeholder="輸入姓名">
+                        <i class="gate__icon bx"></i>
+                    </div>
+
+                    <div class="gate__input-wrapper">
+                        <input class="gate__input" id="js-sign-up__email" type="text" placeholder="輸入電子信箱">
+                        <i class="gate__icon bx"></i>
+                    </div>
+
+                    <div class="gate__input-wrapper">
+                        <input class="gate__input" id="js-sign-up__pwd" type="password" placeholder="輸入密碼">
+                        <i class="gate__icon bx"></i>
+                    </div>
+
+                    <button class="gate__btn" id="js-sign-up__btn">註冊新帳號</button>
+                    <p class="gate__txt" id="js-sign-up__message"></p>
+                    <button class="gate__switch-btn" id="js-sign-up__switch-btn">已經有帳號了？點此登入</button>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <nav>
+        <div class="navbar">
+            <div class="navbar__wrapper">
+                <a href="/"><h1 class="navbar__title">台北一日遊</h1></a>
+
+                <div class="navbar__btn-wrapper va">
+                    <button class="navbar__btn">預定行程</button>
+                    <button class="navbar__btn" id="navbar__gate-btn">登入/註冊</button>
+                    <button class="navbar__btn hidden" id="navbar__sign-out-btn">登出系統</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
+        <main>
+            <div class="booking-main">
+                <h1 class="booking-main__headline">您好...</h1>
+
+                <article class="schedule">
+                    <img class="schedule__img" src="" alt="">
+
+                    <div class="schedule__wrapper">
+                        <h1 class="schedule__title">台北一日遊：</h1>
+
+                        <div class="schedule__txt-wrapper va">
+                            <h1 class="schedule__sub-title">日期：</h1>
+                            <span class="schedule__desc"></span>
+                        </div>
+
+                        <div class="schedule__txt-wrapper va">
+                            <h1 class="schedule__sub-title">時間：</h1>
+                            <span class="schedule__desc"></span>
+                        </div>
+
+                        <div class="schedule__txt-wrapper va">
+                            <h1 class="schedule__sub-title">費用：</h1>
+                            <span class="schedule__desc"></span>
+                        </div>
+
+                        <div class="schedule__txt-wrapper va">
+                            <h1 class="schedule__sub-title">地點：</h1>
+                            <span class="schedule__desc"></span>
+                        </div>
+
+                        <button class="schedule__btn"><img src="../static/img/icon_delete.png" alt="刪除行程"></button>
+                    </div>
+                </article>
+
+                <div class="hr"></div>
+
+                <form class="contact" action="" method="post">
+                    <h1 class="contact__headline">您的聯絡資訊</h1>
+
+                    <div class="contact__wrapper va">
+                        <h1 class="contact__sub-title">聯絡姓名：</h1>
+                        <input class="contact__input" type="text">
+                    </div>
+
+                    <div class="contact__wrapper va">
+                        <h1 class="contact__sub-title">聯絡信箱：</h1>
+                        <input class="contact__input" type="text">
+                    </div>
+
+                    <div class="contact__wrapper va">
+                        <h1 class="contact__sub-title">手機號碼：</h1>
+                        <input class="contact__input" type="text">
+                    </div>
+
+                    <p class="contact__txt">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</p>
+                </form>
+
+                <div class="hr"></div>
+
+                <form class="payment" action="" method="post">
+                    <h1 class="payment__headline">信用卡付款資訊</h1>
+
+                    <div class="payment__wrapper va">
+                        <h1 class="payment__sub-title">卡片號碼：</h1>
+                        <input class="payment__input" type="text">
+                    </div>
+
+                    <div class="payment__wrapper va">
+                        <h1 class="payment__sub-title">過期時間：</h1>
+                        <input class="payment__input" type="text"> 
+                    </div>
+
+                    <div class="payment__wrapper va">
+                        <h1 class="payment__sub-title">驗證密碼：</h1>
+                        <input class="payment__input" type="text">
+                    </div>
+                </form>
+
+                <div class="hr"></div>
+
+                <div class="summary">
+                    <h1 class="summary__title">總價：新台幣 2000 元</h1>
+                    <button class="summary__btn">確認訂購並付款</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer">
+            <p class="footer__txt">COPYRIGHT © 2021 台北一日遊</p>
+        </div>
+    </footer>
+
+    <script src="../static/booking.js"></script>
+    <script src="../static/gate.js"></script>
+</body>
+</html>
