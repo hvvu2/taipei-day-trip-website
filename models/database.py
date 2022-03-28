@@ -17,6 +17,13 @@ cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = poolName, pool
 
 class DBManager:
     def __init__(self):
+        size = cnxpool.pool_size
+        qsize = cnxpool._cnx_queue.qsize()
+
+        if qsize < size:
+            for c in range(size - qsize):
+                cnxpool.add_connection()
+                
         self.cnx = cnxpool.get_connection()
         self.cursor = self.cnx.cursor()
 
