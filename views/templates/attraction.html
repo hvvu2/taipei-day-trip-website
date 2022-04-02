@@ -60,15 +60,30 @@
         </div>
     </article>
 
+    <div class="confirm" id="js-confirm">
+        <div class="confirm__wrapper hidden" id="js-confirm-success">
+            <h1 class="confirm__title">預定成功</h1>
+            <p class="confirm__txt">前往 <a class="confirm__link" href="/booking">預定行程</a> 確認您的行程</p>
+        </div>
+
+        <div class="confirm__wrapper hidden" id="js-confirm-failure">
+            <h1 class="confirm__title">預定失敗</h1>
+            <p class="confirm__txt">請確認選擇的日期是否正確</p>
+        </div>
+
+        <button class="confirm__btn btn" id="js-confirm__btn"></button>
+    </div>
+
     <nav>
         <div class="navbar">
             <div class="navbar__wrapper">
                 <a href="/"><h1 class="navbar__title">台北一日遊</h1></a>
 
                 <div class="navbar__btn-wrapper va">
-                    <button class="navbar__btn">預定行程</button>
-                    <button class="navbar__btn" id="navbar__gate-btn">登入/註冊</button>
-                    <button class="navbar__btn hidden" id="navbar__sign-out-btn">登出系統</button>
+                    <button class="navbar__btn" id="js-navbar__booking-btn">預定行程 </button>
+                    <button class="navbar__btn" id="js-navbar__gate-btn">登入/註冊</button>
+                    <button class="navbar__btn hidden" id="js-navbar__sign-out-btn">登出系統</button>
+                    <i class="navbar__icon" id="js-navbar__icon"><span class="navbar__number" id="js-navbar__number"></span></i>
                 </div>
             </div>
         </div>
@@ -80,9 +95,9 @@
                 <article class="profile">
                     <div class="slider">
                         <div class="slider__showcase">
-                            <img class="slider__img l-img" id="slider__last-img" src="" alt="">
+                            <img class="slider__img l-img" id="js-slider__last-img" src="" alt="">
                             <div class="slider__container" id="js-slider__container"></div>
-                            <img class="slider__img f-img" id="slider__first-img" src="" alt="">
+                            <img class="slider__img f-img" id="js-slider__first-img" src="" alt="">
                         </div>
 
                         <button class="slider__btn l-btn" id="js-slider__previous-btn"><img src="../static/img/btn_leftArrow.png"></button>
@@ -94,13 +109,13 @@
                         <h1 class="profile__title" id="js-profile__title"></h1>
                         <span class="profile__desc" id="js-profile__desc"></span>
                         
-                        <form class="order" action="/booking" method="post">
+                        <div class="order">
                             <h1 class="order__title">訂購導覽行程</h1>
                             <p class="order__txt">以此景點為中心的一日行程，帶您探索城市角落故事</p>
 
                             <div class="order__wrapper va">
                                 <h1 class="order__sub-title">選擇日期：</h1>
-                                <input class="order__date" name="order__date" type="date">
+                                <input class="order__date" id="js-order__date" name="order__date" type="date">
                             </div>
 
                             <div class="order__wrapper va">
@@ -120,11 +135,11 @@
 
                             <div class="order__wrapper va">
                                 <h1 class="order__sub-title">導覽費用：</h1>
-                                <span class="order__desc" id="js-order__desc">新台幣 2000 元</span>
+                                <span class="order__desc">新台幣 <span class="oder__desc" id="js-order__price">2000</span> 元</span>
                             </div>
 
-                            <button class="order__btn" id="js-order__btn" type="submit">開始預訂行程</button>
-                        </form>
+                            <button class="order__btn btn" id="js-order__btn" type="button">開始預訂行程</button>
+                        </div>
                     </div>
                 </article>
 
@@ -154,6 +169,6 @@
     </footer>
 
     <script src="../static/attraction.js"></script>
-    <script src="../static/gate.js"></script>
+    <script src="../static/nav.js"></script>
 </body>
 </html>

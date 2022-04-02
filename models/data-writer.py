@@ -7,6 +7,7 @@ with open("data/taipei-attractions.json", encoding="utf-8") as file:
 id = 0
 
 for attraction in attractions:
+    
     id += 1
     name = attraction["stitle"]
     category = attraction["CAT2"]
@@ -17,7 +18,9 @@ for attraction in attractions:
     latitude = attraction["latitude"]
     longitude = attraction["longitude"]
     imagesList = attraction["file"].lower().split("https://")
-    db.insertBasicInfo(id, name, category, description, address, transport, mrt, latitude, longitude)
+    cover = "https://" + imagesList[1]
+    
+    db.insertBasicInfo(id, name, category, description, address, transport, mrt, latitude, longitude, cover)
 
     for images in imagesList:
         if images.endswith(".jpg"):

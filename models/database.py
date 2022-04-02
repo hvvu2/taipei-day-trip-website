@@ -1,4 +1,5 @@
 import os, mysql.connector, mysql.connector.pooling
+from pickletools import pystring
 from dotenv import load_dotenv
 
 load_dotenv
@@ -17,20 +18,13 @@ cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = poolName, pool
 
 class DBManager:
     def __init__(self):
-        size = cnxpool.pool_size
-        qsize = cnxpool._cnx_queue.qsize()
-
-        if qsize < size:
-            for c in range(size - qsize):
-                cnxpool.add_connection()
-                
         self.cnx = cnxpool.get_connection()
         self.cursor = self.cnx.cursor()
 
-    def insertBasicInfo(self, id, name, category, description, address, transport, mrt, latitude, longitude):
+    def insertBasicInfo(self, id, name, category, description, address, transport, mrt, latitude, longitude, cover):
         cmd = """
-            INSERT INTO `attractions` (`id`, `name`, `category`, `description`, `address`, `transport`, `mrt`, `latitude`, `longitude`) 
-            VALUES (%(id)s, %(name)s, %(category)s, %(description)s, %(address)s, %(transport)s, %(mrt)s, %(latitude)s, %(longitude)s);
+            INSERT INTO `attractions` (`id`, `name`, `category`, `description`, `address`, `transport`, `mrt`, `latitude`, `longitude`, `cover`) 
+            VALUES (%(id)s, %(name)s, %(category)s, %(description)s, %(address)s, %(transport)s, %(mrt)s, %(latitude)s, %(longitude)s, %(cover)s);
         """
         param = {
             "id": id,
@@ -41,7 +35,8 @@ class DBManager:
             "transport": transport,
             "mrt": mrt,
             "latitude": latitude,
-            "longitude": longitude
+            "longitude": longitude,
+            "cover": cover
          }
         self.cursor.execute(cmd, param)
 
@@ -141,9 +136,11 @@ class DBManager:
 
         try:
             self.cnx.commit()
+            return True
 
         except:
             self.cnx.rollback()
+            return False
 
     def getUserInfo(self, email):
         cmd = "SELECT `id`, `name`, `email`, `password` FROM `members` WHERE `email` = %(email)s;"
@@ -157,8 +154,64 @@ class DBManager:
         else:
             return False
 
+    def insertSchedule(self, memberId, email, name, attractionId, date, time, price):
+        cmd = """
+            INSERT INTO `schedules` (`member_id`, `name`, `email`, `attraction_id`, `date`, `time`, `price`)
+            VALUES (%(memberId)s, %(name)s, %(email)s, %(attractionId)s, %(date)s, %(time)s, %(price)s);
+        """
+        param = {
+            "memberId": memberId,
+            "name": name,
+            "email": email,
+            "attractionId": attractionId,
+            "date": date,
+            "time": time,
+            "price": price
+         }
+        self.cursor.execute(cmd, param)
+
+        try:
+            self.cnx.commit()
+            return True
+
+        except:
+            self.cnx.rollback()
+            return False
+
+    def getScheduleInfo(self, memberId):
+        cmd = """
+            SELECT `schedules`.`id`, `member_id`, `schedules`.`name`, `email`, `attraction_id`, `attractions`.`name`, `address`, `cover`, `date`, `time`, `price`
+            FROM `schedules` LEFT JOIN `attractions`
+            ON `schedules`.`attraction_id` = `attractions`.`id`
+            WHERE `member_id` = %(memberId)s;
+        """
+        param = {"memberId": memberId}
+        self.cursor.execute(cmd, param)
+        result = self.cursor.fetchall()
+        if result:
+            return result
+
+        else:
+            return False
+
+    def deleteSchedule(self, scheduleId, memberId):
+        cmd = "DELETE FROM `schedules` WHERE `id` = %(scheduleId)s AND `member_id` = %(memberId)s;"
+        param = {
+            "scheduleId": scheduleId,
+            "memberId": memberId
+        }
+        self.cursor.execute(cmd, param)
+
+        try:
+            self.cnx.commit()
+            return True
+
+        except:
+            self.cnx.rollback()
+            return False
+
     def __exit__(self):
         self.cursor.close()
         self.cnx.close()
 
-db = DBManager()
+# db = DBManager()

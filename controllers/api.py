@@ -1,14 +1,29 @@
 from flask import Blueprint, request, Response, session
+from datetime import datetime
 from models.database import db
 import json, re
 
-def errorHandler(statusCode, message = "The argument is invalid, please retry."):
+invalidId = "The attraction does not exist or the input is invalid."
+emptyInput = "All inputs are required."
+invalidFormat = "The format is invalid."
+emailRegistered = "The email has already been registered."
+incorrectSignIn = "The email or the password is incorrect."
+
+
+def errorHandler(statusCode, message = "The argument is invalid."):
     if statusCode == 400:
         response = {
             "error": True,
             "message": message
         }
         return Response(json.dumps(response), status=400, mimetype="application/json")
+
+    elif statusCode == 403:
+        response = {
+            "error": True,
+            "message": "User is not signed in yet."
+        }
+        return Response(json.dumps(response), status=403, mimetype="application/json")
 
     elif statusCode == 500:
         response = {
@@ -17,18 +32,35 @@ def errorHandler(statusCode, message = "The argument is invalid, please retry.")
         }
         return Response(json.dumps(response), status=500, mimetype="application/json")
 
-invalidId = "The attraction does not exist or the input is invalid, please retry."
-emptyField = "All fields are required."
-invalidFormat = "The format is invalid."
-emailRegistered = "The email has already been registered."
-incorrectSignIn = "The email or the password is incorrect."
+def validateDate(date):
+    currentDate = datetime.today().strftime("%Y-%m-%d")
+    currentYear = int(currentDate.split("-")[0])
+    currentMonth = int(currentDate.split("-")[1])
+    currentDay = int(currentDate.split("-")[2])
+    selectedYear = int(date.split("-")[0])
+    selectedMonth = int(date.split("-")[1])
+    selectedDay = int(date.split("-")[2])
+
+    if selectedYear >= currentYear:
+        if selectedMonth >= currentMonth:
+            if selectedDay >= currentDay:
+                return True
+
+            else:
+                return False
+
+        else:
+            return False    
+
+    else:
+        return False
 
 # ===================================================================================== #
 
 api = Blueprint("api_bp", __name__)
 
 @api.route("/api/attractions", methods=["GET"])
-def showAttractionList():
+def showAttractions():
     try:
         currentPage = int(request.args.get("page"))
         keyword = request.args.get("keyword")        
@@ -132,7 +164,7 @@ def showAttractionList():
 
 
 @api.route("/api/attraction/<attractionId>", methods=["GET"])
-def showTargetAttraction(attractionId):
+def showTargetAttractions(attractionId):
     try:
         rawData = db.getRawDataById(attractionId)
         imageList = []
@@ -170,12 +202,12 @@ def authUser():
 
     if request.method == "GET":
         try:
-            if session["logged"]:
+            if session["signed"]:
                 response = {
                     "data": {
-                        "id": session["logged"][0],
-                        "name": session["logged"][1],
-                        "email": session["logged"][2]
+                        "id": session["signed"][0],
+                        "name": session["signed"][1],
+                        "email": session["signed"][2]
                     }
                 }
                 return json.dumps(response)
@@ -196,11 +228,14 @@ def authUser():
             if name and email and pwd:
                 if re.match(pattern, email):
                     if db.checkEmail(email):
-                        db.insertUser(name, email, pwd)
-                        response = {
-                            "ok": True
-                        }
-                        return json.dumps(response)
+                        if db.insertUser(name, email, pwd):
+                            response = {
+                                "ok": True
+                            }
+                            return json.dumps(response)
+
+                        else:
+                            return errorHandler(500)
 
                     else:
                         return errorHandler(400, emailRegistered)
@@ -209,7 +244,7 @@ def authUser():
                     return errorHandler(400, invalidFormat)
 
             else:
-                return errorHandler(400, emptyField)
+                return errorHandler(400, emptyInput)
         
         except:
             return errorHandler(500)
@@ -219,16 +254,16 @@ def authUser():
             data = request.get_json()
             email = data["email"]
             pwd = data["password"]
+            result = db.getUserInfo(email)
 
-            if db.getUserInfo(email):
-                result = db.getUserInfo(email)
+            if result:
                 dbId = result[0]
                 dbName = result[1]
                 dbEmail = result[2]
                 dbPwd = result[3]
 
                 if (pwd == dbPwd):
-                    session["logged"] = [dbId, dbName, dbEmail]
+                    session["signed"] = [dbId, dbName, dbEmail]
                     response = {
                         "ok": True
                     }
@@ -250,3 +285,94 @@ def authUser():
             "ok": True
         }
         return json.dumps(response)
+
+
+@api.route("/api/booking", methods=["GET", "POST", "DELETE"])
+def bookTrips():
+    if request.method == "GET":
+        try:
+            memberId = session["signed"][0]
+            schedules = db.getScheduleInfo(memberId)
+
+            if schedules:
+                scheduleList = []
+
+                for schedule in schedules:
+                    scheduleInfo = {
+                        "scheduleId": schedule[0],
+                        "attraction": {
+                            "id": schedule[4],
+                            "name": schedule[5],
+                            "address": schedule[6],
+                            "image": schedule[7]
+                        },
+                        "date": schedule[8],
+                        "time": schedule[9],
+                        "price": schedule[10]
+                    }
+
+                    scheduleList.append(scheduleInfo)
+
+                response = {
+                    "data": scheduleList
+                }
+                return json.dumps(response, ensure_ascii=False)
+
+            else:
+                response = {
+                    "data": None
+                }
+                return json.dumps(response)
+
+        except:
+            return errorHandler(403)
+
+
+    elif request.method == "POST":
+        try:
+            data = request.get_json()
+            memberId = session["signed"][0]
+            name = session["signed"][1]
+            email = session["signed"][2]
+            attractionId = data["attractionId"]
+            date = data["date"]
+            time = data["time"]
+            price = data["price"]
+
+            if attractionId and date and time and price:
+                if validateDate(date):
+                    if db.insertSchedule(memberId, name, email, attractionId, date, time, price):
+                        response = {
+                            "ok": True
+                        }
+                        return json.dumps(response)
+                    
+                    else:
+                        return errorHandler(500)
+                
+                else:
+                    return errorHandler(400, invalidFormat)
+
+            else:
+                return errorHandler(400, emptyInput)
+
+        except:
+            return errorHandler(403)
+
+    elif request.method == "DELETE":
+        try:
+            memberId = session["signed"][0]
+            data = request.get_json()
+            scheduleId = data["scheduleId"]
+
+            if db.deleteSchedule(scheduleId, memberId):
+                response = {
+                    "ok": True
+                }
+                return json.dumps(response)
+
+            else:
+                return errorHandler(500)
+
+        except:
+            return errorHandler(403)
