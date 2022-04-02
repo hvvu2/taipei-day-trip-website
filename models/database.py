@@ -214,4 +214,4 @@ class DBManager:
         self.cursor.close()
         self.cnx.close()
 
-# db = DBManager()
+db = DBManager()
