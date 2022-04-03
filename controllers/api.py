@@ -9,7 +9,6 @@ invalidFormat = "The format is invalid."
 emailRegistered = "The email has already been registered."
 incorrectSignIn = "The email or the password is incorrect."
 
-
 def errorHandler(statusCode, message = "The argument is invalid."):
     if statusCode == 400:
         response = {

@@ -14,7 +14,7 @@ dbconfig ={
     "database":os.getenv("DATABASE")
 }
 
-cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = poolName, pool_size = poolSize, **dbconfig)
+cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = poolName, pool_size = poolSize, **dbconfig, pool_reset_session=True)
 
 class DBManager:
     def __init__(self):
