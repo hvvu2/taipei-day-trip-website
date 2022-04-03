@@ -2,20 +2,30 @@ let data = null;
 let images = null;
 let lastImg = null;
 let sliderDotList = null;
-const sliderLastImg = document.getElementById("slider__last-img");
-const sliderFirstImg = document.getElementById("slider__first-img");
+let currentImg = 1;
+let offset = 540;
+let loaded = true;
+
+const sliderLastImg = document.getElementById("js-slider__last-img");
+const sliderFirstImg = document.getElementById("js-slider__first-img");
 const sliderContainer = document.getElementById("js-slider__container");
 const sliderIndicator = document.getElementById("js-slider__indicator");
 const sliderPreviousBtn = document.getElementById("js-slider__previous-btn");
 const sliderNextBtn = document.getElementById("js-slider__next-btn");
 const profileTitle = document.getElementById("js-profile__title");
 const profileDesc = document.getElementById("js-profile__desc");
+const orderDate = document.getElementById("js-order__date");
 const orderMorning = document.getElementById("js-order__morning");
 const orderAfternoon = document.getElementById("js-order__afternoon");
-const orderPrice = document.getElementById("js-order__desc");
+const orderPrice = document.getElementById("js-order__price");
 const infoDesc = document.getElementById("js-info__desc");
 const infoAddress = document.getElementById("js-info__address");
 const infoTransport = document.getElementById("js-info__transport");
+const orderBtn = document.getElementById("js-order__btn");
+const confirmPopup = document.getElementById("js-confirm");
+const confirmPopupSuccess = document.getElementById("js-confirm-success");
+const confirmPopupFailure = document.getElementById("js-confirm-failure");
+const confirmPopupBtn = document.getElementById("js-confirm__btn");
 
 // Model
 const url = () => {
@@ -34,10 +44,40 @@ const getData = async (url) => {
 
 // View
 const setPrice = (price) => {
-    orderPrice.textContent = "新台幣 " + price + " 元";
+    orderPrice.textContent = price;
 }
 
 // Controller
+const validateDate = (date) => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+    const currentDay = currentDate.getDate();
+    const selectedYear = parseInt(date.split("-")[0]);
+    const selectedMonth = parseInt(date.split("-")[1]);
+    const selectedDay = parseInt(date.split("-")[2]);
+
+    if (selectedYear >= currentYear) {
+        if (selectedMonth >= currentMonth) {
+            if (selectedDay >= currentDay) {
+                return true;
+            }
+
+            else {
+                return false;
+            }
+        }
+
+        else {
+            return false;
+        }
+    }
+
+    else {
+        return false;
+    }
+}
+
 const init = async () => {
     const option = {
         method: "GET",
@@ -46,12 +86,12 @@ const init = async () => {
         },
     };
     const signInResponse = await fetch("/api/user", option);
-    const signInPromise = await signInResponse.json()
-    const signInResult = await signInPromise
+    const signInPromise = await signInResponse.json();
+    const signInResult = await signInPromise;
     
     if (signInResult.data) {
-        hideBlock(gateBtn);
         showBlock(signOutBtn);
+        hideBlock(gateBtn);
     }
 
     else{
@@ -101,10 +141,6 @@ orderMorning.addEventListener("click", () => {
 orderAfternoon.addEventListener("click", () => {
     setPrice("2500");
 });
-
-let currentImg = 1;
-let offset = 540;
-let loaded = true;
 
 sliderNextBtn.addEventListener("click", async () => {
     sliderContainer.style.transition = "0.5s";
@@ -179,4 +215,68 @@ sliderLastImg.addEventListener("transitionend", () => {
     loaded = true;
     sliderLastImg.style.transition = "none";
     sliderLastImg.style.transform = "translateX(0)";
+});
+
+orderBtn.addEventListener("click", async () => {
+    const signInOption = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+    };
+    const signInResponse = await fetch("/api/user", signInOption);
+    const signInPromise = await signInResponse.json();
+    const signInResult = await signInPromise;
+
+    if (signInResult.data) {
+        const attractionId = location.pathname.split("/attraction/")[1];
+        const date = orderDate.value;
+        const time = document.querySelector("input[name='order__time']:checked").value;
+        const price = parseInt(orderPrice.textContent);
+        const data = {
+            "attractionId": attractionId,
+            "date": date,
+            "time": time,
+            "price": price
+        };
+        const option = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        };
+        
+        if (attractionId && validateDate(date) && time && price) {
+            await fetch("/api/booking", option);
+            confirmPopup.style.transform = "scale(1)";
+            showBlock(confirmPopupSuccess);
+            hideBlock(confirmPopupFailure);
+            showSchedules();
+            confirmPopupBtn.textContent = "繼續瀏覽"
+        }
+    
+        else {
+            confirmPopup.style.transform = "scale(1)";
+            showBlock(confirmPopupFailure);
+            hideBlock(confirmPopupSuccess);
+            confirmPopupBtn.textContent = "確認"
+        }
+    }
+
+    else{
+        popup.style.pointerEvents = "all";
+        popup.style.opacity = "1";
+        popup.style.transition = "1s";
+        gate.style.transform = "translateY(80px)";
+        gate.style.transition = "0.3s";
+        gateTitle.textContent = "登入會員帳號";
+        showBlock(signIn);
+        hideBlock(signUp);
+        resetGateInput();
+    }
+});
+
+confirmPopupBtn.addEventListener("click", () =>{
+    confirmPopup.style.transform = "scale(0)";
 });

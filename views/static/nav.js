@@ -1,5 +1,8 @@
-const gateBtn = document.getElementById("navbar__gate-btn");
-const signOutBtn = document.getElementById("navbar__sign-out-btn");
+const gateBtn = document.getElementById("js-navbar__gate-btn");
+const signOutBtn = document.getElementById("js-navbar__sign-out-btn");
+const bookingBtn = document.getElementById("js-navbar__booking-btn");
+const bookingIcon = document.getElementById("js-navbar__icon");
+const bookingNumber = document.getElementById("js-navbar__number");
 const popup = document.getElementById("js-popup");
 const gate = document.getElementById("js-gate");
 const gateTitle = document.getElementById("js-gate__title");
@@ -178,8 +181,31 @@ const hideBlock = (e) => {
     e.classList.add("hidden");
 }
 
+// Controller
+const showSchedules = async () => {
+    const option = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+    };
+    const response = await fetch("/api/booking", option);
+    const promise = await response.json();
+    const result = await promise;
+
+    if (result.data.length) {
+        bookingNumber.textContent = result.data.length;
+        bookingIcon.style.transform = "scale(1)";
+    }
+
+    else {
+        bookingIcon.style.transform = "scale(0)";
+    }
+}
 
 //
+showSchedules();
+
 gateBtn.addEventListener("click", () => {
     popup.style.pointerEvents = "all";
     popup.style.opacity = "1";
@@ -378,5 +404,33 @@ signInPwd.addEventListener("blur", () => {
     else {
         setError(signInPwd);
         setErrorIcon(signInPwd);
+    }
+});
+
+bookingBtn.addEventListener("click", async () => {
+    const option = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+    };
+    const signInResponse = await fetch("/api/user", option);
+    const signInPromise = await signInResponse.json();
+    const signInResult = await signInPromise;
+
+    if (signInResult.data) {
+        window.location.href = "/booking";
+    }
+
+    else{
+        popup.style.pointerEvents = "all";
+        popup.style.opacity = "1";
+        popup.style.transition = "1s";
+        gate.style.transform = "translateY(80px)";
+        gate.style.transition = "0.3s";
+        gateTitle.textContent = "登入會員帳號";
+        showBlock(signIn);
+        hideBlock(signUp);
+        resetGateInput();
     }
 });

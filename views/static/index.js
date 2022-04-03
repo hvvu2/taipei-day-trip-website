@@ -74,14 +74,6 @@ const addMessage = (container, message, classname, text) => {
     message.textContent = text;
 }
 
-const show = (e) => {
-    e.classList.remove("hidden");
-}
-
-const hide = (e) => {
-    e.classList.add("hidden");
-}
-
 // Controller
 const infiniteScrolling = (result, container, target, keyword) => {
     let loaded = true;
@@ -124,8 +116,8 @@ const init = async () => {
         },
     };
     const signInResponse = await fetch("/api/user", option);
-    const signInPromise = await signInResponse.json()
-    const signInResult = await signInPromise
+    const signInPromise = await signInResponse.json();
+    const signInResult = await signInPromise;
     
     if (signInResult.data) {
         hideBlock(gateBtn);
@@ -145,8 +137,6 @@ const init = async () => {
     loadPage(main, data, shownItems);
     addSentinel(main, sentinel);
     infiniteScrolling(result, main, sentinel, "");
-
-
 }
 
 const search = async () => {
@@ -157,8 +147,8 @@ const search = async () => {
     }
 
     if (keyword) {
-        show(searchResult);
-        hide(main);
+        showBlock(searchResult);
+        hideBlock(main);
 
         const result = await getData(url(0, keyword));
         const data = result.data;
@@ -179,8 +169,8 @@ const search = async () => {
     }
 
     else {
-        show(main);
-        hide(searchResult);
+        showBlock(main);
+        hideBlock(searchResult);
     }
 }
 

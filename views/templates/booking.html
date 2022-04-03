@@ -66,9 +66,10 @@
                 <a href="/"><h1 class="navbar__title">台北一日遊</h1></a>
 
                 <div class="navbar__btn-wrapper va">
-                    <button class="navbar__btn">預定行程</button>
-                    <button class="navbar__btn" id="navbar__gate-btn">登入/註冊</button>
-                    <button class="navbar__btn hidden" id="navbar__sign-out-btn">登出系統</button>
+                    <button class="navbar__btn" id="js-navbar__booking-btn">預定行程 </button>
+                    <button class="navbar__btn" id="js-navbar__gate-btn">登入/註冊</button>
+                    <button class="navbar__btn hidden" id="js-navbar__sign-out-btn">登出系統</button>
+                    <i class="navbar__icon" id="js-navbar__icon"><span class="navbar__number" id="js-navbar__number"></span></i>
                 </div>
             </div>
         </div>
@@ -76,88 +77,72 @@
 
     <div class="content-wrapper">
         <main>
-            <div class="booking-main">
-                <h1 class="booking-main__headline">您好...</h1>
+            <div class="booking-main" js="js-booking-main">
+                <h1 class="booking-main__headline">您好，<span class="booking-main__headline" id="js-booking-main__name"></span>，待預定的行程如下：</h1>
 
-                <article class="schedule">
-                    <img class="schedule__img" src="" alt="">
+                <div class="booking-main__wrapper hidden" id="js-booked-schedule">
+                    <div class="booking-main__schedule-wrapper" id="js-schedule-list"></div>
 
-                    <div class="schedule__wrapper">
-                        <h1 class="schedule__title">台北一日遊：</h1>
+                    <div class="hr"></div>
 
-                        <div class="schedule__txt-wrapper va">
-                            <h1 class="schedule__sub-title">日期：</h1>
-                            <span class="schedule__desc"></span>
+                    <div class="contact">
+                        <h1 class="contact__headline">您的聯絡資訊</h1>
+
+                        <div class="contact__wrapper va">
+                            <h1 class="contact__sub-title">聯絡姓名：</h1>
+                            <input class="contact__input" id="js-contact__name" type="text">
+                            <i class="contact__icon bx"></i>
                         </div>
 
-                        <div class="schedule__txt-wrapper va">
-                            <h1 class="schedule__sub-title">時間：</h1>
-                            <span class="schedule__desc"></span>
+                        <div class="contact__wrapper va">
+                            <h1 class="contact__sub-title">聯絡信箱：</h1>
+                            <input class="contact__input" id="js-contact__email" type="text">
+                            <i class="contact__icon bx"></i>
                         </div>
 
-                        <div class="schedule__txt-wrapper va">
-                            <h1 class="schedule__sub-title">費用：</h1>
-                            <span class="schedule__desc"></span>
+                        <div class="contact__wrapper va">
+                            <h1 class="contact__sub-title">手機號碼：</h1>
+                            <input class="contact__input" id="js-contact__phone" type="tel" inputmode="numeric" minlength="10" maxlength="10">
+                            <i class="contact__icon bx"></i>
                         </div>
 
-                        <div class="schedule__txt-wrapper va">
-                            <h1 class="schedule__sub-title">地點：</h1>
-                            <span class="schedule__desc"></span>
+                        <p class="contact__txt">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</p>
+                    </div>
+
+                    <div class="hr"></div>
+
+                    <div class="payment">
+                        <h1 class="payment__headline">信用卡付款資訊</h1>
+
+                        <div class="payment__wrapper va">
+                            <h1 class="payment__sub-title">卡片號碼：</h1>
+                            <input class="payment__input" id="js-payment__number" type="tel" pattern="\d*" maxlength="19" placeholder="**** **** **** ****">
+                            <i class="payment__icon bx"></i>
                         </div>
 
-                        <button class="schedule__btn"><img src="../static/img/icon_delete.png" alt="刪除行程"></button>
-                    </div>
-                </article>
+                        <div class="payment__wrapper va">
+                            <h1 class="payment__sub-title">過期時間：</h1>
+                            <input class="payment__input" id="js-payment__expiration" type="tel" placeholder="MM / YY">
+                            <i class="payment__icon bx"></i>
+                        </div>
 
-                <div class="hr"></div>
-
-                <form class="contact" action="" method="post">
-                    <h1 class="contact__headline">您的聯絡資訊</h1>
-
-                    <div class="contact__wrapper va">
-                        <h1 class="contact__sub-title">聯絡姓名：</h1>
-                        <input class="contact__input" type="text">
-                    </div>
-
-                    <div class="contact__wrapper va">
-                        <h1 class="contact__sub-title">聯絡信箱：</h1>
-                        <input class="contact__input" type="text">
+                        <div class="payment__wrapper va">
+                            <h1 class="payment__sub-title">驗證密碼：</h1>
+                            <input class="payment__input" id="js-payment__verification" type="tel" minlength="3" maxlength="3" placeholder="CVC">
+                            <i class="payment__icon bx"></i>
+                        </div>
                     </div>
 
-                    <div class="contact__wrapper va">
-                        <h1 class="contact__sub-title">手機號碼：</h1>
-                        <input class="contact__input" type="text">
+                    <div class="hr"></div>
+
+                    <div class="summary">
+                        <h1 class="summary__title">總價：新台幣 <span class="summary__title" id="js-summary__price"></span> 元</h1>
+                        <button class="summary__btn btn">確認訂購並付款</button>
                     </div>
+                </div>
 
-                    <p class="contact__txt">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</p>
-                </form>
-
-                <div class="hr"></div>
-
-                <form class="payment" action="" method="post">
-                    <h1 class="payment__headline">信用卡付款資訊</h1>
-
-                    <div class="payment__wrapper va">
-                        <h1 class="payment__sub-title">卡片號碼：</h1>
-                        <input class="payment__input" type="text">
-                    </div>
-
-                    <div class="payment__wrapper va">
-                        <h1 class="payment__sub-title">過期時間：</h1>
-                        <input class="payment__input" type="text"> 
-                    </div>
-
-                    <div class="payment__wrapper va">
-                        <h1 class="payment__sub-title">驗證密碼：</h1>
-                        <input class="payment__input" type="text">
-                    </div>
-                </form>
-
-                <div class="hr"></div>
-
-                <div class="summary">
-                    <h1 class="summary__title">總價：新台幣 2000 元</h1>
-                    <button class="summary__btn">確認訂購並付款</button>
+                <div class="booking-main__wrapper hidden" id="js-empty-schedule">
+                    <p class="booking-main__txt">目前沒有任何待預定的行程</p>
                 </div>
             </div>
         </main>
@@ -170,6 +155,6 @@
     </footer>
 
     <script src="../static/booking.js"></script>
-    <script src="../static/gate.js"></script>
+    <script src="../static/nav.js"></script>
 </body>
 </html>
