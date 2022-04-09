@@ -183,13 +183,7 @@ const hideBlock = (e) => {
 
 // Controller
 const showSchedules = async () => {
-    const option = {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
-        },
-    };
-    const response = await fetch("/api/booking", option);
+    const response = await fetch("/api/booking");
     const promise = await response.json();
     const result = await promise;
 

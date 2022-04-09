@@ -5,7 +5,6 @@ let sliderDotList = null;
 let currentImg = 1;
 let offset = 540;
 let loaded = true;
-
 const sliderLastImg = document.getElementById("js-slider__last-img");
 const sliderFirstImg = document.getElementById("js-slider__first-img");
 const sliderContainer = document.getElementById("js-slider__container");
@@ -22,10 +21,10 @@ const infoDesc = document.getElementById("js-info__desc");
 const infoAddress = document.getElementById("js-info__address");
 const infoTransport = document.getElementById("js-info__transport");
 const orderBtn = document.getElementById("js-order__btn");
-const confirmPopup = document.getElementById("js-confirm");
-const confirmPopupSuccess = document.getElementById("js-confirm-success");
-const confirmPopupFailure = document.getElementById("js-confirm-failure");
-const confirmPopupBtn = document.getElementById("js-confirm__btn");
+const confirmPopup = document.getElementById("js-attraction-confirm");
+const confirmPopupSuccess = document.getElementById("js-attraction-confirm__success");
+const confirmPopupFailure = document.getElementById("js-attraction-confirm__failure");
+const confirmPopupBtn = document.getElementById("js-attraction-confirm__btn");
 
 // Model
 const url = () => {
@@ -79,13 +78,7 @@ const validateDate = (date) => {
 }
 
 const init = async () => {
-    const option = {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
-        },
-    };
-    const signInResponse = await fetch("/api/user", option);
+    const signInResponse = await fetch("/api/user");
     const signInPromise = await signInResponse.json();
     const signInResult = await signInPromise;
     

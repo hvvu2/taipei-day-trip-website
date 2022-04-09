@@ -60,13 +60,28 @@
         </div>
     </article>
 
+    <div class="confirm" id="js-booking-confirm">
+        <div class="confirm__wrapper hidden" id="js-booking-confirm__success">
+            <h1 class="confirm__title" id="js-booking-confirm__result"></h1>
+            <p class="confirm__txt" id="js-booking-confirm__msg"></p>
+        </div>
+
+        <div class="confirm__wrapper hidden" id="js-booking-confirm__failure">
+            <h1 class="confirm__title">錯誤</h1>
+            <p class="confirm__txt">請確認所有欄位是否輸入正確</p>
+        </div>
+
+        <div class="confirm__icon hidden" id="js-booking-confirm__icon"></div>
+        <button class="confirm__btn btn hidden" id="js-booking-confirm__btn">確認</button>
+    </div>
+
     <nav>
         <div class="navbar">
             <div class="navbar__wrapper">
                 <a href="/"><h1 class="navbar__title">台北一日遊</h1></a>
 
                 <div class="navbar__btn-wrapper va">
-                    <button class="navbar__btn" id="js-navbar__booking-btn">預定行程 </button>
+                    <button class="navbar__btn" id="js-navbar__booking-btn">預訂行程 </button>
                     <button class="navbar__btn" id="js-navbar__gate-btn">登入/註冊</button>
                     <button class="navbar__btn hidden" id="js-navbar__sign-out-btn">登出系統</button>
                     <i class="navbar__icon" id="js-navbar__icon"><span class="navbar__number" id="js-navbar__number"></span></i>
@@ -78,7 +93,7 @@
     <div class="content-wrapper">
         <main>
             <div class="booking-main" js="js-booking-main">
-                <h1 class="booking-main__headline">您好，<span class="booking-main__headline" id="js-booking-main__name"></span>，待預定的行程如下：</h1>
+                <h1 class="booking-main__headline">您好，<span class="booking-main__headline" id="js-booking-main__name"></span>，待預訂的行程如下：</h1>
 
                 <div class="booking-main__wrapper hidden" id="js-booked-schedule">
                     <div class="booking-main__schedule-wrapper" id="js-schedule-list"></div>
@@ -102,7 +117,7 @@
 
                         <div class="contact__wrapper va">
                             <h1 class="contact__sub-title">手機號碼：</h1>
-                            <input class="contact__input" id="js-contact__phone" type="tel" inputmode="numeric" minlength="10" maxlength="10">
+                            <input class="contact__input" id="js-contact__phone" type="tel" inputmode="numeric" oninput="value=value.replace(/[^\d]/g,'')" maxlength="10">
                             <i class="contact__icon bx"></i>
                         </div>
 
@@ -111,24 +126,24 @@
 
                     <div class="hr"></div>
 
-                    <div class="payment">
+                    <div class="payment" id="js-payment">
                         <h1 class="payment__headline">信用卡付款資訊</h1>
 
                         <div class="payment__wrapper va">
                             <h1 class="payment__sub-title">卡片號碼：</h1>
-                            <input class="payment__input" id="js-payment__number" type="tel" pattern="\d*" maxlength="19" placeholder="**** **** **** ****">
+                            <div class="tpfield" id="card-number"></div>
                             <i class="payment__icon bx"></i>
                         </div>
 
                         <div class="payment__wrapper va">
                             <h1 class="payment__sub-title">過期時間：</h1>
-                            <input class="payment__input" id="js-payment__expiration" type="tel" placeholder="MM / YY">
+                            <div class="tpfield" id="card-expiration-date"></div>
                             <i class="payment__icon bx"></i>
                         </div>
 
                         <div class="payment__wrapper va">
                             <h1 class="payment__sub-title">驗證密碼：</h1>
-                            <input class="payment__input" id="js-payment__verification" type="tel" minlength="3" maxlength="3" placeholder="CVC">
+                            <div class="tpfield" id="card-ccv"></div>
                             <i class="payment__icon bx"></i>
                         </div>
                     </div>
@@ -137,7 +152,7 @@
 
                     <div class="summary">
                         <h1 class="summary__title">總價：新台幣 <span class="summary__title" id="js-summary__price"></span> 元</h1>
-                        <button class="summary__btn btn">確認訂購並付款</button>
+                        <button class="summary__btn btn" id="js-summary__btn">確認訂購並付款</button>
                     </div>
                 </div>
 
@@ -154,7 +169,11 @@
         </div>
     </footer>
 
-    <script src="../static/booking.js"></script>
+    <script src="https://js.tappaysdk.com/tpdirect/v5.8.0"></script>
+    <script>
+        TPDirect.setupSDK(124060, "app_UqwutUEcAPUI7kwmp304xxrv4skZyLW9UWBqQcoJ3H7TLxf8jFJRwOMbhede", "sandbox")
+    </script>
     <script src="../static/nav.js"></script>
+    <script src="../static/booking.js"></script>
 </body>
 </html>
