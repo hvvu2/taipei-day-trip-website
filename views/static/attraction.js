@@ -5,6 +5,7 @@ let sliderDotList = null;
 let currentImg = 1;
 let offset = 540;
 let loaded = true;
+const sliderShowcase = document.getElementById("js-slider__showcase");
 const sliderLastImg = document.getElementById("js-slider__last-img");
 const sliderFirstImg = document.getElementById("js-slider__first-img");
 const sliderContainer = document.getElementById("js-slider__container");
@@ -13,10 +14,12 @@ const sliderPreviousBtn = document.getElementById("js-slider__previous-btn");
 const sliderNextBtn = document.getElementById("js-slider__next-btn");
 const profileTitle = document.getElementById("js-profile__title");
 const profileDesc = document.getElementById("js-profile__desc");
+const order = document.getElementById("js-order");
 const orderDate = document.getElementById("js-order__date");
 const orderMorning = document.getElementById("js-order__morning");
 const orderAfternoon = document.getElementById("js-order__afternoon");
 const orderPrice = document.getElementById("js-order__price");
+const info = document.getElementById("js-info");
 const infoDesc = document.getElementById("js-info__desc");
 const infoAddress = document.getElementById("js-info__address");
 const infoTransport = document.getElementById("js-info__transport");
@@ -44,6 +47,18 @@ const getData = async (url) => {
 // View
 const setPrice = (price) => {
     orderPrice.textContent = price;
+}
+
+const removeSkeleton = () => {
+    sliderShowcase.classList.remove("skeleton");
+    profileTitle.classList.remove("skeleton");
+    profileDesc.classList.remove("skeleton");
+    order.classList.remove("skeleton");
+    infoDesc.classList.remove("skeleton");
+    infoAddress.classList.remove("skeleton");
+    infoTransport.classList.remove("skeleton");
+    info.querySelectorAll(".info__sub-title")[0].classList.remove("skeleton");
+    info.querySelectorAll(".info__sub-title")[1].classList.remove("skeleton");
 }
 
 // Controller
@@ -91,7 +106,7 @@ const init = async () => {
         showBlock(gateBtn);
         hideBlock(signOutBtn);
     }
-    
+
     await getData(url());
     const name = data.name;
     const category = data.category;
@@ -122,6 +137,10 @@ const init = async () => {
     infoDesc.textContent = description;
     infoAddress.textContent = address;
     infoTransport.textContent = transport;
+
+    setTimeout(() => {
+        removeSkeleton();
+    }, 1500);
 }
 
 //

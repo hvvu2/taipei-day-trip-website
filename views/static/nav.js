@@ -187,7 +187,7 @@ const showSchedules = async () => {
     const promise = await response.json();
     const result = await promise;
 
-    if (result.data.length) {
+    if (result.data) {
         bookingNumber.textContent = result.data.length;
         bookingIcon.style.transform = "scale(1)";
     }

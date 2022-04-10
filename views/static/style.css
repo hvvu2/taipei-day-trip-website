@@ -55,6 +55,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 5;
   width: 100%;
   height: 100%;
   content: "";
@@ -62,9 +63,10 @@
 }
 
 .skeleton::after {
+  display: block;
   position: absolute;
   top: 0;
-  display: block;
+  z-index: 10;
   width: 100%;
   height: 100%;
   content: "";
@@ -369,6 +371,7 @@ body {
 }
 
 .confirm__txt .confirm__link:hover {
+  margin: 0;
   color: #4EA0B4;
   -webkit-transition: 0.3s;
   transition: 0.3s;
@@ -777,31 +780,32 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__icon .navbar__number 
 }
 
 .content-wrapper main .main__wrapper .main__link {
-  width: 270px;
-  height: 242px;
   margin: 15px;
+  border-radius: 5px;
   -webkit-transition: 0.3s;
   transition: 0.3s;
 }
 
 .content-wrapper main .main__wrapper .main__link:hover {
+  -webkit-box-shadow: 1px 1px 2px #AABBCC;
+          box-shadow: 1px 1px 2px #AABBCC;
   opacity: 0.75;
   -webkit-transition: 0.3s;
   transition: 0.3s;
 }
 
 .content-wrapper main .main__wrapper .main__link .card {
+  width: 268px;
   height: 240px;
-  background-color: white;
   border: 1px solid #E8E8E8;
   border-radius: 5px;
+  background-color: white;
 }
 
 @media screen and (min-width: 768px) and (max-width: 1200px) {
   .content-wrapper main .main__wrapper .main__link .card {
     width: 350px;
     height: 280px;
-    margin: 15px 15px 0 15px;
   }
 }
 
@@ -809,7 +813,6 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__icon .navbar__number 
   .content-wrapper main .main__wrapper .main__link .card {
     width: 322px;
     height: 280px;
-    margin: 15px 15px 0 15px;
   }
 }
 
@@ -1209,12 +1212,16 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__icon .navbar__number 
 }
 
 .content-wrapper main .attraction-main .profile__wrapper .profile__title {
+  width: 400px;
+  height: 24px;
   margin-bottom: 20px;
   font-size: 24px;
   font-weight: bold;
 }
 
 .content-wrapper main .attraction-main .profile__wrapper .profile__desc {
+  width: 200px;
+  height: 16px;
   margin-bottom: 20px;
 }
 
@@ -1364,9 +1371,14 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__icon .navbar__number 
 
 .content-wrapper main .attraction-main .info__txt {
   display: block;
+  width: 100%;
   margin-bottom: 25px;
   line-height: 24px;
   letter-spacing: 1px;
+}
+
+.content-wrapper main .attraction-main .info__txt:nth-child(1) {
+  min-height: 150px;
 }
 
 .content-wrapper main .attraction-main .info__wrapper {
@@ -1374,9 +1386,21 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__icon .navbar__number 
 }
 
 .content-wrapper main .attraction-main .info__wrapper .info__sub-title {
+  width: 90px;
   height: 32px;
+  margin-bottom: 5px;
   font-weight: bold;
   line-height: 32px;
+}
+
+.content-wrapper main .attraction-main .info__wrapper:nth-child(2) .info__txt {
+  width: 700px;
+  height: 24px;
+}
+
+.content-wrapper main .attraction-main .info__wrapper:nth-child(3) .info__txt {
+  width: 100%;
+  height: 48px;
 }
 
 .content-wrapper main .booking-main {
@@ -1390,6 +1414,7 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__icon .navbar__number 
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  position: relative;
   width: 1200px;
   margin: 40px 0;
 }
@@ -1411,7 +1436,16 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__icon .navbar__number 
 .content-wrapper main .booking-main__headline {
   width: 1000px;
   font-size: 19px;
-  font-weight: bolder;
+  font-weight: bold;
+  opacity: 0;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  -webkit-transition: 1s;
+  transition: 1s;
+}
+
+.content-wrapper main .booking-main__headline > span {
+  font-weight: bold;
 }
 
 @media screen and (min-width: 768px) and (max-width: 1200px) {
@@ -1428,6 +1462,11 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__icon .navbar__number 
 
 .content-wrapper main .booking-main__wrapper {
   width: 1000px;
+  opacity: 0;
+  -webkit-transform: translateY(-20px);
+          transform: translateY(-20px);
+  -webkit-transition: 1s;
+  transition: 1s;
 }
 
 @media screen and (min-width: 768px) and (max-width: 1200px) {
@@ -1794,6 +1833,15 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__icon .navbar__number 
   transition: 0.3s;
 }
 
+.content-wrapper main .booking-main__wrapper:last-child {
+  position: absolute;
+  top: 20px;
+  -webkit-transform: translateY(-5px);
+          transform: translateY(-5px);
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
 .content-wrapper main .thankyou-main {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1809,22 +1857,6 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__icon .navbar__number 
   margin: 40px 0;
 }
 
-.content-wrapper main .thankyou-main__icon-wrapper {
-  width: 108px;
-  height: 108px;
-  overflow: hidden;
-}
-
-.content-wrapper main .thankyou-main__icon-wrapper .thankyou-main__icon {
-  font-size: 108px;
-  color: #4EA0B4;
-  opacity: 0;
-  -webkit-transform: translateY(5%);
-          transform: translateY(5%);
-  -webkit-transition: 1.5s;
-  transition: 1.5s;
-}
-
 .content-wrapper main .thankyou-main__wrapper {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1837,8 +1869,20 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__icon .navbar__number 
       -ms-flex-align: center;
           align-items: center;
   opacity: 0;
-  -webkit-transform: translateY(50%);
-          transform: translateY(50%);
+  -webkit-transform: translateY(5%);
+          transform: translateY(5%);
+  -webkit-transition: 1.5s;
+  transition: 1.5s;
+}
+
+.content-wrapper main .thankyou-main__wrapper .thankyou-main__icon {
+  width: 108px;
+  height: 108px;
+  font-size: 108px;
+  color: #4EA0B4;
+  opacity: 0;
+  -webkit-transform: translateY(5%);
+          transform: translateY(5%);
   -webkit-transition: 1.5s;
   transition: 1.5s;
 }

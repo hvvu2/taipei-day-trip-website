@@ -8,6 +8,8 @@ emptyInput = "All inputs are required."
 invalidFormat = "The format is invalid."
 emailRegistered = "The email has already been registered."
 incorrectSignIn = "The email or the password is incorrect."
+emailPattern = r"(^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$)"
+phonePattern = r"(^09\d{8}$)"
 
 def errorHandler(statusCode, message = "The argument is invalid."):
     if statusCode == 400:
@@ -206,8 +208,6 @@ def showTargetAttractions(attractionId):
 
 @api.route("/api/user", methods=["GET", "POST", "PATCH", "DELETE"])
 def authUser():
-    pattern = r"(^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$)"
-
     if request.method == "GET":
         try:
             response = {
@@ -233,7 +233,7 @@ def authUser():
             pwd = data["password"]
 
             if name and email and pwd:
-                if re.match(pattern, email):
+                if re.match(emailPattern, email):
                     if db.checkEmail(email):
                         db.insertUser(name, email, pwd)
                         response = {
@@ -390,83 +390,83 @@ def manageSchedules():
 
 @api.route("/api/orders", methods=["POST"])
 def processPayment():
-    # try:
+    try:
         memberId = session["signed"][0]
 
-        # try: 
-        orderInfo = request.get_json()
-        prime = orderInfo["prime"]
-        partnerKey = os.getenv("PARTNER_KEY")
-        orderTime = str(datetime.today())[0:19]
-        orderNumber = genOrderNumber()
-        price = orderInfo["order"]["price"]
-        schedules = orderInfo["order"]["trip"]
-        contactName = orderInfo["order"]["contact"]["name"]
-        contactEmail = orderInfo["order"]["contact"]["email"]
-        contactPhone = orderInfo["order"]["contact"]["phone"]
+        try: 
+            orderInfo = request.get_json()
+            prime = orderInfo["prime"]
+            partnerKey = os.getenv("PARTNER_KEY")
+            orderTime = str(datetime.today())[0:19]
+            orderNumber = genOrderNumber()
+            price = orderInfo["order"]["price"]
+            schedules = orderInfo["order"]["trip"]
+            contactName = orderInfo["order"]["contact"]["name"]
+            contactEmail = orderInfo["order"]["contact"]["email"]
+            contactPhone = orderInfo["order"]["contact"]["phone"]
 
-        if prime and price and schedules and contactName and contactEmail and contactPhone.startswith("09"):
-            db.insertOrder(orderTime, orderNumber, price, contactName, contactEmail, contactPhone)
+            if prime and price and schedules and contactName and re.match(emailPattern, contactEmail) and re.match(phonePattern, contactPhone):
+                db.insertOrder(orderTime, orderNumber, price, contactName, contactEmail, contactPhone)
 
-            for schedule in schedules:
-                scheduleId = schedule["scheduleId"]
+                for schedule in schedules:
+                    scheduleId = schedule["scheduleId"]
 
-                db.insertOrderDetail(orderNumber, scheduleId)
+                    db.insertOrderDetail(orderNumber, scheduleId)
 
-            url = "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime"
-            headers = {
-                "Content-Type": "application/json",
-                "x-api-key": os.getenv("PARTNER_KEY")
-            }
-            body = {
-                "prime": prime,
-                "partner_key": partnerKey,
-                "merchant_id": "hvvu2_CTBC",
-                "details":"TapPay Test",
-                "amount": price,
-                "cardholder": {
-                    "phone_number": contactPhone,
-                    "name": contactName,
-                    "email": contactEmail,
-                    "zip_code": "",
-                    "address": "",
-                    "national_id": ""
+                url = "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime"
+                headers = {
+                    "Content-Type": "application/json",
+                    "x-api-key": os.getenv("PARTNER_KEY")
                 }
-            }
-            paymentResponse = requests.post(url, json=body, headers=headers).json()
-
-            if paymentResponse["status"] == 0:
-                db.updateOrderStatus(orderNumber)
-                db.clearAllSchedules(memberId)
-
-                response = {
-                    "data": {
-                        "number": orderNumber,
-                        "payment": {
-                        "status": 0,
-                        "message": "Payment completed."
-                        }
+                body = {
+                    "prime": prime,
+                    "partner_key": partnerKey,
+                    "merchant_id": "hvvu2_CTBC",
+                    "details":"TapPay Test",
+                    "amount": price,
+                    "cardholder": {
+                        "phone_number": contactPhone,
+                        "name": contactName,
+                        "email": contactEmail,
+                        "zip_code": "",
+                        "address": "",
+                        "national_id": ""
                     }
                 }
-                return json.dumps(response)
+                paymentResponse = requests.post(url, json=body, headers=headers).json()
 
+                if paymentResponse["status"] == 0:
+                    db.updateOrderStatus(orderNumber)
+                    db.clearAllSchedules(memberId)
+
+                    response = {
+                        "data": {
+                            "number": orderNumber,
+                            "payment": {
+                            "status": 0,
+                            "message": "Payment completed."
+                            }
+                        }
+                    }
+                    return json.dumps(response)
+
+                else:
+                    response = {
+                        "data": {
+                            "number": orderNumber,
+                            "payment": {
+                            "status": 1,
+                            "message": "Failed to process payment."
+                            }
+                        }
+                    }
+                    return json.dumps(response)
+            
             else:
-                response = {
-                    "data": {
-                        "number": orderNumber,
-                        "payment": {
-                        "status": 1,
-                        "message": "Failed to process payment."
-                        }
-                    }
-                }
-                return json.dumps(response)
+                return errorHandler(400, invalidFormat)
         
-        else:
-            return errorHandler(400, invalidFormat)
-        
-        # except:
-        #     return errorHandler(500)
+        except:
+            return errorHandler(500)
 
-    # except:
-    #     return errorHandler(403)
+    except:
+        return errorHandler(403)

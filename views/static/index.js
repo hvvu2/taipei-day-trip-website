@@ -46,11 +46,11 @@ const addCard = (container) => {
 
 const setCardInfo = (data, currentPage, shownItems) => {
     for (i = 0; i < shownItems; i++) {
-        const cardLink = currentPage.childNodes[i];
-        const cardImg = cardLink.querySelector(".card__img");
-        const cardName = cardLink.querySelector(".card__title");
-        const cardMrt = cardLink.querySelectorAll(".card__desc")[0];
-        const cardCategory = cardLink.querySelectorAll(".card__desc")[1];
+        const mainLink = currentPage.querySelectorAll(".main__link")[i];
+        const cardImg = mainLink.querySelector(".card__img");
+        const cardName = mainLink.querySelector(".card__title");
+        const cardMrt = mainLink.querySelectorAll(".card__desc")[0];
+        const cardCategory = mainLink.querySelectorAll(".card__desc")[1];
 
         const id = data[i].id.toString();
         const url = "/attraction/" + id;
@@ -59,7 +59,7 @@ const setCardInfo = (data, currentPage, shownItems) => {
         const mrt = data[i].mrt;
         const category = data[i].category;
 
-        cardLink.setAttribute("href", url);
+        mainLink.setAttribute("href", url);
         cardImg.style.backgroundImage = "url(" + imgUrl +")";
         cardName.textContent = name;
         cardMrt.textContent = mrt;
@@ -69,11 +69,11 @@ const setCardInfo = (data, currentPage, shownItems) => {
 
 const removeSkeleton = (currentPage, shownItems) => {
     for (i = 0; i < shownItems; i++) {
-        const cardLink = currentPage.childNodes[i];
-        const cardImg = cardLink.querySelector(".card__img");
-        const cardName = cardLink.querySelector(".card__title");
-        const cardMrt = cardLink.querySelectorAll(".card__desc")[0];
-        const cardCategory = cardLink.querySelectorAll(".card__desc")[1];
+        const mainLink = currentPage.querySelectorAll(".main__link")[i];
+        const cardImg = mainLink.querySelector(".card__img");
+        const cardName = mainLink.querySelector(".card__title");
+        const cardMrt = mainLink.querySelectorAll(".card__desc")[0];
+        const cardCategory = mainLink.querySelectorAll(".card__desc")[1];
 
         cardImg.classList.remove("skeleton");
         cardName.classList.remove("skeleton");
@@ -132,11 +132,12 @@ const infiniteScrolling = (result, page, container, target, keyword) => {
                     const shownItems = data.length;
 
                     setCardInfo(data, currentPage, shownItems);
+
                     setTimeout(() => {
                         removeSkeleton(currentPage, shownItems);
                         removeRemainder(currentPage, shownItems, 12);
                         target.classList.remove("hidden");
-                    }, 2000);
+                    }, 1500);
         
                     loaded = true;
                 }
@@ -173,8 +174,6 @@ const init = async () => {
         hideBlock(signOutBtn);
     }
 
-    loadPage(main, 12);
-
     const result = await getData(url(0, ""));
     const sentinel = document.createElement("div");
     const data = result.data;
@@ -182,10 +181,12 @@ const init = async () => {
     const currentPage = main.querySelectorAll(".main__wrapper")[page];
 
     setCardInfo(data, currentPage, shownItems);
+
     setTimeout(() => {
         removeSkeleton(currentPage, shownItems);
         addSentinel(main, sentinel);
-    }, 2000)
+    }, 1500);
+
     infiniteScrolling(result, page, main, sentinel, "");
 }
 

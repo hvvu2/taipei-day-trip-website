@@ -1,4 +1,6 @@
 let prime = null;
+let totalPrice = 0
+const bookingHeadline = document.getElementById("js-booking-main__headline");
 const memberName = document.getElementById("js-booking-main__name");
 const bookedSchedule = document.getElementById("js-booked-schedule");
 const emptySchedule = document.getElementById("js-empty-schedule");
@@ -16,6 +18,7 @@ const confirmPopupResult = document.getElementById("js-booking-confirm__result")
 const confirmPopupMsg = document.getElementById("js-booking-confirm__msg");
 const confirmPopupIcon = document.getElementById("js-booking-confirm__icon");
 const confirmPopupBtn = document.getElementById("js-booking-confirm__btn");
+const phonePattern = /^09\d{8}$/;
 
 // model
 const getData = async (url) => {
@@ -90,7 +93,15 @@ const loadSchedule = (scheduleId, img, name, date, time, price, address) => {
         const result = await fetch("/api/booking", option)
 
         if (result.ok) {
-            window.location.reload();
+            if (scheduleList.childNodes.length == 1) {
+                window.location.reload();
+            }
+
+            else {
+                schedule.remove();
+                summaryPrice.textContent = totalPrice -= price;
+                showSchedules();
+            }
         }
     });
 
@@ -145,7 +156,7 @@ const validateInputs = () => {
         setErrorIcon(contactEmail);
     }
 
-    if (phone.startsWith("09") && phone.length == 10) {
+    if (phonePattern.test(phone)) {
         removeError(contactPhone);
         removeErrorIcon(contactPhone);
     }
@@ -155,7 +166,7 @@ const validateInputs = () => {
         setErrorIcon(contactPhone);
     }
 
-    if (name && emailPattern.test(email) && phone.startsWith("09") && phone.length == 10) {
+    if (name && emailPattern.test(email) && phonePattern.test(phone)) {
         return true;
     }
 
@@ -172,18 +183,22 @@ const init = async () => {
 
     if (signInResult.data) {
         const signInName = signInResult.data.name;
+        
         showBlock(signOutBtn);
         hideBlock(gateBtn);
+        bookingHeadline.style.opacity = "1";
+        bookingHeadline.style.transform = "translateY(0)";
         memberName.textContent = signInName;
 
         const result = await getData("/api/booking");
         const scheduleList = result.data;
         
         if (scheduleList) {
-            showBlock(bookedSchedule);
-            hideBlock(emptySchedule);
-            let totalPrice = 0
-    
+            bookedSchedule.style.opacity = "1";
+            bookedSchedule.style.transform = "translateY(0)";
+            emptySchedule.style.opacity = "0";
+            emptySchedule.style.transform = "translateY(-5px)";
+            
             for (i = 0; i < scheduleList.length; i++) {
                 const scheduleId = scheduleList[i].scheduleId;
                 const img = scheduleList[i].attraction.image;
@@ -201,9 +216,10 @@ const init = async () => {
         }
     
         else {
-            confirmPopupResult.textContent = "錯誤";
-            showBlock(emptySchedule);
-            hideBlock(bookedSchedule);
+            bookedSchedule.style.opacity = "0";
+            bookedSchedule.style.transform = "translateY(-20px)";
+            emptySchedule.style.opacity = "1";
+            emptySchedule.style.transform = "translateY(0)";
         }
     }
 
@@ -331,7 +347,7 @@ summaryBtn.addEventListener("click", async () => {
 
         else {
             confirmPopupResult.textContent = "付款失敗";
-            confirmPopupMsg.textContent = "請重新提交訂單";
+            confirmPopupMsg.textContent = "請嘗試重新提交訂單";
             showBlock(confirmPopupBtn);
             hideBlock(confirmPopupIcon);
         }
