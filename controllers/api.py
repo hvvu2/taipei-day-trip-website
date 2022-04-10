@@ -1,13 +1,15 @@
 from flask import Blueprint, request, Response, session
 from datetime import datetime
 from models.database import db
-import json, re
+import json, re, random, os, requests
 
 invalidId = "The attraction does not exist or the input is invalid."
 emptyInput = "All inputs are required."
 invalidFormat = "The format is invalid."
 emailRegistered = "The email has already been registered."
 incorrectSignIn = "The email or the password is incorrect."
+emailPattern = r"(^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$)"
+phonePattern = r"(^09\d{8}$)"
 
 def errorHandler(statusCode, message = "The argument is invalid."):
     if statusCode == 400:
@@ -53,6 +55,15 @@ def validateDate(date):
 
     else:
         return False
+
+def genOrderNumber():
+    date = str(datetime.today()).split(" ")[0]
+    time = str(datetime.today()).split(" ")[1]
+    argsA = date[2:4] + date[5:7] + date[8:10]
+    argsB = time[6:8] + time[3:5] + time[0:2]
+    argsC = str(random.randint(10, 99))
+    orderNumber = argsA + argsB + argsC
+    return orderNumber
 
 # ===================================================================================== #
 
@@ -197,19 +208,16 @@ def showTargetAttractions(attractionId):
 
 @api.route("/api/user", methods=["GET", "POST", "PATCH", "DELETE"])
 def authUser():
-    pattern = r"(^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$)"
-
     if request.method == "GET":
         try:
-            if session["signed"]:
-                response = {
-                    "data": {
-                        "id": session["signed"][0],
-                        "name": session["signed"][1],
-                        "email": session["signed"][2]
-                    }
+            response = {
+                "data": {
+                    "id": session["signed"][0],
+                    "name": session["signed"][1],
+                    "email": session["signed"][2]
                 }
-                return json.dumps(response)
+            }
+            return json.dumps(response)
 
         except:
             response = {
@@ -225,16 +233,13 @@ def authUser():
             pwd = data["password"]
 
             if name and email and pwd:
-                if re.match(pattern, email):
+                if re.match(emailPattern, email):
                     if db.checkEmail(email):
-                        if db.insertUser(name, email, pwd):
-                            response = {
-                                "ok": True
-                            }
-                            return json.dumps(response)
-
-                        else:
-                            return errorHandler(500)
+                        db.insertUser(name, email, pwd)
+                        response = {
+                            "ok": True
+                        }
+                        return json.dumps(response)
 
                     else:
                         return errorHandler(400, emailRegistered)
@@ -287,7 +292,7 @@ def authUser():
 
 
 @api.route("/api/booking", methods=["GET", "POST", "DELETE"])
-def bookTrips():
+def manageSchedules():
     if request.method == "GET":
         try:
             memberId = session["signed"][0]
@@ -300,16 +305,15 @@ def bookTrips():
                     scheduleInfo = {
                         "scheduleId": schedule[0],
                         "attraction": {
-                            "id": schedule[4],
-                            "name": schedule[5],
-                            "address": schedule[6],
-                            "image": schedule[7]
+                            "id": schedule[7],
+                            "name": schedule[8],
+                            "address": schedule[9],
+                            "image": schedule[10]
                         },
-                        "date": schedule[8],
-                        "time": schedule[9],
-                        "price": schedule[10]
+                        "date": schedule[4],
+                        "time": schedule[5],
+                        "price": schedule[6]
                     }
-
                     scheduleList.append(scheduleInfo)
 
                 response = {
@@ -326,34 +330,39 @@ def bookTrips():
         except:
             return errorHandler(403)
 
-
     elif request.method == "POST":
         try:
-            data = request.get_json()
             memberId = session["signed"][0]
-            name = session["signed"][1]
-            email = session["signed"][2]
-            attractionId = data["attractionId"]
-            date = data["date"]
-            time = data["time"]
-            price = data["price"]
 
-            if attractionId and date and time and price:
-                if validateDate(date):
-                    if db.insertSchedule(memberId, name, email, attractionId, date, time, price):
+            try:
+                data = request.get_json()
+                name = session["signed"][1]
+                email = session["signed"][2]
+                date = data["date"]
+                time = data["time"]
+                price = data["price"]
+                attractionId = data["attractionId"]
+                attractionInfo = db.getRawDataById(attractionId)
+                attractionName = attractionInfo[1]
+                attractionAddress = attractionInfo[4]
+                attractionCover = attractionInfo[9]
+
+                if attractionId and date and time and price:
+                    if validateDate(date):
+                        db.insertSchedule(memberId, name, email, date, time, price, attractionId, attractionName, attractionAddress, attractionCover)
                         response = {
                             "ok": True
                         }
                         return json.dumps(response)
                     
                     else:
-                        return errorHandler(500)
-                
-                else:
-                    return errorHandler(400, invalidFormat)
+                        return errorHandler(400, invalidFormat)
 
-            else:
-                return errorHandler(400, emptyInput)
+                else:
+                    return errorHandler(400, emptyInput)
+
+            except:
+                return errorHandler(500)
 
         except:
             return errorHandler(403)
@@ -361,17 +370,103 @@ def bookTrips():
     elif request.method == "DELETE":
         try:
             memberId = session["signed"][0]
-            data = request.get_json()
-            scheduleId = data["scheduleId"]
 
-            if db.deleteSchedule(scheduleId, memberId):
+            try:
+                data = request.get_json()
+                scheduleId = data["scheduleId"]
+
+                db.deleteSchedule(scheduleId, memberId)
                 response = {
                     "ok": True
                 }
                 return json.dumps(response)
 
-            else:
-                return errorHandler(500)
+            except:
+                errorHandler(500)
 
         except:
             return errorHandler(403)
+
+
+@api.route("/api/orders", methods=["POST"])
+def processPayment():
+    try:
+        memberId = session["signed"][0]
+
+        try: 
+            orderInfo = request.get_json()
+            prime = orderInfo["prime"]
+            partnerKey = os.getenv("PARTNER_KEY")
+            orderTime = str(datetime.today())[0:19]
+            orderNumber = genOrderNumber()
+            price = orderInfo["order"]["price"]
+            schedules = orderInfo["order"]["trip"]
+            contactName = orderInfo["order"]["contact"]["name"]
+            contactEmail = orderInfo["order"]["contact"]["email"]
+            contactPhone = orderInfo["order"]["contact"]["phone"]
+
+            if prime and price and schedules and contactName and re.match(emailPattern, contactEmail) and re.match(phonePattern, contactPhone):
+                db.insertOrder(orderTime, orderNumber, price, contactName, contactEmail, contactPhone)
+
+                for schedule in schedules:
+                    scheduleId = schedule["scheduleId"]
+
+                    db.insertOrderDetail(orderNumber, scheduleId)
+
+                url = "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime"
+                headers = {
+                    "Content-Type": "application/json",
+                    "x-api-key": os.getenv("PARTNER_KEY")
+                }
+                body = {
+                    "prime": prime,
+                    "partner_key": partnerKey,
+                    "merchant_id": "hvvu2_CTBC",
+                    "details":"TapPay Test",
+                    "amount": price,
+                    "cardholder": {
+                        "phone_number": contactPhone,
+                        "name": contactName,
+                        "email": contactEmail,
+                        "zip_code": "",
+                        "address": "",
+                        "national_id": ""
+                    }
+                }
+                paymentResponse = requests.post(url, json=body, headers=headers).json()
+
+                if paymentResponse["status"] == 0:
+                    db.updateOrderStatus(orderNumber)
+                    db.clearAllSchedules(memberId)
+
+                    response = {
+                        "data": {
+                            "number": orderNumber,
+                            "payment": {
+                            "status": 0,
+                            "message": "Payment completed."
+                            }
+                        }
+                    }
+                    return json.dumps(response)
+
+                else:
+                    response = {
+                        "data": {
+                            "number": orderNumber,
+                            "payment": {
+                            "status": 1,
+                            "message": "Failed to process payment."
+                            }
+                        }
+                    }
+                    return json.dumps(response)
+            
+            else:
+                return errorHandler(400, invalidFormat)
+        
+        except:
+            return errorHandler(500)
+
+    except:
+        return errorHandler(403)

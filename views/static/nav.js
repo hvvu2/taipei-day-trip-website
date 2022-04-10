@@ -183,17 +183,11 @@ const hideBlock = (e) => {
 
 // Controller
 const showSchedules = async () => {
-    const option = {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
-        },
-    };
-    const response = await fetch("/api/booking", option);
+    const response = await fetch("/api/booking");
     const promise = await response.json();
     const result = await promise;
 
-    if (result.data.length) {
+    if (result.data) {
         bookingNumber.textContent = result.data.length;
         bookingIcon.style.transform = "scale(1)";
     }
@@ -314,6 +308,25 @@ signInBtn.addEventListener("click", async () => {
             gate.style.transition = "0.3s";
             hideBlock(gateBtn);
             showBlock(signOutBtn);
+
+            const bookingOption = {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            };
+            const bookingResponse = await fetch("/api/booking", bookingOption);
+            const bookingPromise = await bookingResponse.json();
+            const bookingResult = await bookingPromise;
+        
+            if (bookingResult.data.length) {
+                bookingNumber.textContent = bookingResult.data.length;
+                bookingIcon.style.transform = "scale(1)";
+            }
+        
+            else {
+                bookingIcon.style.transform = "scale(0)";
+            }
         }
 
         else if (result.error) {

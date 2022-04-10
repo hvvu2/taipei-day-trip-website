@@ -1,5 +1,4 @@
 import os, mysql.connector, mysql.connector.pooling
-from pickletools import pystring
 from dotenv import load_dotenv
 
 load_dotenv
@@ -14,11 +13,10 @@ dbconfig ={
     "database":os.getenv("DATABASE")
 }
 
-cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = poolName, pool_size = poolSize, **dbconfig, pool_reset_session=True)
-
 class DBManager:
     def __init__(self):
-        self.cnx = cnxpool.get_connection()
+        self.cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = poolName, pool_size = poolSize, **dbconfig, pool_reset_session=True)
+        self.cnx = self.cnxpool.get_connection()
         self.cursor = self.cnx.cursor()
 
     def insertBasicInfo(self, id, name, category, description, address, transport, mrt, latitude, longitude, cover):
@@ -136,11 +134,9 @@ class DBManager:
 
         try:
             self.cnx.commit()
-            return True
 
         except:
             self.cnx.rollback()
-            return False
 
     def getUserInfo(self, email):
         cmd = "SELECT `id`, `name`, `email`, `password` FROM `members` WHERE `email` = %(email)s;"
@@ -154,37 +150,33 @@ class DBManager:
         else:
             return False
 
-    def insertSchedule(self, memberId, email, name, attractionId, date, time, price):
+    def insertSchedule(self, memberId, name, email, date, time, price, attractionId, attractionName, attractionAddress, attractionCover):
         cmd = """
-            INSERT INTO `schedules` (`member_id`, `name`, `email`, `attraction_id`, `date`, `time`, `price`)
-            VALUES (%(memberId)s, %(name)s, %(email)s, %(attractionId)s, %(date)s, %(time)s, %(price)s);
+            INSERT INTO `schedules` (`member_id`, `name`, `email`, `date`, `time`, `price`, `attraction_id`, `attraction_name`, `attraction_address`, `attraction_cover`)
+            VALUES (%(memberId)s, %(name)s, %(email)s, %(date)s, %(time)s, %(price)s, %(attractionId)s, %(attractionName)s, %(attractionAddress)s, %(attractionCover)s);
         """
         param = {
             "memberId": memberId,
             "name": name,
             "email": email,
-            "attractionId": attractionId,
             "date": date,
             "time": time,
-            "price": price
+            "price": price,
+            "attractionId": attractionId,
+            "attractionName": attractionName,
+            "attractionAddress": attractionAddress,
+            "attractionCover": attractionCover
          }
         self.cursor.execute(cmd, param)
 
         try:
             self.cnx.commit()
-            return True
 
         except:
             self.cnx.rollback()
-            return False
 
     def getScheduleInfo(self, memberId):
-        cmd = """
-            SELECT `schedules`.`id`, `member_id`, `schedules`.`name`, `email`, `attraction_id`, `attractions`.`name`, `address`, `cover`, `date`, `time`, `price`
-            FROM `schedules` LEFT JOIN `attractions`
-            ON `schedules`.`attraction_id` = `attractions`.`id`
-            WHERE `member_id` = %(memberId)s;
-        """
+        cmd = "SELECT * FROM `schedules` WHERE `member_id` = %(memberId)s;"
         param = {"memberId": memberId}
         self.cursor.execute(cmd, param)
         result = self.cursor.fetchall()
@@ -204,11 +196,71 @@ class DBManager:
 
         try:
             self.cnx.commit()
-            return True
 
         except:
             self.cnx.rollback()
-            return False
+
+    def insertOrder(self, orderTime, orderNumber, price, contactName, contactEmail, contactPhone):
+        cmd = """
+            INSERT INTO `orders` (`order_time`, `order_number`, `price`, `contact_name`, `contact_email`, `contact_phone`)
+            VALUES (%(orderTime)s, %(orderNumber)s, %(price)s, %(contactName)s, %(contactEmail)s, %(contactPhone)s);
+        """
+        param = {
+            "orderTime": orderTime,
+            "orderNumber": orderNumber,
+            "price": price,
+            "contactName": contactName,
+            "contactEmail": contactEmail,
+            "contactPhone": contactPhone
+        }
+        self.cursor.execute(cmd, param)
+
+        try:
+            self.cnx.commit()
+
+        except:
+            self.cnx.rollback()
+
+    def insertOrderDetail(self, orderNumber, scheduleId):
+        cmd = """
+            INSERT INTO `order_details` (`order_number`, `schedule_id`)
+            VALUES (%(orderNumber)s, %(scheduleId)s);
+        """
+        param = {
+            "orderNumber": orderNumber,
+            "scheduleId": scheduleId
+        }
+        self.cursor.execute(cmd, param)
+
+        try:
+            self.cnx.commit()
+
+        except:
+            self.cnx.rollback()
+
+
+    def updateOrderStatus(self, orderNumber):
+        cmd = "UPDATE `orders` SET `status` = '0' WHERE `order_number` = %(orderNumber)s;"
+        param = {"orderNumber": orderNumber,}
+        self.cursor.execute(cmd, param)
+
+        try:
+            self.cnx.commit()
+
+        except:
+            self.cnx.rollback()
+
+    def clearAllSchedules(self, memberId):
+        cmd = "DELETE FROM `schedules` WHERE `member_id` = %(memberId)s;"
+        param = {"memberId": memberId}
+        self.cursor.execute(cmd, param)
+
+        try:
+            self.cnx.commit()
+
+        except:
+            self.cnx.rollback()
+
 
     def __exit__(self):
         self.cursor.close()

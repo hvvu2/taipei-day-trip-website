@@ -33,6 +33,7 @@ $ok: #00CD28;
 $blank: #C4C4C4;
 $border: #E8E8E8;
 $background: #E8E8E8;
+$skeleton: #EBEBEB;
 $btn: #666666;
 $btn-hover: #B2B2B2;
 $shadow: #AABBCC;
@@ -78,6 +79,50 @@ $card__txt-ht: ( $card-ht * 1/3 ) - ($card__txt-pd * 2);
 .va{
     display: flex;
     align-items: center;
+}
+
+.skeleton{
+    position: relative;
+    overflow: hidden;
+    border-radius: 5px;
+
+    &::before{
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 5;
+        width: 100%;
+        height: 100%;
+        content: "";
+        background-color: $border;
+    }
+
+    &::after{
+        display: block;
+        position: absolute;
+        top: 0;
+        z-index: 10;
+        width: 100%;
+        height: 100%;
+        content: "";
+        background: $skeleton;
+        animation: loading-card 1s linear infinite;
+    }
+
+    @keyframes loading-card{
+        0%{
+            transform: translateX(-400%);
+        }
+
+        100%{
+            transform: translateX(400%);
+        }
+    }
+}
+
+input.card-number{
+    background-color: gray;
 }
 
 // CSS
@@ -223,7 +268,7 @@ body{
                     cursor: pointer;
     
                     &:hover{
-                        transition: 0.3;
+                        transition: 0.3s;
                         color: $btn-hover;
                     }
                 }
@@ -277,14 +322,14 @@ body{
         background: linear-gradient(270deg, #337788 0%, #66AABB 100%);
     }
 
-    .confirm__title{
+    &__title{
         font-size: 20px;
         font-weight: bold;
         text-align: center;
         color: $main-color;
     }
 
-    .confirm__txt{
+    &__txt{
         margin-top: 25px;
         text-align: center;
 
@@ -293,10 +338,53 @@ body{
             transition: 0.3s;
     
             &:hover{
+                margin: 0;
                 color: $sub-color;
                 transition: 0.3s;
             }
         }
+    }
+
+    &__icon{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+
+        &::before{
+            position: absolute;
+            z-index: 10;
+            width: 30px;
+            height: 30px;
+            content: "";
+            border-radius: 100%;
+            background-color: white;
+        }
+
+        &::after{
+            position: absolute;
+            z-index: 5;
+            width: 40px;
+            height: 40px;
+            content: "";
+            border-radius: 100%;
+            background: linear-gradient(135deg, #e1ecef 0%, #145e71 100%);
+            animation: loading-circle 0.75s linear infinite;
+        }
+
+        @keyframes loading-circle{
+            0%{
+                transform: rotate(0);
+            }
+
+            100%{
+                transform: rotate(360deg);
+            }
+        }
+
     }
 
     &__btn{
@@ -374,7 +462,7 @@ nav{
                     width: 18px;
                     height: 18px;
                     border: 2px solid white;
-                    border-radius: 50%;
+                    border-radius: 100%;
                     background-color: $main-color;
                     transform: scale(0);
                     transition: 0.1s;
@@ -538,79 +626,98 @@ nav{
                 width: 352px;
             }
 
-            &__link{
-                transition: 0.3s;
+            &__wrapper{
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                width: 100%;
 
-                &:hover{
-                    opacity: 0.75;
-                    transition: 0.3s;
-                }
-
-                .card{
-                    width: 268px;
-                    height: $card-ht;
+                .main__link{
                     margin: 15px;
-                    background-color: white;
-                    border: 1px solid $border;
                     border-radius: 5px;
-    
-                    @include pad(){
-                        width: 350px;
-                        height: 280px;
-                        margin: 15px 15px 0 15px;
+                    transition: 0.3s;
+
+                    &:hover{
+                        box-shadow: 1px 1px 2px $shadow;
+                        opacity: 0.75;
+                        transition: 0.3s;
                     }
     
-                    @include mobile(){
-                        width: 322px;
-                        height: 280px;
-                        margin: 15px 15px 0 15px;
-                    }
-    
-                    &__img{
-                        width: 100%;
-                        max-width: 100%;
-                        height: $card__img-ht;
-                        background-color: $blank;
-                        border-radius: 5px 5px 0 0;
-    
+                    .card{
+                        width: 268px;
+                        height: $card-ht;
+                        border: 1px solid $border;
+                        border-radius: 5px;
+                        background-color: white;
+
                         @include pad(){
-                            height: 202px;
+                            width: 350px;
+                            height: 280px;
                         }
-    
+        
                         @include mobile(){
-                            height: 202px;
+                            width: 322px;
+                            height: 280px;
                         }
-                    }
-    
-                    &__wrapper{
-                        display: flex;
-                        flex-direction: column;
-                        padding: $card__txt-pd;
-                        width: 248px;
-                        height: $card__txt-ht;
-    
-                        @include pad(){
-                            width: 330px;
+        
+                        &__img{
+                            height: $card__img-ht;
+                            border-radius: 5px 5px 0 0;
+                            background-size: cover;
+        
+                            @include pad(){
+                                height: 202px;
+                            }
+        
+                            @include mobile(){
+                                height: 202px;
+                            }
                         }
-    
-                        @include mobile(){
-                            width: 302px;
-                        }
-    
-                        .card__title{
-                            flex-grow: 1;
-                            width: 100%;
-                            font-weight: bold;
-                        }
-    
-                        .card__desc-wrapper{
-                            flex-grow: 1;
+        
+                        &__wrapper{
                             display: flex;
+                            flex-direction: column;
                             justify-content: space-between;
-                            align-items: flex-end;
-    
-                            .card__desc{
-                                display: inline-block;
+                            padding: $card__txt-pd;
+                            width: 248px;
+                            height: $card__txt-ht;
+        
+                            @include pad(){
+                                width: 330px;
+                            }
+        
+                            @include mobile(){
+                                width: 302px;
+                            }
+        
+                            .card__title{
+                                width: 100%;
+                                height: 20px;
+                                font-weight: bold;
+
+                                &.skeleton{
+                                    color: transparent;   
+                                }
+                            }
+        
+                            .card__desc-wrapper{
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: flex-end;
+        
+                                .card__desc{
+                                    display: inline-block;
+                                    width: 45%;
+                                    height: 20px;
+
+                                    &.skeleton{
+                                        color: transparent;
+                                    }
+                                }
+
+                                .card__desc:last-child{
+                                    text-align: right;
+                                }
                             }
                         }
                     }
@@ -841,12 +948,16 @@ nav{
                     }
 
                     .profile__title{
+                        width: 400px;
+                        height: 24px;
                         margin-bottom: 20px;
                         font-size: 24px;
                         font-weight: bold;
                     }
 
                     .profile__desc{
+                        width: 200px;
+                        height: 16px;
                         margin-bottom: 20px;
                     }
 
@@ -975,18 +1086,39 @@ nav{
 
                 &__txt{
                     display: block;
+                    width: 100%;
                     margin-bottom: 25px;
                     line-height: 24px;
                     letter-spacing: 1px;
+                }
+
+                &__txt:nth-child(1){
+                    min-height: 150px;
                 }
 
                 &__wrapper{
                     margin-bottom: 25px;
 
                     .info__sub-title{
+                        width: 90px;
                         height: 32px;
+                        margin-bottom: 5px;
                         font-weight: bold;
                         line-height: 32px;
+                    }
+                }
+
+                &__wrapper:nth-child(2){
+                    .info__txt{
+                        width: 700px;
+                        height: 24px;
+                    }
+                }
+
+                &__wrapper:nth-child(3){
+                    .info__txt{
+                        width: 100%;
+                        height: 48px;
                     }
                 }
             }
@@ -996,6 +1128,7 @@ nav{
             display: flex;
             align-items: center;
             flex-direction: column;
+            position: relative;
             width: 1200px;
             margin: 40px 0;
 
@@ -1012,7 +1145,14 @@ nav{
             &__headline{
                 width: 1000px;
                 font-size: 19px;
-                font-weight: bolder;
+                font-weight: bold;
+                opacity: 0;
+                transform: translateY(-50%);
+                transition: 1s;
+
+                & > span{
+                    font-weight: bold;
+                }
 
                 @include pad(){
                     width: 700px;
@@ -1025,6 +1165,9 @@ nav{
 
             &__wrapper{
                 width: 1000px;
+                opacity: 0;
+                transform: translateY(-20px);
+                transition: 1s;
 
                 @include pad(){
                     width: 700px;
@@ -1230,20 +1373,26 @@ nav{
                         display: flex;
                         position: relative;
 
-                        .payment__input{
-                            padding: 10px; 
+                        .tpfield{
+                            padding: 10px;
                             width: 180px;
+                            height: 15px;
                             border: 1px solid $border;
                             border-radius: 5px;
-    
-                            &:focus{
-                                border-color: $main-color;
                             }
-    
-                            &.error{
-                                border-color: $error;
-                            }
+
+                        .tappay-field-focus{
+                            border-color: $main-color;
                         }
+
+                        .tappay-field-valid{
+                            border-color: $ok;
+                        }
+
+                        .tappay-field-invalid{
+                            border-color: $error;
+                        }
+
 
                         .payment__icon{
                             position: absolute;
@@ -1289,6 +1438,61 @@ nav{
                             background: $sub-color;
                             transition: 0.3s;
                         }
+                    }
+                }
+            }
+
+            &__wrapper:last-child{
+                position: absolute;
+                top: 20px;
+                transform: translateY(-5px);
+                transition: 0.5s;
+            }
+        }
+
+        .thankyou-main{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 1200px;
+            margin: 40px 0;
+
+            &__wrapper{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                opacity: 0;
+                transform: translateY(5%);
+                transition: 1.5s;
+
+                .thankyou-main__icon{
+                    width: 108px;
+                    height: 108px;
+                    font-size: 108px;
+                    color: $sub-color;
+                    opacity: 0;
+                    transform: translateY(5%);
+                    transition: 1.5s;
+                }
+
+                .thankyou-main__title{
+                    margin-top: 30px;
+                    font-size: 24px;
+                    font-weight: bold;
+                }
+    
+                .thankyou-main__txt{
+                    margin-top: 30px;
+                    font-size: 18px;
+                }
+    
+                .thankyou-main__link{
+                    color: $main-color;
+                    transition: 0.3s;
+    
+                    &:hover{
+                        color: $sub-color;
+                        transition: 0.3s;
                     }
                 }
             }
