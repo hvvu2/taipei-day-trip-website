@@ -22,6 +22,7 @@ const signUpName = document.getElementById("js-sign-up__name");
 const signUpEmail = document.getElementById("js-sign-up__email");
 const signUpPwd = document.getElementById("js-sign-up__pwd");
 const signUpMsg = document.getElementById("js-sign-up__message");
+const namePattern = /^.{2,32}$/;
 const emailPattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
 // View
@@ -124,7 +125,7 @@ const validateSignUp = () => {
     const email = signUpEmail.value.trim();
     const pwd = signUpPwd.value.trim();
 
-    if (name) {
+    if (namePattern.test(name)) {
         setOkInput(signUpName);
     }
 
@@ -148,7 +149,7 @@ const validateSignUp = () => {
         setErrorInput(signUpPwd);
     }
 
-    if (name && emailPattern.test(email) && pwd) {
+    if (namePattern.test(name) && emailPattern.test(email) && pwd) {
         removeError(signUpMsg)
         removeMsg(signUpMsg);
         return true;
@@ -371,7 +372,7 @@ gateInputs.forEach((input) => {
 });
 
 signUpName.addEventListener("blur", () => {
-    if (signUpName.value.trim()) {
+    if (namePattern.test(signUpName.value.trim())) {
         setOkInput(signUpName);
     }
 

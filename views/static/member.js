@@ -2,6 +2,11 @@ const orderHistory = document.getElementById("js-order-history");
 const orderHistoryMsg = document.getElementById("order-history__msg");
 const memberHeaderName = document.getElementById("js-member-header__name");
 const memberHeaderEmail = document.getElementById("js-member-header__email");
+const memberHeaderEdit = document.getElementById("js-member-header__edit-btn");
+const memberHeaderTitleWrapper = document.getElementById("js-member-header__title-wrapper");
+const memberHeaderInputWrapper = document.getElementById("js-member-header__input-wrapper");
+const memberHeaderInput = document.getElementById("js-member-header__input");
+const memberHeaderConfirm = document.getElementById("js-member-header__confirm-btn");
 
 // View
 const showOrders = (orderData) => {
@@ -123,6 +128,7 @@ const init = async () => {
     if (signInResult.data) {
         showBlock(memberBtn);
         hideBlock(gateBtn);
+        showBlock(memberHeaderEdit);
 
         memberHeaderName.textContent = signInResult.data.name;
         memberHeaderEmail.textContent = signInResult.data.email;
@@ -166,3 +172,59 @@ const init = async () => {
 }
 
 init();
+
+memberHeaderEdit.addEventListener("click", () => {
+    showBlock(memberHeaderInputWrapper);
+    hideBlock(memberHeaderTitleWrapper);
+    memberHeaderInput.value = "";
+});
+
+memberHeaderConfirm.addEventListener("click", async () => {
+    const newName = memberHeaderInput.value.trim();
+    
+    if (namePattern.test(newName)) {
+        const data = {
+            "new_name": newName,
+        };
+        const option = {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        };
+        const response = await fetch("api/user", option);
+        const promise = await response.json();
+        const result = await promise;
+
+        if (result.ok) {
+            memberHeaderName.textContent = result.new_name;
+            showBlock(memberHeaderTitleWrapper);
+            hideBlock(memberHeaderInputWrapper);
+        }
+
+        else {
+            setError(memberHeaderInput);
+        }
+    }
+
+    else {
+        setError(memberHeaderInput);
+    }
+});
+
+memberHeaderInput.addEventListener("focus", () => {
+    removeError(memberHeaderInput);
+})
+
+document.addEventListener("click", (e) => {
+    if (e.target == memberHeaderInput || e.target == memberHeaderConfirm) {
+        showBlock(memberHeaderInputWrapper);
+        hideBlock(memberHeaderTitleWrapper);
+    }
+
+    else {
+        showBlock(memberHeaderTitleWrapper);
+        hideBlock(memberHeaderInputWrapper);
+    }
+}, true);

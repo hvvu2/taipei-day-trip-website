@@ -204,8 +204,8 @@ body{
                 }
 
                 .gate__input{
-                    padding: 15px;
-                    width: 278px;
+                    padding: 15px 45px 15px 15px;
+                    width: 248px;
                     margin-bottom: 10px;
                     border: 1px solid $border;
                     border-radius: 5px;
@@ -634,6 +634,7 @@ nav{
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
+            width: 1200px;
 
             &__img{
                 display: flex;
@@ -651,17 +652,82 @@ nav{
                 }
             }
 
-            &__title{
-                height: 24px;
-                font-size: 24px;
-                font-weight: bold;
+            &__wrapper{
+                display: flex;
                 margin-bottom: 20px;
-                color: white;
+                height: 24px;
+
+                .member-header__title-wrapper{
+                    position: relative;
+
+                    .member-header__title{
+                        height: 24px;
+                        font-size: 24px;
+                        font-weight: bold;
+                        color: white;
+                        text-shadow: 0px 0px 30px $shadow;
+                    }
+
+                    .member-header__btn{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        position: absolute;
+                        bottom: 0;
+                        right: -40px;
+                        width: 20px;
+                        height: 20px;
+                        cursor: pointer;
+                    }
+                }
+
+                .member-header__input-wrapper{
+                    position: relative;
+
+                    .member-header__input{
+                        z-index: 10;
+                        padding: 7px 45px 7px 10px;
+                        width: 150px;
+                        border-radius: 5px;
+
+                        &.error{
+                            color: $error;
+                        }
+                    }
+
+                    .member-header__input-btn{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        width: 30px;
+                        height: 30px;
+                        border-top-right-radius: 5px;
+                        border-bottom-right-radius: 5px;
+                        background-color: $main-color;
+                        transition: 0.3s;
+                        cursor: pointer;
+
+                        &:hover{
+                            background-color: $sub-color;
+                            transition: 0.3s;
+                        }
+                    }
+                }
+
+                .member-header__icon{
+                    font-size: 20px;
+                    color: $sub-txt;
+                    pointer-events: none;
+                }
             }
 
             &__sub-title{
                 height: 16px;
                 color: white;
+                text-shadow: 0px 0px 30px $shadow;
             }
         }
     }

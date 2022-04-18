@@ -1,13 +1,17 @@
+from ast import expr_context
 from flask import Blueprint, request, Response, session
 from datetime import datetime
 from models.database import db
-import json, re, random, os, requests
+import json, re, random, os, requests, hashlib
 
 invalidId = "The attraction does not exist or the input is invalid."
 emptyInput = "All inputs are required."
 invalidFormat = "The format is invalid."
 emailRegistered = "The email has already been registered."
+sameUserName = "The name must be different from you're using now."
 incorrectSignIn = "The email or the password is incorrect."
+salt = os.getenv("SALT")
+namePattern = r"(^.{2,32}$)"
 emailPattern = r"(^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$)"
 phonePattern = r"(^09\d{8}$)"
 
@@ -206,7 +210,7 @@ def showTargetAttractions(attractionId):
         return errorHandler(500)
 
 
-@api.route("/api/user", methods=["GET", "POST", "PATCH", "DELETE"])
+@api.route("/api/user", methods=["GET", "POST", "PATCH", "PUT", "DELETE"])
 def authUser():
     if request.method == "GET":
         try:
@@ -234,9 +238,10 @@ def authUser():
             pwd = data["password"]
 
             if name and email and pwd:
-                if re.match(emailPattern, email):
+                if re.match(namePattern, name) and re.match(emailPattern, email):
                     if db.checkEmail(email):
-                        db.insertUser(name, email, pwd)
+                        shaPwd = hashlib.sha256((pwd + salt).encode("utf-8")).hexdigest()
+                        db.insertUser(name, email, shaPwd)
                         response = {
                             "ok": True
                         }
@@ -259,6 +264,7 @@ def authUser():
             data = request.get_json()
             email = data["email"]
             pwd = data["password"]
+            shaPwd = hashlib.sha256((pwd + salt).encode("utf-8")).hexdigest()
             result = db.getUserInfo(email)
 
             if result:
@@ -267,7 +273,7 @@ def authUser():
                 dbEmail = result[2]
                 dbPwd = result[3]
 
-                if (pwd == dbPwd):
+                if (shaPwd == dbPwd):
                     session["signed"] = [dbId, dbName, dbEmail]
                     response = {
                         "ok": True
@@ -282,6 +288,38 @@ def authUser():
 
         except:
             return errorHandler(500)
+
+    elif request.method == "PUT":
+        try:
+            memberId = session["signed"][0]
+
+        except:
+            return errorHandler(403)
+
+        else:
+            data = request.get_json()
+            newName = data["new_name"]
+
+            if newName:
+                if re.match(namePattern, newName):
+                    if db.checkUserName(memberId, newName):
+                        db.changeUserName(memberId, newName)
+
+                        session["signed"][1] = newName
+                        response = {
+                            "ok": True,
+                            "new_name": newName
+                        }
+                        return json.dumps(response)
+
+                    else:
+                        return errorHandler(400, sameUserName)
+
+                else:
+                    return errorHandler(400, invalidFormat)
+
+            else:
+                return errorHandler(400, emptyInput)
 
     elif request.method == "DELETE":
         session.clear()

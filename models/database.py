@@ -104,9 +104,9 @@ class DBManager:
         else:
             return False
 
-    def getImages(self, id):
-        cmd = "SELECT `url` FROM `images` WHERE `attraction_id` = %(id)s;"
-        param = {"id": id}
+    def getImages(self, attractionId):
+        cmd = "SELECT `url` FROM `images` WHERE `attraction_id` = %(attractionId)s;"
+        param = {"attractionId": attractionId}
         self.cursor.execute(cmd, param)
         result = self.cursor.fetchall()
         return result
@@ -149,6 +149,36 @@ class DBManager:
 
         else:
             return False
+
+    def checkUserName(self, id, newName):
+        cmd = "SELECT * FROM `members` WHERE `id` = %(id)s AND `name` = %(newName)s;"
+        param = {
+            "id": id,
+            "newName": newName
+        }
+        self.cursor.execute(cmd, param)
+        result = self.cursor.fetchone()
+
+        if result:
+            return False
+
+        else:
+            return True
+
+    def changeUserName(self, id, newName):
+        cmd = "UPDATE `members` SET `name` = %(newName)s WHERE `id` = %(id)s;"
+        param = {
+            "id": id,
+            "newName": newName
+        }
+        self.cursor.execute(cmd, param)
+
+        try:
+            self.cnx.commit()
+
+        except:
+            self.cnx.rollback()
+
 
     def insertSchedule(self, memberId, date, time, price, attractionId, attractionName, attractionAddress, attractionCover):
         cmd = """

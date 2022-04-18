@@ -213,8 +213,8 @@ body {
 }
 
 .popup .gate__wrapper .gate__form-wrapper .gate__input {
-  padding: 15px;
-  width: 278px;
+  padding: 15px 45px 15px 15px;
+  width: 248px;
   margin-bottom: 10px;
   border: 1px solid #E8E8E8;
   border-radius: 5px;
@@ -775,6 +775,7 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn:nth-child(3):hove
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  width: 1200px;
 }
 
 .content-wrapper header .member-header__img {
@@ -799,17 +800,98 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn:nth-child(3):hove
   color: #4EA0B4;
 }
 
-.content-wrapper header .member-header__title {
+.content-wrapper header .member-header__wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 20px;
+  height: 24px;
+}
+
+.content-wrapper header .member-header__wrapper .member-header__title-wrapper {
+  position: relative;
+}
+
+.content-wrapper header .member-header__wrapper .member-header__title-wrapper .member-header__title {
   height: 24px;
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 20px;
   color: white;
+  text-shadow: 0px 0px 30px #AABBCC;
+}
+
+.content-wrapper header .member-header__wrapper .member-header__title-wrapper .member-header__btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: absolute;
+  bottom: 0;
+  right: -40px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.content-wrapper header .member-header__wrapper .member-header__input-wrapper {
+  position: relative;
+}
+
+.content-wrapper header .member-header__wrapper .member-header__input-wrapper .member-header__input {
+  z-index: 10;
+  padding: 7px 45px 7px 10px;
+  width: 150px;
+  border-radius: 5px;
+}
+
+.content-wrapper header .member-header__wrapper .member-header__input-wrapper .member-header__input.error {
+  color: #FF1B1B;
+}
+
+.content-wrapper header .member-header__wrapper .member-header__input-wrapper .member-header__input-btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background-color: #448899;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.content-wrapper header .member-header__wrapper .member-header__input-wrapper .member-header__input-btn:hover {
+  background-color: #4EA0B4;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.content-wrapper header .member-header__wrapper .member-header__icon {
+  font-size: 20px;
+  color: #F8F8F8;
+  pointer-events: none;
 }
 
 .content-wrapper header .member-header__sub-title {
   height: 16px;
   color: white;
+  text-shadow: 0px 0px 30px #AABBCC;
 }
 
 .content-wrapper main {
