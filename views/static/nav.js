@@ -1,4 +1,5 @@
 const gateBtn = document.getElementById("js-navbar__gate-btn");
+const memberBtn = document.getElementById("js-navbar__member-btn");
 const signOutBtn = document.getElementById("js-navbar__sign-out-btn");
 const bookingBtn = document.getElementById("js-navbar__booking-btn");
 const bookingIcon = document.getElementById("js-navbar__icon");
@@ -38,6 +39,84 @@ const resetGateInput = () => {
     removeMsg(signUpMsg);
     removeError(signInMsg);
     removeMsg(signInMsg);
+}
+
+const setOk = (e) => {
+    e.classList.add("ok");
+}
+
+const setOkIcon = (e) => {
+    e.parentNode.querySelector("i").classList.add("bx-check-circle")
+}
+
+const setError = (e) => {
+    e.classList.add("error");
+}
+
+const setErrorIcon = (e) => {
+    e.parentNode.querySelector("i").classList.add("bx-x-circle");
+}
+
+const removeOk = (e) => {
+    e.classList.remove("ok");
+}
+
+const removeOkIcon = (e) => {
+    e.parentNode.querySelector("i").classList.remove("bx-check-circle");
+}
+
+const removeError = (e) => {
+    e.classList.remove("error");
+}
+
+const removeErrorIcon = (e) => {
+    e.parentNode.querySelector("i").classList.remove("bx-x-circle");
+}
+
+const setOkInput = (e) => {
+    setOk(e);
+    setOkIcon(e)
+    removeError(e);
+    removeErrorIcon(e);
+}
+
+const setErrorInput = (e) => {
+    setError(e);
+    setErrorIcon(e);
+    removeOk(e);
+    removeOkIcon(e);
+}
+
+const setMsg = (e, txt) => {
+    e.textContent = txt;
+}
+
+const removeMsg = (e) => {
+    e.textContent = "";
+}
+
+const showBlock = (e) => {
+    e.classList.remove("hidden");
+}
+
+const hideBlock = (e) => {
+    e.classList.add("hidden");
+}
+
+// Controller
+const showSchedules = async () => {
+    const response = await fetch("/api/booking");
+    const promise = await response.json();
+    const result = await promise;
+
+    if (result.data) {
+        bookingNumber.textContent = result.data.length;
+        bookingIcon.style.transform = "scale(1)";
+    }
+
+    else {
+        bookingIcon.style.transform = "scale(0)";
+    }
 }
 
 const validateSignUp = () => {
@@ -116,84 +195,6 @@ const validateSignIn = () => {
         setError(signInMsg);
         setMsg(signInMsg, "帳號及密碼未輸入，或帳號格式錯誤")
         return false;
-    }
-}
-
-const setOk = (e) => {
-    e.classList.add("ok");
-}
-
-const setOkIcon = (e) => {
-    e.parentNode.querySelector("i").classList.add("bx-check-circle")
-}
-
-const setError = (e) => {
-    e.classList.add("error");
-}
-
-const setErrorIcon = (e) => {
-    e.parentNode.querySelector("i").classList.add("bx-x-circle");
-}
-
-const removeOk = (e) => {
-    e.classList.remove("ok");
-}
-
-const removeOkIcon = (e) => {
-    e.parentNode.querySelector("i").classList.remove("bx-check-circle");
-}
-
-const removeError = (e) => {
-    e.classList.remove("error");
-}
-
-const removeErrorIcon = (e) => {
-    e.parentNode.querySelector("i").classList.remove("bx-x-circle");
-}
-
-const setOkInput = (e) => {
-    setOk(e);
-    setOkIcon(e)
-    removeError(e);
-    removeErrorIcon(e);
-}
-
-const setErrorInput = (e) => {
-    setError(e);
-    setErrorIcon(e);
-    removeOk(e);
-    removeOkIcon(e);
-}
-
-const setMsg = (e, txt) => {
-    e.textContent = txt;
-}
-
-const removeMsg = (e) => {
-    e.textContent = "";
-}
-
-const showBlock = (e) => {
-    e.classList.remove("hidden");
-}
-
-const hideBlock = (e) => {
-    e.classList.add("hidden");
-}
-
-// Controller
-const showSchedules = async () => {
-    const response = await fetch("/api/booking");
-    const promise = await response.json();
-    const result = await promise;
-
-    if (result.data) {
-        bookingNumber.textContent = result.data.length;
-        bookingIcon.style.transform = "scale(1)";
-    }
-
-    else {
-        bookingIcon.style.transform = "scale(0)";
     }
 }
 
@@ -307,7 +308,7 @@ signInBtn.addEventListener("click", async () => {
             gate.style.transform = "translateY(-400px)";
             gate.style.transition = "0.3s";
             hideBlock(gateBtn);
-            showBlock(signOutBtn);
+            showBlock(memberBtn);
 
             const bookingOption = {
                 method: "GET",
@@ -338,6 +339,10 @@ signInBtn.addEventListener("click", async () => {
     }
 });
 
+memberBtn.addEventListener("click", () => {
+    window.location.href = "/member";
+});
+
 signOutBtn.addEventListener("click", async () => {
     const option = {
         method: "DELETE",
@@ -345,7 +350,6 @@ signOutBtn.addEventListener("click", async () => {
             "Content-Type": "application/json"
         }
     };
-
     const response = await fetch("/api/user", option);
     const promise = await response.json();
     const result = await promise;
@@ -353,7 +357,7 @@ signOutBtn.addEventListener("click", async () => {
     if (result.ok) {
         window.location.reload();
         showBlock(gateBtn);
-        hideBlock(signOutBtn);
+        hideBlock(memberBtn);
     }
 });
 

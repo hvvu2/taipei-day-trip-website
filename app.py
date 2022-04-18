@@ -22,6 +22,11 @@ def attraction(id):
 	return render_template("attraction.html")
 
 
+@app.route("/member")
+def member():
+	return render_template("member.html")
+
+
 @app.route("/booking")
 def booking():
 	return render_template("booking.html")
@@ -30,7 +35,7 @@ def booking():
 @app.route("/thankyou")
 def thankyou():
 	return render_template("thankyou.html")
-	
+
 
 if __name__ == "__main__":
 	app.run(port=3000)

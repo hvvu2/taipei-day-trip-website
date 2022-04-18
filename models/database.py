@@ -150,15 +150,13 @@ class DBManager:
         else:
             return False
 
-    def insertSchedule(self, memberId, name, email, date, time, price, attractionId, attractionName, attractionAddress, attractionCover):
+    def insertSchedule(self, memberId, date, time, price, attractionId, attractionName, attractionAddress, attractionCover):
         cmd = """
-            INSERT INTO `schedules` (`member_id`, `name`, `email`, `date`, `time`, `price`, `attraction_id`, `attraction_name`, `attraction_address`, `attraction_cover`)
-            VALUES (%(memberId)s, %(name)s, %(email)s, %(date)s, %(time)s, %(price)s, %(attractionId)s, %(attractionName)s, %(attractionAddress)s, %(attractionCover)s);
+            INSERT INTO `schedules` (`member_id`, `date`, `time`, `price`, `attraction_id`, `attraction_name`, `attraction_address`, `attraction_cover`)
+            VALUES (%(memberId)s, %(date)s, %(time)s, %(price)s, %(attractionId)s, %(attractionName)s, %(attractionAddress)s, %(attractionCover)s);
         """
         param = {
             "memberId": memberId,
-            "name": name,
-            "email": email,
             "date": date,
             "time": time,
             "price": price,
@@ -180,6 +178,7 @@ class DBManager:
         param = {"memberId": memberId}
         self.cursor.execute(cmd, param)
         result = self.cursor.fetchall()
+
         if result:
             return result
 
@@ -200,14 +199,15 @@ class DBManager:
         except:
             self.cnx.rollback()
 
-    def insertOrder(self, orderTime, orderNumber, price, contactName, contactEmail, contactPhone):
+    def insertOrder(self, memberId, time, number, price, contactName, contactEmail, contactPhone):
         cmd = """
-            INSERT INTO `orders` (`order_time`, `order_number`, `price`, `contact_name`, `contact_email`, `contact_phone`)
-            VALUES (%(orderTime)s, %(orderNumber)s, %(price)s, %(contactName)s, %(contactEmail)s, %(contactPhone)s);
+            INSERT INTO `orders` (`member_id`, `time`, `number`, `price`, `contact_name`, `contact_email`, `contact_phone`)
+            VALUES (%(memberId)s, %(time)s, %(number)s, %(price)s, %(contactName)s, %(contactEmail)s, %(contactPhone)s);
         """
         param = {
-            "orderTime": orderTime,
-            "orderNumber": orderNumber,
+            "memberId": memberId,
+            "time": time,
+            "number": number,
             "price": price,
             "contactName": contactName,
             "contactEmail": contactEmail,
@@ -221,14 +221,19 @@ class DBManager:
         except:
             self.cnx.rollback()
 
-    def insertOrderDetail(self, orderNumber, scheduleId):
+    def insertOrderDetail(self, orderNumber, scheduleDate, scheduleTime, attractionId, attractionName, attractionAddress, attractionCover):
         cmd = """
-            INSERT INTO `order_details` (`order_number`, `schedule_id`)
-            VALUES (%(orderNumber)s, %(scheduleId)s);
+            INSERT INTO `order_details` (`order_number`, `schedule_date`, `schedule_time`, `attraction_id`, `attraction_name`, `attraction_address`, `attraction_cover`)
+            VALUES (%(orderNumber)s, %(scheduleDate)s, %(scheduleTime)s, %(attractionId)s, %(attractionName)s, %(attractionAddress)s, %(attractionCover)s);
         """
         param = {
             "orderNumber": orderNumber,
-            "scheduleId": scheduleId
+            "scheduleDate": scheduleDate,
+            "scheduleTime": scheduleTime,
+            "attractionId": attractionId,
+            "attractionName": attractionName,
+            "attractionAddress": attractionAddress,
+            "attractionCover": attractionCover
         }
         self.cursor.execute(cmd, param)
 
@@ -238,10 +243,20 @@ class DBManager:
         except:
             self.cnx.rollback()
 
-
     def updateOrderStatus(self, orderNumber):
-        cmd = "UPDATE `orders` SET `status` = '0' WHERE `order_number` = %(orderNumber)s;"
-        param = {"orderNumber": orderNumber,}
+        cmd = "UPDATE `orders` SET `status` = '0' WHERE `number` = %(orderNumber)s;"
+        param = {"orderNumber": orderNumber}
+        self.cursor.execute(cmd, param)
+
+        try:
+            self.cnx.commit()
+
+        except:
+            self.cnx.rollback()
+    
+    def updatePaymentStatus(self, orderNumber):
+        cmd = "UPDATE `orders` SET `payment_status` = '0' WHERE `number` = %(orderNumber)s;"
+        param = {"orderNumber": orderNumber}
         self.cursor.execute(cmd, param)
 
         try:
@@ -261,6 +276,30 @@ class DBManager:
         except:
             self.cnx.rollback()
 
+    def getOrders(self, memberId):
+        cmd = """
+            SELECT `number`, `time`, `price`, `contact_name`, `contact_email`, `contact_phone`
+            FROM `orders` WHERE `member_id` = %(memberId)s AND `status` = 0 AND `payment_status` = 0;
+        """
+        param = {"memberId": memberId}
+        self.cursor.execute(cmd, param)
+        result = self.cursor.fetchall()
+
+        if result:
+            return result
+
+        else:
+            return False
+
+    def getOrderDetails(self, orderNumber):
+        cmd = """
+            SELECT `attraction_id`, `attraction_name`, `attraction_address`, `attraction_cover`, `schedule_date`, `schedule_time`
+            FROM `order_details` WHERE `order_number` = %(orderNumber)s;
+        """
+        param = {"orderNumber": orderNumber}
+        self.cursor.execute(cmd, param)
+        result = self.cursor.fetchall()
+        return result
 
     def __exit__(self):
         self.cursor.close()

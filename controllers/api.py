@@ -217,12 +217,13 @@ def authUser():
                     "email": session["signed"][2]
                 }
             }
-            return json.dumps(response)
 
         except:
             response = {
                 "data": None
             }
+
+        finally:
             return json.dumps(response)
 
     elif request.method == "POST":
@@ -296,6 +297,11 @@ def manageSchedules():
     if request.method == "GET":
         try:
             memberId = session["signed"][0]
+            
+        except:
+            return errorHandler(403)
+
+        else:
             schedules = db.getScheduleInfo(memberId)
 
             if schedules:
@@ -305,168 +311,246 @@ def manageSchedules():
                     scheduleInfo = {
                         "scheduleId": schedule[0],
                         "attraction": {
-                            "id": schedule[7],
-                            "name": schedule[8],
-                            "address": schedule[9],
-                            "image": schedule[10]
+                            "id": schedule[5],
+                            "name": schedule[6],
+                            "address": schedule[7],
+                            "image": schedule[8]
                         },
-                        "date": schedule[4],
-                        "time": schedule[5],
-                        "price": schedule[6]
+                        "date": schedule[2],
+                        "time": schedule[3],
+                        "price": schedule[4]
                     }
                     scheduleList.append(scheduleInfo)
 
                 response = {
                     "data": scheduleList
                 }
-                return json.dumps(response, ensure_ascii=False)
 
             else:
                 response = {
                     "data": None
                 }
-                return json.dumps(response)
 
-        except:
-            return errorHandler(403)
+            return json.dumps(response, ensure_ascii=False)
 
     elif request.method == "POST":
         try:
             memberId = session["signed"][0]
 
-            try:
-                data = request.get_json()
-                name = session["signed"][1]
-                email = session["signed"][2]
-                date = data["date"]
-                time = data["time"]
-                price = data["price"]
-                attractionId = data["attractionId"]
-                attractionInfo = db.getRawDataById(attractionId)
-                attractionName = attractionInfo[1]
-                attractionAddress = attractionInfo[4]
-                attractionCover = attractionInfo[9]
-
-                if attractionId and date and time and price:
-                    if validateDate(date):
-                        db.insertSchedule(memberId, name, email, date, time, price, attractionId, attractionName, attractionAddress, attractionCover)
-                        response = {
-                            "ok": True
-                        }
-                        return json.dumps(response)
-                    
-                    else:
-                        return errorHandler(400, invalidFormat)
-
-                else:
-                    return errorHandler(400, emptyInput)
-
-            except:
-                return errorHandler(500)
-
         except:
             return errorHandler(403)
+
+        else:
+            data = request.get_json()
+            date = data["date"]
+            time = data["time"]
+            price = data["price"]
+            attractionId = data["attractionId"]
+            attractionInfo = db.getRawDataById(attractionId)
+            attractionName = attractionInfo[1]
+            attractionAddress = attractionInfo[4]
+            attractionCover = attractionInfo[9]
+
+            if attractionId and date and time and price:
+                if validateDate(date):
+                    db.insertSchedule(memberId, date, time, price, attractionId, attractionName, attractionAddress, attractionCover)
+                    response = {
+                        "ok": True
+                    }
+                    return json.dumps(response)
+                
+                else:
+                    return errorHandler(400, invalidFormat)
+
+            else:
+                return errorHandler(400, emptyInput)
 
     elif request.method == "DELETE":
         try:
             memberId = session["signed"][0]
+        
+        except:
+            return errorHandler(403)
 
-            try:
-                data = request.get_json()
-                scheduleId = data["scheduleId"]
+        else:
+            data = request.get_json()
+            scheduleId = data["scheduleId"]
 
-                db.deleteSchedule(scheduleId, memberId)
-                response = {
-                    "ok": True
-                }
-                return json.dumps(response)
+            db.deleteSchedule(scheduleId, memberId)
+            response = {
+                "ok": True
+            }
+            return json.dumps(response)
 
-            except:
-                errorHandler(500)
+
+@api.route("/api/orders", methods=["GET", "POST"])
+def manageOrders():
+    if request.method == "GET":
+        try:
+            memberId = session["signed"][0]
 
         except:
             return errorHandler(403)
 
+        else:
+            orders = db.getOrders(memberId)
+                
+            if orders:
+                orderList = []
 
-@api.route("/api/orders", methods=["POST"])
-def processPayment():
-    try:
-        memberId = session["signed"][0]
+                for order in orders:
+                    orderNumber = order[0]
+                    orderTime = str(order[1])[0:16]
+                    orderPrice = order[2]
+                    contactName = order[3]
+                    contactEmail = order[4]
+                    contactPhone = order[5]
+                    
+                    orderInfo = {
+                        "number": orderNumber,
+                        "time": orderTime,
+                        "price": orderPrice,
+                        "contact": {
+                            "name": contactName,
+                            "email": contactEmail,
+                            "phone": contactPhone
+                        }
+                    }
 
-        try: 
+                    orderList.append(orderInfo)
+                
+                response = {
+                    "data": orderList
+                }
+
+            else:
+                response = {
+                    "data": None
+                }
+
+            return json.dumps(response, ensure_ascii=False)
+
+    elif request.method == "POST":
+        try:
+            memberId = session["signed"][0]
+
+        except:
+            return errorHandler(403)
+
+        else:
             orderInfo = request.get_json()
             prime = orderInfo["prime"]
             partnerKey = os.getenv("PARTNER_KEY")
+            merchantId = os.getenv("MERCHANT_ID")
             orderTime = str(datetime.today())[0:19]
-            orderNumber = genOrderNumber()
-            price = orderInfo["order"]["price"]
+            orderNumber = genOrderNumber() + str(memberId)
+            orderPrice = orderInfo["order"]["price"]
             schedules = orderInfo["order"]["trip"]
             contactName = orderInfo["order"]["contact"]["name"]
             contactEmail = orderInfo["order"]["contact"]["email"]
             contactPhone = orderInfo["order"]["contact"]["phone"]
 
-            if prime and price and schedules and contactName and re.match(emailPattern, contactEmail) and re.match(phonePattern, contactPhone):
-                db.insertOrder(orderTime, orderNumber, price, contactName, contactEmail, contactPhone)
+            if prime and orderPrice and schedules and contactName and re.match(emailPattern, contactEmail) and re.match(phonePattern, contactPhone):
+                db.insertOrder(memberId, orderTime, orderNumber, orderPrice, contactName, contactEmail, contactPhone)
 
                 for schedule in schedules:
-                    scheduleId = schedule["scheduleId"]
+                    scheduleDate = schedule["date"]
+                    scheduleTime = schedule["time"]
+                    attractionId = schedule["attraction"]["id"]
+                    attractionName = schedule["attraction"]["name"]
+                    attractionAddress = schedule["attraction"]["address"]
+                    attractionCover = schedule["attraction"]["image"]
 
-                    db.insertOrderDetail(orderNumber, scheduleId)
+                    db.insertOrderDetail(orderNumber, scheduleDate, scheduleTime, attractionId, attractionName, attractionAddress, attractionCover)
 
                 url = "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime"
                 headers = {
                     "Content-Type": "application/json",
-                    "x-api-key": os.getenv("PARTNER_KEY")
+                    "x-api-key": partnerKey
                 }
                 body = {
                     "prime": prime,
                     "partner_key": partnerKey,
-                    "merchant_id": "hvvu2_CTBC",
+                    "merchant_id": merchantId,
                     "details":"TapPay Test",
-                    "amount": price,
+                    "amount": orderPrice,
                     "cardholder": {
                         "phone_number": contactPhone,
                         "name": contactName,
                         "email": contactEmail,
-                        "zip_code": "",
-                        "address": "",
-                        "national_id": ""
                     }
                 }
                 paymentResponse = requests.post(url, json=body, headers=headers).json()
 
-                if paymentResponse["status"] == 0:
+                if paymentResponse:
                     db.updateOrderStatus(orderNumber)
-                    db.clearAllSchedules(memberId)
 
-                    response = {
-                        "data": {
-                            "number": orderNumber,
-                            "payment": {
-                            "status": 0,
-                            "message": "Payment completed."
+                    if paymentResponse["status"] == 0:
+                        db.updatePaymentStatus(orderNumber)
+                        db.clearAllSchedules(memberId)
+
+                        response = {
+                            "data": {
+                                "number": orderNumber,
+                                "payment": {
+                                "status": 0,
+                                "message": "Payment completed."
+                                }
                             }
                         }
-                    }
+
+                    else:
+                        response = {
+                            "data": {
+                                "number": orderNumber,
+                                "payment": {
+                                "status": 1,
+                                "message": "Failed to process payment."
+                                }
+                            }
+                        }
+                        
                     return json.dumps(response)
 
                 else:
-                    response = {
-                        "data": {
-                            "number": orderNumber,
-                            "payment": {
-                            "status": 1,
-                            "message": "Failed to process payment."
-                            }
-                        }
-                    }
-                    return json.dumps(response)
+                    return errorHandler(500)
             
             else:
                 return errorHandler(400, invalidFormat)
-        
-        except:
-            return errorHandler(500)
+
+
+@api.route("/api/order/<orderNumber>", methods=["GET"])
+def getOrderDetails(orderNumber):
+    try:
+        session["signed"]
 
     except:
         return errorHandler(403)
+
+    else:
+        trips = db.getOrderDetails(orderNumber)
+        tripList = []
+        
+        for trip in trips:
+            attractionId = trip[0]
+            attractionName = trip[1]
+            attractionAddress = trip[2]
+            scheduleDate = trip[4]
+            scheduleTime = trip[5]
+
+            tripInfo = {
+                "attraction": {
+                    "id": attractionId,
+                    "name": attractionName,
+                    "address": attractionAddress
+                },
+                "date": scheduleDate,
+                "time": scheduleTime
+            }
+
+            tripList.append(tripInfo)
+        
+        response = {
+            "data": tripList
+        }
+        return json.dumps(response, ensure_ascii=False)

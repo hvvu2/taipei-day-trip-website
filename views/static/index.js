@@ -166,12 +166,12 @@ const init = async () => {
     
     if (signInResult.data) {
         hideBlock(gateBtn);
-        showBlock(signOutBtn);
+        showBlock(memberBtn);
     }
 
     else{
         showBlock(gateBtn);
-        hideBlock(signOutBtn);
+        hideBlock(memberBtn);
     }
 
     const result = await getData(url(0, ""));

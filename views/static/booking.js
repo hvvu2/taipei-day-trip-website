@@ -184,7 +184,7 @@ const init = async () => {
     if (signInResult.data) {
         const signInName = signInResult.data.name;
         
-        showBlock(signOutBtn);
+        showBlock(memberBtn);
         hideBlock(gateBtn);
         bookingHeadline.style.opacity = "1";
         bookingHeadline.style.transform = "translateY(0)";
@@ -301,12 +301,10 @@ summaryBtn.addEventListener("click", async () => {
         const price = parseInt(summaryPrice.textContent);
         
         for (i = 0; i < scheduleList.length; i++) {
-            const scheduleId = scheduleList[i].scheduleId;
             const attraction = scheduleList[i].attraction;
             const date = scheduleList[i].date;
             const time = scheduleList[i].time;
             const schedule = {
-                "scheduleId": scheduleId,
                 "attraction": attraction,
                 "date": date,
                 "time": time
