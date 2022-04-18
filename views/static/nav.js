@@ -2,6 +2,8 @@ const gateBtn = document.getElementById("js-navbar__gate-btn");
 const memberBtn = document.getElementById("js-navbar__member-btn");
 const signOutBtn = document.getElementById("js-navbar__sign-out-btn");
 const bookingBtn = document.getElementById("js-navbar__booking-btn");
+const menuBtn = document.getElementById("js-navbar__menu-btn");
+const menu = document.getElementById("js-navbar__menu");
 const bookingIcon = document.getElementById("js-navbar__icon");
 const bookingNumber = document.getElementById("js-navbar__number");
 const popup = document.getElementById("js-popup");
@@ -310,6 +312,7 @@ signInBtn.addEventListener("click", async () => {
             gate.style.transition = "0.3s";
             hideBlock(gateBtn);
             showBlock(memberBtn);
+            showBlock(signOutBtn);
 
             const bookingOption = {
                 method: "GET",
@@ -359,6 +362,7 @@ signOutBtn.addEventListener("click", async () => {
         window.location.reload();
         showBlock(gateBtn);
         hideBlock(memberBtn);
+        hideBlock(signOutBtn);
     }
 });
 
@@ -450,5 +454,15 @@ bookingBtn.addEventListener("click", async () => {
         showBlock(signIn);
         hideBlock(signUp);
         resetGateInput();
+    }
+});
+
+menuBtn.addEventListener("click", () => {
+    if (menu.style.display != "flex") {
+        menu.style.display = "flex";
+    }
+
+    else {
+        menu.style.display = "none";
     }
 });

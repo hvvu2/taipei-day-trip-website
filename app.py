@@ -1,6 +1,9 @@
-import os
 from flask import Flask, render_template
-from controllers.api import api
+from controllers.attraction import attraction
+from controllers.user import user
+from controllers.booking import booking
+from controllers.order import order
+import os
 
 # ===================================================================================== #
 
@@ -9,7 +12,10 @@ app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 app.secret_key = os.getenv("SECRET_KEY")
 
-app.register_blueprint(api, prefix="/api")
+app.register_blueprint(attraction)
+app.register_blueprint(user)
+app.register_blueprint(booking)
+app.register_blueprint(order)
 
 # Pages
 @app.route("/")

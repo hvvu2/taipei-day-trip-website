@@ -477,30 +477,31 @@ nav .navbar {
   background-color: white;
 }
 
-nav .navbar .navbar__wrapper {
+nav .navbar__wrapper {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  position: relative;
   width: 1200px;
   height: 100%;
 }
 
 @media screen and (min-width: 768px) and (max-width: 1200px) {
-  nav .navbar .navbar__wrapper {
+  nav .navbar__wrapper {
     width: 755px;
   }
 }
 
 @media screen and (min-width: 360px) and (max-width: 768px) {
-  nav .navbar .navbar__wrapper {
+  nav .navbar__wrapper {
     width: 365px;
   }
 }
 
-nav .navbar .navbar__wrapper .navbar__title {
+nav .navbar__wrapper .navbar__title {
   -ms-flex-item-align: center;
       -ms-grid-row-align: center;
       align-self: center;
@@ -510,14 +511,56 @@ nav .navbar .navbar__wrapper .navbar__title {
   line-height: 54px;
 }
 
-nav .navbar .navbar__wrapper .navbar__btn-wrapper {
+nav .navbar__wrapper .navbar__menu-btn {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  display: none;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 35px;
+  height: 35px;
+  font-size: 35px;
+}
+
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  nav .navbar__wrapper .navbar__menu-btn {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+}
+
+nav .navbar__wrapper .navbar__btn-wrapper {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
   position: relative;
 }
 
-nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn {
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  nav .navbar__wrapper .navbar__btn-wrapper {
+    display: none;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    position: absolute;
+    top: 54px;
+    right: 0;
+    padding-bottom: 10px;
+    width: 140px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: white;
+  }
+}
+
+nav .navbar__wrapper .navbar__btn-wrapper .navbar__btn {
   width: 90px;
   height: 100%;
   color: #666666;
@@ -526,13 +569,24 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn {
   cursor: pointer;
 }
 
-nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn:hover {
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  nav .navbar__wrapper .navbar__btn-wrapper .navbar__btn {
+    height: 30px;
+    margin: 10px 0;
+  }
+}
+
+nav .navbar__wrapper .navbar__btn-wrapper .navbar__btn:hover {
   color: #B2B2B2;
   -webkit-transition: 0.3s;
   transition: 0.3s;
 }
 
-nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__icon {
+nav .navbar__wrapper .navbar__btn-wrapper .navbar__btn:nth-child(2) {
+  position: relative;
+}
+
+nav .navbar__wrapper .navbar__btn-wrapper .navbar__icon {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -557,38 +611,17 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__icon {
   pointer-events: none;
 }
 
-nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__icon .navbar__number {
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  nav .navbar__wrapper .navbar__btn-wrapper .navbar__icon {
+    left: 72px;
+    bottom: -4px;
+  }
+}
+
+nav .navbar__wrapper .navbar__btn-wrapper .navbar__icon .navbar__number {
   font-size: 8px;
   font-style: normal;
   color: white;
-}
-
-nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__menu {
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  position: absolute;
-  top: 54px;
-  right: 0;
-  padding: 15px 0;
-  width: 90px;
-  border: 1px solid #E8E8E8;
-  border-top: none;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  background-color: white;
-  opacity: 0;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
-  pointer-events: none;
-}
-
-nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn:nth-child(3):hover + .navbar__menu, nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__menu:hover {
-  opacity: 1;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
-  pointer-events: all;
 }
 
 .content-wrapper {
@@ -2035,6 +2068,18 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn:nth-child(3):hove
   margin: 40px 0;
 }
 
+@media screen and (min-width: 768px) and (max-width: 1200px) {
+  .content-wrapper main .member-main {
+    width: 710px;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  .content-wrapper main .member-main {
+    width: 360px;
+  }
+}
+
 .content-wrapper main .member-main__title {
   font-size: 24px;
   font-weight: bold;
@@ -2051,8 +2096,20 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn:nth-child(3):hove
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  width: 100%;
+  width: 1000px;
   border-radius: 5px;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1200px) {
+  .content-wrapper main .member-main__wrapper {
+    width: 700px;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  .content-wrapper main .member-main__wrapper {
+    width: 340px;
+  }
 }
 
 .content-wrapper main .member-main__wrapper .member-main__msg {
@@ -2079,11 +2136,18 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn:nth-child(3):hove
 .content-wrapper main .member-main__wrapper .order-history__header {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 200px 200px 150px 1fr 150px 180px;
-      grid-template-columns: 200px 200px 150px 1fr 150px 180px;
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
   height: 40px;
   border-radius: 5px;
   background-color: #4EA0B4;
+}
+
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  .content-wrapper main .member-main__wrapper .order-history__header {
+    -ms-grid-columns: 1fr 1fr 100px;
+        grid-template-columns: 1fr 1fr 100px;
+  }
 }
 
 .content-wrapper main .member-main__wrapper .order-history__header .order-history__title {
@@ -2096,17 +2160,30 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn:nth-child(3):hove
   color: white;
 }
 
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  .content-wrapper main .member-main__wrapper .order-history__header .order-history__title {
+    font-size: 14px;
+  }
+}
+
 .content-wrapper main .member-main__wrapper .order-history__wrapper {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 200px 200px 150px 1fr 150px 180px;
-      grid-template-columns: 200px 200px 150px 1fr 150px 180px;
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
   -ms-grid-rows: 30px 1fr;
       grid-template-rows: 30px 1fr;
   position: relative;
   padding: 20px 0;
   font-size: 16px;
   border-bottom: 1px solid #E8E8E8;
+}
+
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  .content-wrapper main .member-main__wrapper .order-history__wrapper {
+    -ms-grid-columns: 1fr 1fr 100px;
+        grid-template-columns: 1fr 1fr 100px;
+  }
 }
 
 .content-wrapper main .member-main__wrapper .order-history__wrapper .order-history__txt {
@@ -2118,7 +2195,15 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn:nth-child(3):hove
   -ms-flex-item-align: center;
       -ms-grid-row-align: center;
       align-self: center;
+  padding: 0 5px;
   font-size: 16px;
+  word-break: break-all;
+}
+
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  .content-wrapper main .member-main__wrapper .order-history__wrapper .order-history__txt {
+    font-size: 12px;
+  }
 }
 
 .content-wrapper main .member-main__wrapper .order-history__wrapper .order-history__btn {
@@ -2130,8 +2215,12 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn:nth-child(3):hove
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  justify-self: center;
-  align-self: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   position: absolute;
   right: 10px;
   width: 24px;
@@ -2139,14 +2228,26 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn:nth-child(3):hove
   cursor: pointer;
 }
 
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  .content-wrapper main .member-main__wrapper .order-history__wrapper .order-history__btn {
+    right: 0;
+  }
+}
+
 .content-wrapper main .member-main__wrapper .order-history__wrapper .order-history__btn i {
   font-size: 24px;
 }
 
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  .content-wrapper main .member-main__wrapper .order-history__wrapper .order-history__btn i {
+    font-size: 18px;
+  }
+}
+
 .content-wrapper main .member-main__wrapper .order-history__wrapper .order-detail {
   -ms-grid-column: 1;
-  -ms-grid-column-span: 6;
-  grid-column: 1/7;
+  -ms-grid-column-span: 3;
+  grid-column: 1/4;
   -ms-grid-row: 2;
   -ms-grid-row-span: 1;
   grid-row: 2/3;
@@ -2163,14 +2264,32 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn:nth-child(3):hove
   background-color: rgba(68, 136, 153, 0.05);
 }
 
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  .content-wrapper main .member-main__wrapper .order-history__wrapper .order-detail {
+    padding: 20px 5px 0 5px;
+  }
+}
+
 .content-wrapper main .member-main__wrapper .order-history__wrapper .order-detail__header {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr 1fr 180px 180px;
-      grid-template-columns: 1fr 1fr 180px 180px;
+  -ms-grid-columns: 1fr 1fr 120px 180px;
+      grid-template-columns: 1fr 1fr 120px 180px;
   height: 40px;
   border-radius: 5px;
   background-color: rgba(78, 160, 180, 0.2);
+}
+
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  .content-wrapper main .member-main__wrapper .order-history__wrapper .order-detail__header {
+    -ms-grid-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+.content-wrapper main .member-main__wrapper .order-history__wrapper .order-detail__header:first-child {
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
 }
 
 .content-wrapper main .member-main__wrapper .order-history__wrapper .order-detail__header .order-detail__sub-title {
@@ -2181,13 +2300,31 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn:nth-child(3):hove
       align-self: center;
 }
 
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  .content-wrapper main .member-main__wrapper .order-history__wrapper .order-detail__header .order-detail__sub-title {
+    font-size: 14px;
+  }
+}
+
 .content-wrapper main .member-main__wrapper .order-history__wrapper .order-detail__wrapper {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr 1fr 180px 180px;
-      grid-template-columns: 1fr 1fr 180px 180px;
+  -ms-grid-columns: 1fr 1fr 120px 180px;
+      grid-template-columns: 1fr 1fr 120px 180px;
   padding: 15px 0;
   border-bottom: 1px solid #E8E8E8;
+}
+
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  .content-wrapper main .member-main__wrapper .order-history__wrapper .order-detail__wrapper {
+    -ms-grid-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+.content-wrapper main .member-main__wrapper .order-history__wrapper .order-detail__wrapper:nth-child(2) {
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
 }
 
 .content-wrapper main .member-main__wrapper .order-history__wrapper .order-detail__wrapper:last-child {
@@ -2197,6 +2334,17 @@ nav .navbar .navbar__wrapper .navbar__btn-wrapper .navbar__btn:nth-child(3):hove
 .content-wrapper main .member-main__wrapper .order-history__wrapper .order-detail__wrapper .order-detail__txt {
   -ms-grid-column-align: center;
       justify-self: center;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  word-break: break-all;
+}
+
+@media screen and (min-width: 360px) and (max-width: 768px) {
+  .content-wrapper main .member-main__wrapper .order-history__wrapper .order-detail__wrapper .order-detail__txt {
+    padding: 0 5px;
+    font-size: 12px;
+  }
 }
 
 .content-wrapper main .thankyou-main {

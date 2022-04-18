@@ -184,8 +184,9 @@ const init = async () => {
     if (signInResult.data) {
         const signInName = signInResult.data.name;
         
-        showBlock(memberBtn);
         hideBlock(gateBtn);
+        showBlock(memberBtn);
+        showBlock(signOutBtn);
         bookingHeadline.style.opacity = "1";
         bookingHeadline.style.transform = "translateY(0)";
         memberName.textContent = signInName;

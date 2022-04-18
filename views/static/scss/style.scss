@@ -415,9 +415,10 @@ nav{
         border-bottom: 1px solid $border;
         background-color: white;
 
-        .navbar__wrapper{
+        &__wrapper{
             display: flex;
             justify-content: space-between;
+            position: relative;
             width: 1200px;
             height: 100%;
 
@@ -437,9 +438,36 @@ nav{
                 line-height: 54px;
             }
 
+            .navbar__menu-btn{
+                align-self: center;
+                display: none;
+                justify-content: center;
+                align-items: center;
+                width: 35px;
+                height: 35px;
+                font-size: 35px;
+
+                @include mobile(){
+                    display: flex;
+                }
+            }
+
             .navbar__btn-wrapper{
                 justify-content: space-between;
                 position: relative;
+
+                @include mobile(){
+                    display: none;
+                    flex-direction: column;
+                    position: absolute;
+                    top: 54px;
+                    right: 0;
+                    padding-bottom: 10px;
+                    width: 140px;
+                    border-bottom-left-radius: 5px;
+                    border-bottom-right-radius: 5px;
+                    background-color: white;
+                }
 
                 .navbar__btn{
                     width: 90px;
@@ -447,10 +475,19 @@ nav{
                     color: $btn;
                     transition: 0.3s;
                     cursor: pointer;
+
+                    @include mobile(){
+                        height: 30px;
+                        margin: 10px 0;
+                    }
     
                     &:hover{
                         color: $btn-hover;
                         transition: 0.3s;
+                    }
+
+                    &:nth-child(2){
+                        position: relative;
                     }
                 }
     
@@ -470,34 +507,16 @@ nav{
                     transition: 0.1s;
                     pointer-events: none;
 
+                    @include mobile(){
+                        left: 72px;
+                        bottom: -4px;
+                    }
+
                     .navbar__number{
                         font-size: 8px;
                         font-style: normal;
                         color: white;
                     }
-                }
-
-                .navbar__menu{
-                    flex-direction: column;
-                    position: absolute;
-                    top: 54px;
-                    right: 0;
-                    padding: 15px 0;
-                    width: 90px;
-                    border: 1px solid $border;
-                    border-top: none;
-                    border-bottom-left-radius: 5px;
-                    border-bottom-right-radius: 5px;
-                    background-color: white;
-                    opacity: 0;
-                    transition: 0.3s;
-                    pointer-events: none;
-                }
-
-                .navbar__btn:nth-child(3):hover + .navbar__menu, .navbar__menu:hover{
-                    opacity: 1;
-                    transition: 0.3s;
-                    pointer-events: all;
                 }
             }
         }
@@ -1595,6 +1614,14 @@ nav{
             width: 1200px;
             margin: 40px 0;
 
+            @include pad(){
+                width: 710px;
+            }
+
+            @include mobile(){
+                width: 360px;
+            }
+
             &__title{
                 font-size: 24px;
                 font-weight: bold;
@@ -1607,8 +1634,16 @@ nav{
                 position: relative;
                 display: flex;
                 justify-content: center;
-                width: 100%;
+                width: 1000px;
                 border-radius: 5px;
+
+                @include pad(){
+                    width: 700px;
+                }
+
+                @include mobile(){
+                    width: 340px;
+                }
 
                 .member-main__msg{
                     position: absolute;
@@ -1628,54 +1663,80 @@ nav{
 
                     &__header{
                         display: grid;
-                        grid-template-columns: 200px 200px 150px 1fr 150px 180px;
+                        grid-template-columns: 1fr 1fr 1fr;
                         height: 40px;
                         border-radius: 5px;
                         background-color: $sub-color;
+
+                        @include mobile(){
+                            grid-template-columns: 1fr 1fr 100px;
+                        }
 
                         .order-history__title{
                             justify-self: center;
                             align-self: center;
                             font-size: 18px;
                             color: white;
+
+                            @include mobile(){
+                                font-size: 14px;
+                            }
                         }
                     }
 
                     &__wrapper{
                         display: grid;
-                        grid-template-columns: 200px 200px 150px 1fr 150px 180px;
+                        grid-template-columns: 1fr 1fr 1fr;
                         grid-template-rows: 30px 1fr;
                         position: relative;
                         padding: 20px 0;
                         font-size: 16px;
                         border-bottom: 1px solid $border;
 
+                        @include mobile(){
+                            grid-template-columns: 1fr 1fr 100px;
+                        }
+
                         .order-history__txt{
                             grid-row: 1/2;
                             justify-self: center;
                             align-self: center;
+                            padding: 0 5px;
                             font-size: 16px;
+                            word-break: break-all;
+
+                            @include mobile(){
+                                font-size: 12px;
+                            }
                         }
 
                         .order-history__btn{
                             grid-row: 1/2;
                             align-self: center;
                             display: flex;
-                            justify-self: center;
-                            align-self: center;
+                            justify-content: center;
+                            align-items: center;
                             position: absolute;
                             right: 10px;
                             width: 24px;
                             height: 24px;
                             cursor: pointer;
 
+                            @include mobile(){
+                                right: 0;
+                            }
+
                             i{
                                 font-size: 24px;
+
+                                @include mobile(){
+                                    font-size: 18px;
+                                }
                             }
                         }
 
                         .order-detail{
-                            grid-column: 1/7;
+                            grid-column: 1/4;
                             grid-row: 2/3;
                             display: flex;
                             flex-direction: column;
@@ -1684,24 +1745,48 @@ nav{
                             border-radius: 5px;
                             background-color: rgba($main-color, 0.05);
 
+                            @include mobile(){
+                                padding: 20px 5px 0 5px;
+                            }
+
                             &__header{
                                 display: grid;
-                                grid-template-columns: 1fr 1fr 180px 180px;
+                                grid-template-columns: 1fr 1fr 120px 180px;
                                 height: 40px;
                                 border-radius: 5px;
                                 background-color: rgba($sub-color, 0.2);
 
+                                @include mobile(){
+                                    grid-template-columns: 1fr 1fr 1fr 1fr;
+                                }
+
+                                &:first-child{
+                                    grid-template-columns: 1fr 1fr 1fr;
+                                }
+
                                 .order-detail__sub-title{
                                     justify-self: center;
                                     align-self: center;
+
+                                    @include mobile(){
+                                        font-size: 14px;
+                                    }
                                 }
                             }
 
                             &__wrapper{
                                 display: grid;
-                                grid-template-columns: 1fr 1fr 180px 180px;
+                                grid-template-columns: 1fr 1fr 120px 180px;
                                 padding: 15px 0;
                                 border-bottom: 1px solid $border;
+
+                                @include mobile(){
+                                    grid-template-columns: 1fr 1fr 1fr 1fr;
+                                }
+
+                                &:nth-child(2){
+                                    grid-template-columns: 1fr 1fr 1fr;
+                                }
 
                                 &:last-child{
                                     border: none;
@@ -1709,6 +1794,13 @@ nav{
 
                                 .order-detail__txt{
                                     justify-self: center;
+                                    align-self: center;
+                                    word-break: break-all;
+
+                                    @include mobile(){
+                                        padding: 0 5px;
+                                        font-size: 12px;
+                                    }
                                 }
                             }
                         }

@@ -86,12 +86,13 @@ DROP TABLE IF EXISTS `members`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `members` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `name` varchar(32) NOT NULL,
+  `email` varchar(32) NOT NULL,
+  `password` varchar(256) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `email` (`email`),
+  KEY `email_2` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +101,7 @@ CREATE TABLE `members` (
 
 LOCK TABLES `members` WRITE;
 /*!40000 ALTER TABLE `members` DISABLE KEYS */;
-INSERT INTO `members` VALUES (1,'admin','admin@gmail.com','admin'),(2,'ply','ply@ply.com','ply');
+INSERT INTO `members` VALUES (1,'admin','admin@gmail.com','29af1852739518c2ac58fcedb7fcd1291bfa73137eb4cfdf4def2b1101f97cd5');
 /*!40000 ALTER TABLE `members` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -114,10 +115,15 @@ DROP TABLE IF EXISTS `order_details`;
 CREATE TABLE `order_details` (
   `id` int NOT NULL AUTO_INCREMENT,
   `order_number` varchar(64) NOT NULL,
-  `schedule_id` int NOT NULL,
+  `schedule_date` varchar(32) NOT NULL,
+  `schedule_time` varchar(32) NOT NULL,
+  `attraction_id` int NOT NULL,
+  `attraction_name` varchar(255) NOT NULL,
+  `attraction_address` varchar(255) NOT NULL,
+  `attraction_cover` varchar(1024) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `order_number` (`order_number`),
-  CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`order_number`) REFERENCES `orders` (`order_number`) ON DELETE CASCADE
+  CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`order_number`) REFERENCES `orders` (`number`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -139,15 +145,19 @@ DROP TABLE IF EXISTS `orders`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orders` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `order_time` datetime NOT NULL,
-  `order_number` varchar(64) NOT NULL,
-  `price` int NOT NULL,
+  `member_id` int NOT NULL,
+  `time` datetime NOT NULL,
+  `number` varchar(64) NOT NULL,
   `status` int DEFAULT '1',
+  `price` int NOT NULL,
+  `payment_status` int DEFAULT '1',
   `contact_name` varchar(255) NOT NULL,
   `contact_email` varchar(255) NOT NULL,
   `contact_phone` varchar(32) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `order_number` (`order_number`)
+  UNIQUE KEY `number` (`number`),
+  KEY `member_id` (`member_id`),
+  CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `members` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -170,8 +180,6 @@ DROP TABLE IF EXISTS `schedules`;
 CREATE TABLE `schedules` (
   `id` int NOT NULL AUTO_INCREMENT,
   `member_id` int NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
   `date` varchar(32) NOT NULL,
   `time` varchar(32) NOT NULL,
   `price` int NOT NULL,
@@ -182,7 +190,7 @@ CREATE TABLE `schedules` (
   PRIMARY KEY (`id`),
   KEY `member_id` (`member_id`),
   CONSTRAINT `schedules_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `members` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -203,4 +211,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-10  1:36:35
+-- Dump completed on 2022-04-18 21:11:03

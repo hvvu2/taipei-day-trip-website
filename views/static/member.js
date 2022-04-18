@@ -20,6 +20,11 @@ const showOrders = (orderData) => {
     const orderHistoryBtn = document.createElement("button");
     const orderHistoryBtnIcon = document.createElement("i");
     const orderDetail = document.createElement("div");
+    const orderContactHeader = document.createElement("div");
+    const orderContactName = document.createElement("h1");
+    const orderContactEmail = document.createElement("h1");
+    const orderContactPhone = document.createElement("h1");
+    const orderDetailWrapper = document.createElement("div");
     const orderDetailHeader = document.createElement("div");
     const orderDetailName = document.createElement("h1");
     const orderDetailAddress = document.createElement("h1");
@@ -29,13 +34,18 @@ const showOrders = (orderData) => {
     orderHistory.appendChild(orderHistoryWrapper);
     orderHistoryWrapper.appendChild(orderNumber);
     orderHistoryWrapper.appendChild(orderTime);
-    orderHistoryWrapper.appendChild(orderName);
-    orderHistoryWrapper.appendChild(orderEmail);
-    orderHistoryWrapper.appendChild(orderPhone);
     orderHistoryWrapper.appendChild(orderPrice);
     orderHistoryWrapper.appendChild(orderHistoryBtn);
     orderHistoryBtn.appendChild(orderHistoryBtnIcon);
     orderHistoryWrapper.appendChild(orderDetail);
+    orderDetail.appendChild(orderContactHeader);
+    orderContactHeader.appendChild(orderContactName);
+    orderContactHeader.appendChild(orderContactEmail);
+    orderContactHeader.appendChild(orderContactPhone);
+    orderDetail.appendChild(orderDetailWrapper);
+    orderDetailWrapper.appendChild(orderName);
+    orderDetailWrapper.appendChild(orderEmail);
+    orderDetailWrapper.appendChild(orderPhone);
     orderDetail.appendChild(orderDetailHeader);
     orderDetailHeader.appendChild(orderDetailName);
     orderDetailHeader.appendChild(orderDetailAddress);
@@ -48,6 +58,9 @@ const showOrders = (orderData) => {
     orderEmail.textContent = orderData.contact.email;
     orderPhone.textContent = orderData.contact.phone;
     orderPrice.textContent = orderData.price + " 元";
+    orderContactName.textContent = "聯絡姓名";
+    orderContactEmail.textContent = "聯絡信箱";
+    orderContactPhone.textContent = "聯絡電話";
     orderDetailName.textContent = "景點名稱";
     orderDetailAddress.textContent = "景點地址";
     orderDetailDate.textContent = "行程日期";
@@ -56,19 +69,24 @@ const showOrders = (orderData) => {
     orderHistoryWrapper.classList.add("order-history__wrapper");
     orderNumber.classList.add("order-history__txt");
     orderTime.classList.add("order-history__txt");
-    orderName.classList.add("order-history__txt");
-    orderEmail.classList.add("order-history__txt");
-    orderPhone.classList.add("order-history__txt");
     orderPrice.classList.add("order-history__txt");
     orderHistoryBtnIcon.classList.add("bx", "bxs-chevron-down");
     orderHistoryBtn.classList.add("order-history__btn");
     orderDetail.classList.add("order-detail", "hidden");
+    orderContactHeader.classList.add("order-detail__header");
     orderDetailHeader.classList.add("order-detail__header");
+    orderContactName.classList.add("order-detail__sub-title");
+    orderContactEmail.classList.add("order-detail__sub-title");
+    orderContactPhone.classList.add("order-detail__sub-title");
+    orderDetailWrapper.classList.add("order-detail__wrapper")
+    orderName.classList.add("order-detail__txt");
+    orderEmail.classList.add("order-detail__txt");
+    orderPhone.classList.add("order-detail__txt");
     orderDetailName.classList.add("order-detail__sub-title");
     orderDetailAddress.classList.add("order-detail__sub-title");
     orderDetailDate.classList.add("order-detail__sub-title");
     orderDetailTime.classList.add("order-detail__sub-title");
-
+    
     orderHistoryBtn.addEventListener("click", () => {
         if (orderDetail.classList.contains("hidden")) {
             showBlock(orderDetail);
@@ -103,6 +121,7 @@ const showOrderDetails = (container, tripData) => {
         attractionName.textContent = tripData[j].attraction.name;
         attractionAddress.textContent = tripData[j].attraction.address;
         scheduleDate.textContent = tripData[j].date;
+
         if (tripData[j].time == "morning") {
             scheduleTime.textContent = "早上 9 點到下午 4 點";
         }
@@ -126,8 +145,9 @@ const init = async () => {
     const signInResult = await signInPromise;
 
     if (signInResult.data) {
-        showBlock(memberBtn);
         hideBlock(gateBtn);
+        showBlock(memberBtn);
+        showBlock(signOutBtn);
         showBlock(memberHeaderEdit);
 
         memberHeaderName.textContent = signInResult.data.name;
