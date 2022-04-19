@@ -166,11 +166,13 @@ const init = async () => {
     
     if (signInResult.data) {
         hideBlock(gateBtn);
+        showBlock(memberBtn);
         showBlock(signOutBtn);
     }
 
     else{
         showBlock(gateBtn);
+        hideBlock(memberBtn);
         hideBlock(signOutBtn);
     }
 

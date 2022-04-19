@@ -8,8 +8,9 @@ const init = async () => {
     const signInResult = await signInPromise;
 
     if (signInResult.data) {
-        showBlock(signOutBtn);
         hideBlock(gateBtn);
+        showBlock(memberBtn);
+        showBlock(signOutBtn);
     }
 
     else{

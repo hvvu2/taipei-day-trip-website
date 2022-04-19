@@ -38,12 +38,12 @@
 
                 <div class="gate__form-wrapper hidden" id="js-sign-up">
                     <div class="gate__input-wrapper">
-                        <input class="gate__input" id="js-sign-up__name" type="text" placeholder="輸入姓名">
+                        <input class="gate__input" id="js-sign-up__name" type="text" maxlength="32" placeholder="輸入姓名">
                         <i class="gate__icon bx"></i>
                     </div>
 
                     <div class="gate__input-wrapper">
-                        <input class="gate__input" id="js-sign-up__email" type="text" placeholder="輸入電子信箱">
+                        <input class="gate__input" id="js-sign-up__email" type="text" maxlength="32" placeholder="輸入電子信箱">
                         <i class="gate__icon bx"></i>
                     </div>
 
@@ -64,12 +64,17 @@
         <div class="navbar">
             <div class="navbar__wrapper">
                 <a href="/"><h1 class="navbar__title">台北一日遊</h1></a>
+                <button class="navbar__menu-btn" id="js-navbar__menu-btn">
+                    <i class="bx bx-menu"></i>
+                </button>
 
-                <div class="navbar__btn-wrapper va">
-                    <button class="navbar__btn" id="js-navbar__booking-btn">預訂行程 </button>
+                <div class="navbar__btn-wrapper va" id="js-navbar__menu">
+                    <button class="navbar__btn hidden" id="js-navbar__member-btn">會員中心</button>
+                    <button class="navbar__btn" id="js-navbar__booking-btn">預訂行程
+                        <i class="navbar__icon" id="js-navbar__icon"><span class="navbar__number" id="js-navbar__number"></span></i>
+                    </button>
                     <button class="navbar__btn" id="js-navbar__gate-btn">登入/註冊</button>
                     <button class="navbar__btn hidden" id="js-navbar__sign-out-btn">登出系統</button>
-                    <i class="navbar__icon" id="js-navbar__icon"><span class="navbar__number" id="js-navbar__number"></span></i>
                 </div>
             </div>
         </div>

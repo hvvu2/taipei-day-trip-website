@@ -1,6 +1,9 @@
 const gateBtn = document.getElementById("js-navbar__gate-btn");
+const memberBtn = document.getElementById("js-navbar__member-btn");
 const signOutBtn = document.getElementById("js-navbar__sign-out-btn");
 const bookingBtn = document.getElementById("js-navbar__booking-btn");
+const menuBtn = document.getElementById("js-navbar__menu-btn");
+const menu = document.getElementById("js-navbar__menu");
 const bookingIcon = document.getElementById("js-navbar__icon");
 const bookingNumber = document.getElementById("js-navbar__number");
 const popup = document.getElementById("js-popup");
@@ -21,6 +24,7 @@ const signUpName = document.getElementById("js-sign-up__name");
 const signUpEmail = document.getElementById("js-sign-up__email");
 const signUpPwd = document.getElementById("js-sign-up__pwd");
 const signUpMsg = document.getElementById("js-sign-up__message");
+const namePattern = /^.{2,32}$/;
 const emailPattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
 // View
@@ -38,85 +42,6 @@ const resetGateInput = () => {
     removeMsg(signUpMsg);
     removeError(signInMsg);
     removeMsg(signInMsg);
-}
-
-const validateSignUp = () => {
-    const name = signUpName.value.trim();
-    const email = signUpEmail.value.trim();
-    const pwd = signUpPwd.value.trim();
-
-    if (name) {
-        setOkInput(signUpName);
-    }
-
-    else {
-        setErrorInput(signUpName);
-    }
-
-    if (emailPattern.test(email)) {
-        setOkInput(signUpEmail);
-    }
-
-    else {
-        setErrorInput(signUpEmail);
-    }
-
-    if (pwd) {
-        setOkInput(signUpPwd);
-    }
-
-    else {
-        setErrorInput(signUpPwd);
-    }
-
-    if (name && emailPattern.test(email) && pwd) {
-        removeError(signUpMsg)
-        removeMsg(signUpMsg);
-        return true;
-    }
-    
-    else {
-        setError(signUpMsg);
-        setMsg(signUpMsg, "仍有欄位未輸入或資料格式錯誤")
-        return false;
-    }
-}
-
-const validateSignIn = () => {
-    const email = signInEmail.value.trim();
-    const pwd = signInPwd.value.trim();
-
-    if (emailPattern.test(email)) {
-        removeError(signInEmail);
-        removeErrorIcon(signInEmail);
-    }
-
-    else {
-        setError(signInEmail);
-        setErrorIcon(signInEmail);
-    }
-
-    if (pwd) {
-        removeError(signInPwd);
-        removeErrorIcon(signInPwd);
-    }
-
-    else {
-        setError(signInPwd);
-        setErrorIcon(signInPwd);
-    }
-
-    if (emailPattern.test(email) && pwd) {
-        removeError(signInMsg);
-        removeMsg(signInMsg);
-        return true;
-    }
-
-    else {
-        setError(signInMsg);
-        setMsg(signInMsg, "帳號及密碼未輸入，或帳號格式錯誤")
-        return false;
-    }
 }
 
 const setOk = (e) => {
@@ -194,6 +119,85 @@ const showSchedules = async () => {
 
     else {
         bookingIcon.style.transform = "scale(0)";
+    }
+}
+
+const validateSignUp = () => {
+    const name = signUpName.value.trim();
+    const email = signUpEmail.value.trim();
+    const pwd = signUpPwd.value.trim();
+
+    if (namePattern.test(name)) {
+        setOkInput(signUpName);
+    }
+
+    else {
+        setErrorInput(signUpName);
+    }
+
+    if (emailPattern.test(email)) {
+        setOkInput(signUpEmail);
+    }
+
+    else {
+        setErrorInput(signUpEmail);
+    }
+
+    if (pwd) {
+        setOkInput(signUpPwd);
+    }
+
+    else {
+        setErrorInput(signUpPwd);
+    }
+
+    if (namePattern.test(name) && emailPattern.test(email) && pwd) {
+        removeError(signUpMsg)
+        removeMsg(signUpMsg);
+        return true;
+    }
+    
+    else {
+        setError(signUpMsg);
+        setMsg(signUpMsg, "仍有欄位未輸入或資料格式錯誤")
+        return false;
+    }
+}
+
+const validateSignIn = () => {
+    const email = signInEmail.value.trim();
+    const pwd = signInPwd.value.trim();
+
+    if (emailPattern.test(email)) {
+        removeError(signInEmail);
+        removeErrorIcon(signInEmail);
+    }
+
+    else {
+        setError(signInEmail);
+        setErrorIcon(signInEmail);
+    }
+
+    if (pwd) {
+        removeError(signInPwd);
+        removeErrorIcon(signInPwd);
+    }
+
+    else {
+        setError(signInPwd);
+        setErrorIcon(signInPwd);
+    }
+
+    if (emailPattern.test(email) && pwd) {
+        removeError(signInMsg);
+        removeMsg(signInMsg);
+        return true;
+    }
+
+    else {
+        setError(signInMsg);
+        setMsg(signInMsg, "帳號及密碼未輸入，或帳號格式錯誤")
+        return false;
     }
 }
 
@@ -307,6 +311,7 @@ signInBtn.addEventListener("click", async () => {
             gate.style.transform = "translateY(-400px)";
             gate.style.transition = "0.3s";
             hideBlock(gateBtn);
+            showBlock(memberBtn);
             showBlock(signOutBtn);
 
             const bookingOption = {
@@ -338,6 +343,10 @@ signInBtn.addEventListener("click", async () => {
     }
 });
 
+memberBtn.addEventListener("click", () => {
+    window.location.href = "/member";
+});
+
 signOutBtn.addEventListener("click", async () => {
     const option = {
         method: "DELETE",
@@ -345,7 +354,6 @@ signOutBtn.addEventListener("click", async () => {
             "Content-Type": "application/json"
         }
     };
-
     const response = await fetch("/api/user", option);
     const promise = await response.json();
     const result = await promise;
@@ -353,6 +361,7 @@ signOutBtn.addEventListener("click", async () => {
     if (result.ok) {
         window.location.reload();
         showBlock(gateBtn);
+        hideBlock(memberBtn);
         hideBlock(signOutBtn);
     }
 });
@@ -367,7 +376,7 @@ gateInputs.forEach((input) => {
 });
 
 signUpName.addEventListener("blur", () => {
-    if (signUpName.value.trim()) {
+    if (namePattern.test(signUpName.value.trim())) {
         setOkInput(signUpName);
     }
 
@@ -445,5 +454,15 @@ bookingBtn.addEventListener("click", async () => {
         showBlock(signIn);
         hideBlock(signUp);
         resetGateInput();
+    }
+});
+
+menuBtn.addEventListener("click", () => {
+    if (menu.style.display != "flex") {
+        menu.style.display = "flex";
+    }
+
+    else {
+        menu.style.display = "none";
     }
 });

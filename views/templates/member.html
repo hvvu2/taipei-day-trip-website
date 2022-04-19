@@ -81,15 +81,46 @@
     </nav>
 
     <div class="content-wrapper">
-        <main>
-            <div class="thankyou-main">
-                <div class="thankyou-main__wrapper" id="js-thankyou-main__txt-wrapper">
-                    <i class="thankyou-main__icon bx bx-check-circle" id="js-thankyou-main__icon"></i>
-                    <h1 class="thankyou-main__title">訂單建立成功！</h1>
-                    <p class="thankyou-main__txt">您的訂單編號為：<span class="thankyou-main__txt" id="js-thankyou-main__order-number"></span></p>
-                    <p class="thankyou-main__txt">前往<a href="/member" class="thankyou-main__link">會員中心</a>查看詳細的行程內容</p>
-                    <p class="thankyou-main__txt">期待能提供您優質的導覽行程！</p>
+        <header>
+            <div class="member-header">
+                <div class="member-header__img" id="js-member-header__avatar"><i class="member-header__icon bx bx-user"></i></div>
+
+                <div class="member-header__wrapper">
+                    <div class="member-header__title-wrapper" id="js-member-header__title-wrapper">
+                        <h1 class="member-header__title" id="js-member-header__name"></h1>
+                        <button class="member-header__btn hidden" id="js-member-header__edit-btn">
+                            <i class="member-header__icon bx bx-pencil"></i>
+                        </button>
+                    </div>
+
+                    <div class="member-header__input-wrapper hidden" id="js-member-header__input-wrapper">
+                        <input class="member-header__input" id="js-member-header__input" type="text" maxlength="32">
+
+                        <button class="member-header__input-btn" id="js-member-header__confirm-btn">
+                            <i class="member-header__icon bx bx-check"></i>
+                        </button>
+                    </div>
                 </div>
+
+                <span class="member-header__sub-title" id="js-member-header__email"></span>
+            </div>
+        </header>
+
+        <main>
+            <div class="member-main">
+                <h1 class="member-main__title">訂單紀錄</h1>
+                
+                <section class="member-main__wrapper">
+                    <p class="member-main__msg" id="order-history__msg">目前尚無訂單紀錄</p>
+
+                    <div class="order-history" id="js-order-history">
+                        <div class="order-history__header">
+                            <h1 class="order-history__title">訂單編號</h1>
+                            <h1 class="order-history__title">訂單時間</h1>
+                            <h1 class="order-history__title">訂單金額</h1>
+                        </div>
+                    </div>
+                </section>
             </div>
         </main>
     </div>
@@ -101,6 +132,6 @@
     </footer>
 
     <script src="../static/nav.js"></script>
-    <script src="../static/thankyou.js"></script>
+    <script src="../static/member.js"></script>
 </body>
 </html>
