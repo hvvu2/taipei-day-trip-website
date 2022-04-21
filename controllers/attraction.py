@@ -23,12 +23,6 @@ def showAttractions():
 
         def createData(i, data):
             item = data[i]
-            imageList = []
-            imageUrls = db.getImages(item[0])
-
-            for imageUrl in imageUrls:
-                imageList.append(imageUrl[0])
-
             itemInfo = {
                 "id": item[0],
                 "name": item[1],
@@ -39,7 +33,7 @@ def showAttractions():
                 "mrt": item[6],
                 "latitude": float(item[7]),
                 "longitude": float(item[8]),
-                "images": imageList
+                "images": item[9]
             }
             itemList.append(itemInfo)
 
