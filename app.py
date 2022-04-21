@@ -10,7 +10,7 @@ import os
 app = Flask(__name__, template_folder="./views/templates", static_folder="./views/static")
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
-app.secret_key = os.getenv("SECRET_KEY")
+app.secret_key = os.getenv("TDTW_SECRET_KEY")
 
 app.register_blueprint(attraction)
 app.register_blueprint(user)

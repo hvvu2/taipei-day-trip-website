@@ -6,11 +6,11 @@ load_dotenv
 poolName = "mysqlPool"
 poolSize = 10
 dbconfig ={
-    "host":os.getenv("HOST"),
-    "port":os.getenv("PORT"),
-    "user":os.getenv("USER"),
-    "password":os.getenv("PASSWORD"),
-    "database":os.getenv("DATABASE")
+    "host":os.getenv("TDTW_HOST"),
+    "port":os.getenv("TDTW_PORT"),
+    "user":os.getenv("TDTW_USER"),
+    "password":os.getenv("TDTW_PASSWORD"),
+    "database":os.getenv("TDTW_DATABASE")
 }
 
 class DBManager:
