@@ -54,7 +54,7 @@ const setCardInfo = (data, currentPage, shownItems) => {
 
         const id = data[i].id.toString();
         const url = "/attraction/" + id;
-        const imgUrl = data[i].images[0];
+        const imgUrl = data[i].images;
         const name = data[i].name;
         const mrt = data[i].mrt;
         const category = data[i].category;

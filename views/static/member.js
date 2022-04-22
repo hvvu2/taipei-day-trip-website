@@ -148,8 +148,12 @@ const init = async () => {
         hideBlock(gateBtn);
         showBlock(memberBtn);
         showBlock(signOutBtn);
-        showBlock(memberHeaderEdit);
-
+        memberHeaderName.style.opacity = "1";
+        memberHeaderName.style.transform = "translateY(0)";
+        memberHeaderEmail.style.opacity = "1";
+        memberHeaderEmail.style.transform = "translateY(0)";
+        memberHeaderEdit.style.opacity = "1";
+        memberHeaderEdit.style.transform = "translateY(0)";
         memberHeaderName.textContent = signInResult.data.name;
         memberHeaderEmail.textContent = signInResult.data.email;
     }
