@@ -2,13 +2,13 @@
 ### http://52.205.169.27:3000/
 
 # Description
-Taipei Day Trip is a travel e-commerce website, users can search 
+Taipei Day Trip is a travel e-commerce website, users can browse more than 50 attractions in Taipei. Pick wherever you want and pay online, then you are ready to discover the beauty of Taipei.
 
 ＊ Test Username : guest@guest.gst
 <br/>
 ＊ Test Password : 000000
 <br/>
-＊ Test Credit Card: 4242 4242 4242 4242
+＊ Test Credit Card Number: 4242 4242 4242 4242
 <br/>
 ＊ Test Expiration Date:  01/23
 <br/>
@@ -27,5 +27,9 @@ Taipei Day Trip is a travel e-commerce website, users can search
 
 # Backend Techniques
 ## Python Flask
+
+## RESTful API
+
 ## MySQL
+
 ## AWS
