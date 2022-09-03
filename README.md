@@ -34,7 +34,7 @@ Taipei Day Trip is a travel e-commerce website, users can browse more than 50 at
 # Backend Techniques
 ## Python Flask
 * Blueprints: Split the application into different modules by their functions.
-* Flask Session: Authenticate the member state.
+* Session: Authenticate the member state.
 
 ## RESTful API
 
