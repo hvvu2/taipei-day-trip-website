@@ -15,7 +15,7 @@ Taipei Day Trip is a travel e-commerce website, users can browse more than 50 at
 ＊ Test CVV: 123
 
 # Features
-1. Implementing infinite scroll with debouncing to achieve smooth lazy loading
+1. Implementing infinite scroll with throttle to achieve smooth lazy loading
 2. Users can type in keywords to search certain attractions.
 3. After logging in, users are able to book multiple trips and process payment.
 4. Users can change their names and check the order histories in the member center.
